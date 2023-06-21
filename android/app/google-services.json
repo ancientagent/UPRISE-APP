@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "330685849240",
+    "project_id": "upriseradiyo-cfd8b",
+    "storage_bucket": "upriseradiyo-cfd8b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330685849240:android:e00e36111dd1ba12dc3aed",
+        "android_client_info": {
+          "package_name": "com.app.uprise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "330685849240-gu5h95ve8goqr1q2uvf5926pjus1m3oo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.uprise",
+            "certificate_hash": "1dcc2dc473e178533a6b81882ca98ac7e1d17305"
+          }
+        },
+        {
+          "client_id": "330685849240-0b7pp702b2as79ttc8nqgobisc83id1l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcwHJkLO-WsRAirO5-rMWBsu9uCjvUAvk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "330685849240-0b7pp702b2as79ttc8nqgobisc83id1l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "330685849240-01cfa6aklvcdearc1r36vq51pfm0lkrg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.uprise"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

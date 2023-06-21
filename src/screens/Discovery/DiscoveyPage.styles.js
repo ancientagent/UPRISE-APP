@@ -1,0 +1,181 @@
+import { Platform, StyleSheet } from 'react-native';
+import Colors from '../../theme/colors';
+
+export default StyleSheet.create({
+  svgTxt: {
+    fontFamily: 'Oswald Regular',
+    fontWeight: '400',
+    fontSize: 18,
+    color: Colors.labelColor,
+    width: 150,
+    position: 'absolute',
+    textAlign: 'center',
+    left: 0,
+    right: 0,
+    top: '68%',
+    bottom: '12%',
+  },
+  radioStaion: {
+    marginBottom: 10,
+    fontFamily: 'Oswald Medium',
+    fontWeight: '500',
+    fontSize: 22,
+    color: Colors.labelColor,
+  },
+  radioStaionView: {
+    marginLeft: 20,
+  },
+  miniPlayerStyle: {
+    height: 150,
+    backgroundColor: Colors.Black,
+  },
+  AllAlbumsView: {
+    height: Platform.OS === 'ios' ? '87%' : '85%',
+    justifyContent: 'space-between',
+  },
+  gridView: {
+    alignSelf: 'center',
+    marginBottom: 5,
+    flexDirection: 'row',
+  },
+  AllAlbumsContainer: {
+    height: '85%',
+  },
+  genreImageView: {
+    marginHorizontal: 7,
+    width: 161,
+    marginVertical: 10,
+  },
+  genreImage: {
+    height: 184,
+    width: 161,
+  },
+  genreOverlay: {
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    backgroundColor: Colors.genreOverlay,
+    height: 184,
+    width: 161,
+  },
+  genreTextStyle: {
+    fontSize: 16,
+    fontFamily: 'Oswald Bold',
+    fontWeight: '800',
+    color: Colors.White,
+    marginBottom: 15,
+  },
+  genreNameView: {
+    marginBottom: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  genreTitle: {
+    fontSize: 12,
+    fontFamily: 'Oswald Regular',
+    fontWeight: '400',
+    color: Colors.White,
+  },
+  genreView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginRight: 24,
+  },
+  genreText: {
+    fontSize: 20,
+    marginLeft: 24,
+    fontFamily: 'Oswald Bold',
+    fontWeight: '800',
+    color: Colors.White,
+  },
+  albumsImageView: {
+    marginHorizontal: 7,
+    width: 148,
+    marginVertical: 10,
+  },
+  albumsImage: {
+    height: 148,
+    width: 148,
+  },
+  albumsTextStyle: {
+    marginTop: 8,
+    fontSize: 12,
+    fontFamily: 'Oswald Regular',
+    fontWeight: '400',
+    color: Colors.labelColor,
+  },
+  AlbumNameView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  AlbumTitle: {
+    fontSize: 12,
+    fontFamily: 'Oswald Regular',
+    fontWeight: '400',
+    color: Colors.AlbumTitleColor,
+  },
+  AlbumsView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginRight: 24,
+  },
+  AlbumsText: {
+    marginLeft: 24,
+    fontFamily: 'Oswald Medium',
+    fontWeight: '500',
+    fontSize: 22,
+    color: Colors.White,
+  },
+  memberImageView: {
+    alignItems: 'center',
+    marginRight: 28,
+    width: 80,
+    marginVertical: 14,
+  },
+  memberImageStyle: {
+    height: 80,
+    width: 80,
+    backgroundColor: Colors.iconBgColor,
+    borderRadius: 80,
+  },
+  memberTextStyle: {
+    textAlign: 'center',
+    marginTop: 14,
+    fontSize: 14,
+    fontFamily: 'Oswald Regular',
+    fontWeight: '400',
+    color: Colors.labelColor,
+  },
+  seeallText: {
+    fontFamily: 'Oswald Medium',
+    fontWeight: '500',
+    fontSize: 12,
+    color: Colors.labelColor,
+  },
+  promosImage: {
+    height: 145,
+    width: '100%',
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+  },
+  promosText: {
+    marginTop: 12,
+    fontWeight: '800',
+    fontFamily: 'Oswald Bold',
+    fontSize: 24,
+    color: Colors.labelColor,
+  },
+  bandName: {
+    color: Colors.eventNameTextColor,
+    fontWeight: '400',
+    fontFamily: 'Oswald Regular',
+    fontSize: 16,
+  },
+  bandNameHeadeing: {
+    fontWeight: '400',
+    fontFamily: 'Oswald Regular',
+    fontSize: 14,
+    color: Colors.eventDetailsTextColor,
+  },
+});

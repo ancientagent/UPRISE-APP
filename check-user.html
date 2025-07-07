@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Check User Exists</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 8px; margin-bottom: 10px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; margin-right: 10px; }
+        #response { margin-top: 20px; padding: 10px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <h2>Check User Exists</h2>
+    <p>First, let's check if the user exists in the database</p>
+    
+    <div class="form-group">
+        <label>Email:</label>
+        <input type="email" id="email" value="bt12@yopmail.com">
+    </div>
+    
+    <button onclick="checkUser()">Check User</button>
+    <button onclick="verifyUser()">Verify User</button>
+    <div id="response"></div>
+
+    <script>
+        async function checkUser() {
+            const email = document.getElementById('email').value;
+            
+            try {
+                const response = await fetch('http://localhost:3000/auth/check-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'client-id': '437920819fa89d19abe380073d28839c',
+                        'client-secret': '28649120bdf32812f433f428b15ab1a1'
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                const result = await response.json();
+                document.getElementById('response').innerHTML = '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+            } catch (error) {
+                document.getElementById('response').innerHTML = '<pre>Error: ' + error.message + '</pre>';
+            }
+        }
+
+        async function verifyUser() {
+            const email = document.getElementById('email').value;
+            
+            try {
+                const response = await fetch('http://localhost:3000/auth/test-verify-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'client-id': '437920819fa89d19abe380073d28839c',
+                        'client-secret': '28649120bdf32812f433f428b15ab1a1'
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                const result = await response.json();
+                document.getElementById('response').innerHTML = '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+                
+                if (response.ok) {
+                    document.getElementById('response').innerHTML += `
+                        <p><strong>Next Steps:</strong></p>
+                        <ul>
+                            <li>If onBoardingStatus = 0: User will go to Location screen</li>
+                            <li>If onBoardingStatus = 1: User will go to Genre Selection screen</li>
+                            <li>If onBoardingStatus = 2: User will go to Dashboard</li>
+                        </ul>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('response').innerHTML = '<pre>Error: ' + error.message + '</pre>';
+            }
+        }
+    </script>
+</body>
+</html> 

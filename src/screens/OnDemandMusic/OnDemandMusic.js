@@ -80,7 +80,7 @@ const OnDemandMusic = ({ route, navigation }) => {
     const backAction = () => {
       Alert.alert(
         'Uprise',
-        'Now your’re switching to fairplayer',
+        "Now you're switching to fairplayer",
         [
           {
             text: 'Cancel',

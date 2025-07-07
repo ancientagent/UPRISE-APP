@@ -1,34 +1,31 @@
-/* eslint-disable consistent-return */
 import { Alert } from 'react-native';
-import { strings } from '../../utilities/localization/localization';
 
-export function showNoNetworkAlert() {
-  if (!global.isNetworkAlertShowing) {
-    global.isNetworkAlertShowing = true;
-    return new Promise(resolve => {
-      Alert.alert(
-        strings('Alert.noInternetTitle'),
-        strings('Alert.noNetworkMessage'),
-        [{
-          text: strings('Alert.ok'),
-          onPress() {
-            global.isNetworkAlertShowing = false;
-          },
-        }],
-        { cancelable: false, onDismiss() { resolve(); } },
-      );
-    });
+// Track recent alerts to prevent spam
+let recentAlerts = [];
+const ALERT_COOLDOWN = 2000; // 2 seconds
+
+const showAlert = (message, title = 'Alert') => {
+  const now = Date.now();
+  const alertKey = `${title}:${message}`;
+  
+  // Remove old alerts from tracking
+  recentAlerts = recentAlerts.filter(alert => now - alert.timestamp < ALERT_COOLDOWN);
+  
+  // Check if this alert was shown recently
+  const isDuplicate = recentAlerts.some(alert => alert.key === alertKey);
+  
+  if (!isDuplicate) {
+    // Add to tracking
+    recentAlerts.push({ key: alertKey, timestamp: now });
+    
+    // Show alert only if it's not a duplicate
+    console.log(`Alert: ${title} - ${message}`); // Log for debugging
+    Alert.alert(title, message, [
+      { text: 'OK', onPress: () => {} }
+    ]);
+  } else {
+    console.log(`Duplicate alert prevented: ${title} - ${message}`);
   }
-}
-export default function showAlert(message) {
-  if (message) {
-    return new Promise(resolve => {
-      Alert.alert(
-        strings('Alert.title'),
-        message,
-        [{ text: strings('Alert.ok'), onPress() { resolve(); } }], // This function will continue Saga
-        { cancelable: false, onDismiss() { resolve(); } },
-      );
-    });
-  }
-}
+};
+
+export default showAlert; 

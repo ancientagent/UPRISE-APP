@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .success {
+            background: #28a745;
+        }
+        .warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        .danger {
+            background: #dc3545;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Backend API Test Suite</h1>
+        <p>Test all the backend endpoints to ensure everything is working correctly.</p>
+        
+        <h3>Basic Tests</h3>
+        <button onclick="testBasicEndpoint()">Test Basic Endpoint</button>
+        <button onclick="checkConfig()">Check Config</button>
+        
+        <h3>User Management Tests</h3>
+        <button onclick="listUsers()">List All Users</button>
+        <button onclick="checkUser()">Check User Exists</button>
+        <button onclick="testVerifyUser()">Test Verify User</button>
+        <button onclick="updateOnboardingStatus()">Update Onboarding Status</button>
+        
+        <h3>Authentication Tests</h3>
+        <button onclick="testLogin()">Test Login</button>
+        <button onclick="testSignup()">Test Signup</button>
+        
+        <div id="results">Click a button to test endpoints...</div>
+    </div>
+
+    <script>
+        const BASE_URL = 'http://localhost:3000';
+        const CLIENT_ID = '437920819fa89d19abe380073d28839c';
+        const CLIENT_SECRET = '28649120bdf32812f433f428b15ab1a1';
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toISOString();
+            const results = document.getElementById('results');
+            const statusClass = type === 'success' ? 'success' : type === 'error' ? 'error' : '';
+            const statusDiv = type !== 'info' ? `<div class="status ${statusClass}">${type.toUpperCase()}</div>` : '';
+            
+            results.innerHTML += `${statusDiv}[${timestamp}] ${message}\n\n`;
+            results.scrollTop = results.scrollHeight;
+        }
+
+        async function makeRequest(url, options = {}) {
+            try {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'client-id': CLIENT_ID,
+                    'client-secret': CLIENT_SECRET,
+                    ...options.headers
+                };
+                const response = await fetch(url, {
+                    headers: headers,
+                    ...options
+                });
+                
+                const data = await response.json();
+                return { success: response.ok, status: response.status, data };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        async function testBasicEndpoint() {
+            log('Testing basic endpoint...');
+            const result = await makeRequest(`${BASE_URL}/auth/test`);
+            
+            if (result.success) {
+                log(`✅ Basic endpoint working! Status: ${result.status}`, 'success');
+                log(`Response: ${JSON.stringify(result.data, null, 2)}`);
+            } else {
+                log(`❌ Basic endpoint failed: ${result.error || result.data?.message}`, 'error');
+            }
+        }
+
+        async function checkConfig() {
+            log('Checking backend configuration...');
+            const result = await makeRequest(`${BASE_URL}/auth/check-config`);
+            
+            if (result.success) {
+                log(`✅ Config check successful! Status: ${result.status}`, 'success');
+                log(`Response: ${JSON.stringify(result.data, null, 2)}`);
+            } else {
+                log(`❌ Config check failed: ${result.error || result.data?.message}`, 'error');
+            }
+        }
+
+        async function listUsers() {
+            log('Listing all users...');
+            const result = await makeRequest(`${BASE_URL}/auth/list-users`);
+            
+            if (result.success) {
+                log(`✅ Users listed successfully! Status: ${result.status}`, 'success');
+                log(`Found ${result.data.users?.length || 0} users`);
+                log(`Response: ${JSON.stringify(result.data, null, 2)}`);
+            } else {
+                log(`❌ List users failed: ${result.error || result.data?.message}`, 'error');
+            }
+        }
+
+        async function checkUser() {
+            log('Checking if user exists...');
+            const result = await makeRequest(`${BASE_URL}/auth/check-user`, {
+                method: 'POST',
+                body: JSON.stringify({ email: 'bt12@yopmail.com' })
+            });
+            
+            if (result.success) {
+                log(`✅ User check successful! Status: ${result.status}`, 'success');
+                log(`Response: ${JSON.stringify(result.data, null, 2)}`);
+            } else {
+                log(`❌ User check failed: ${result.error || result.data?.message}`, 'error');
+            }
+        }
+
+        async function testVerifyUser() {
+            log('Testing user verification...');
+            const result = await makeRequest(`${BASE_URL}/auth/test-verify-user`, {
+                method: 'POST',
+                body: JSON.stringify({ email: 'bt12@yopmail.com' })
+            });
+            
+            if (result.success) {
+                log(`✅ User verification successful! Status: ${result.status}`, 'success');
+                log(`Response: ${JSON.stringify(result.data, null, 2)}`);
+            } else {
+                log(`❌ User verification failed: ${result.error || result.data?.message}`, 'error');
+            }
+        }
+
+        async function updateOnboardingStatus() {
+            log('Testing onboarding status update...');
+            const result = await makeRequest(`${BASE_URL}/auth/update-onboarding-status`, {
+                method: 'POST',
+                body: JSON.stringify({ 
+                    email: 'bt12@yopmail.com',
+                    onBoardingStatus: 'completed'
+                })
+            });
+            
+            if (result.success) {
+                log(`✅ Onboarding status updated! Status: ${result.status}`, 'success');
+                log(`Response: ${JSON.stringify(result.data, null, 2)}`);
+            } else {
+                log(`❌ Onboarding status update failed: ${result.error || result.data?.message}`, 'error');
+            }
+        }
+
+        async function testLogin() {
+            log('Testing login endpoint...');
+            const result = await makeRequest(`${BASE_URL}/auth/login`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    email: 'bt12@yopmail.com',
+                    password: 'Loca$h2682'
+                })
+            });
+            
+            if (result.success) {
+                log(`✅ Login successful! Status: ${result.status}`, 'success');
+                log(`Response: ${JSON.stringify(result.data, null, 2)}`);
+            } else {
+                log(`❌ Login failed: ${result.error || result.data?.message}`, 'error');
+            }
+        }
+
+        async function testSignup() {
+            log('Testing signup endpoint...');
+            const result = await makeRequest(`${BASE_URL}/auth/signup`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    firstName: 'Test',
+                    userName: 'testuser123',
+                    email: 'test123@yopmail.com',
+                    password: 'TestPass123!',
+                    mobile: '1234567890',
+                    gender: 'PREFER NOT TO SAY',
+                    role: 'listener',
+                    city: 'Test City',
+                    state: 'Test State',
+                    country: 'USA'
+                })
+            });
+            
+            if (result.success) {
+                log(`✅ Signup successful! Status: ${result.status}`, 'success');
+                log(`Response: ${JSON.stringify(result.data, null, 2)}`);
+            } else {
+                log(`❌ Signup failed: ${result.error || result.data?.message}`, 'error');
+            }
+        }
+
+        // Auto-run basic test on page load
+        window.onload = function() {
+            log('🚀 Backend test suite loaded. Ready to test endpoints!');
+            log('Make sure the backend is running on http://localhost:3000');
+        };
+    </script>
+</body>
+</html> 

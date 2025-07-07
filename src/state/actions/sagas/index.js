@@ -58,7 +58,7 @@ export const mostPopularAlbumsSagaAction = payload => ({ type: types.mostPopular
 export const mostPopularGenresSagaAction = payload => ({ type: types.mostPopularGenresSagaType, payload });
 export const getSongsByGenreSagaAction = payload => ({ type: types.getSongsByGenreSagaType, payload });
 export const getUserAvatarSagaAction = () => ({ type: types.getUserAvatarSagaType });
-export const getUserGenresSagaAction = () => ({ type: types.getUserGenresSagaType });
+export const getUserGenresSagaAction = payload => ({ type: types.getUserGenresSagaType, payload });
 export const songReportSagaAction = payload => ({ type: types.songReportSagaType, payload });
 export const removeEventSagaAction = payload => ({ type: types.removeEventSagaType, payload });
 export const registerDeviceTokenSagaAction = payload => ({ type: types.registerDeviceTokenSagaType, payload });

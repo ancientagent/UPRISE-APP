@@ -8,7 +8,7 @@ import { getRequestURL } from '../../utilities/utilities';
 export default function getUserDetailsRequest(payload) {
   const requestOptions = {
     method: GET,
-    url: getRequestURL(Config.UPDATED_USERDETAILS),
+    url: getRequestURL(Config.GET_USER_DETAILS_URL),
     headers: { Authorization: `Bearer ${payload.accessToken}` },
   };
   return request(requestOptions)

@@ -1,63 +1,42 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable global-require */
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
+import { LogBox } from 'react-native';
+import { NavigationContainer, DarkTheme } from '@react-navigation/native';
+import SplashScreen from 'react-native-splash-screen';
+import TrackPlayer from 'react-native-track-player';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
-import TrackPlayer from 'react-native-track-player';
-import RNSplashScreen from 'react-native-splash-screen';
-import { NavigationContainer, DarkTheme } from '@react-navigation/native';
-import AsyncStorage
-from '@react-native-community/async-storage';
-import { navigationRef } from './src/navigators/RootNavigation';
-import reduxManager from './src/state/store';
 import AppNavigator from './src/navigators/AppNavigator';
+import reduxManager from './src/state/store';
+import { navigationRef } from './src/navigators/RootNavigation';
 import { requestUserPermission, notificationListener } from './src/utilities/notificationServices';
+import messaging from '@react-native-firebase/messaging';
 
 const { store, storePersistor } = reduxManager;
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      navState: null,
-    };
-  }
 
-  async componentDidMount() {
-    await AsyncStorage.setItem('playerState', 'pause');
-    await AsyncStorage.setItem('onDemandPlayer', 'inactive');
-    const checkToken = await AsyncStorage.getItem('fcmToken');
-    if (checkToken === null) {
-      requestUserPermission();
-    }
+const App = () => {
+  useEffect(() => {
+    requestUserPermission();
     notificationListener();
-    setTimeout(() => {
-      RNSplashScreen.hide();
-    }, 150);
-    await TrackPlayer.setupPlayer({
-      minBuffer: 300,
-      playBuffer: 20,
-      maxBuffer: 300,
-      maxCacheFiles: 100,
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
-  }
+    SplashScreen.hide();
+    TrackPlayer.setupPlayer();
+    LogBox.ignoreLogs(['Reanimated 2']);
+    return unsubscribe;
+  }, []);
 
-  render() {
-    const { navState } = this.state;
-    return (
-      <Provider store={ store }>
-        <PersistGate loading={ null } persistor={ storePersistor }>
-          { /* we used onStateChange to know the state of current nav e.g:
-            onStateChange={ state => console.log('New state is', state) } */ }
-          <NavigationContainer
-            ref={ navigationRef }
-            onStateChange={ state => this.setState({ navState: state }) }
-            theme={ DarkTheme }
-          >
-            <AppNavigator navState={ navState } />
-          </NavigationContainer>
-        </PersistGate>
-      </Provider>
-    );
-  }
-}
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={storePersistor}>
+        <NavigationContainer ref={navigationRef} theme={DarkTheme}>
+          <AppNavigator />
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
+  );
+};
+
 export default App;

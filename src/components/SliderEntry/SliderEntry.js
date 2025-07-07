@@ -9,6 +9,12 @@ import Colors from '../../theme/colors';
 import SvgImage from '../SvgImage/SvgImage';
 
 const SliderEntry = props => {
+  // Guard clause to handle missing or malformed data
+  if (!props || !props.data) {
+    console.log('SliderEntry: Missing props or data');
+    return null; // or return a placeholder component
+  }
+
   const image = () => {
     const {
       uri, parallax, parallaxProps, even, defultImage,
@@ -57,7 +63,7 @@ const SliderEntry = props => {
           ) : image() }
         </View>
         <Text style={ showRadioStation ? styles.titleStyle1 : styles.titleStyle2 }>
-          { title }
+          { title || 'No Title' }
         </Text>
       </>
     </TouchableOpacity>

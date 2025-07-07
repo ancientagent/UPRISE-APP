@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>List All Users</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        #response { margin-top: 20px; padding: 10px; border: 1px solid #ddd; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h2>List All Users in Database</h2>
+    <p>This will show all users currently in the database</p>
+    
+    <button onclick="listUsers()">List All Users</button>
+    <div id="response"></div>
+
+    <script>
+        async function listUsers() {
+            try {
+                const response = await fetch('http://localhost:3000/auth/list-users', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'client-id': '437920819fa89d19abe380073d28839c',
+                        'client-secret': '28649120bdf32812f433f428b15ab1a1'
+                    }
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    let html = `<h3>Total Users: ${result.totalUsers}</h3>`;
+                    
+                    if (result.users && result.users.length > 0) {
+                        html += `
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                        <th>Onboarding</th>
+                                        <th>Created</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        `;
+                        
+                        result.users.forEach(user => {
+                            html += `
+                                <tr>
+                                    <td>${user.id}</td>
+                                    <td>${user.firstName} ${user.lastName}</td>
+                                    <td>${user.userName}</td>
+                                    <td>${user.email}</td>
+                                    <td>${user.status}</td>
+                                    <td>${user.onBoardingStatus}</td>
+                                    <td>${new Date(user.createdAt).toLocaleString()}</td>
+                                </tr>
+                            `;
+                        });
+                        
+                        html += '</tbody></table>';
+                    } else {
+                        html += '<p>No users found in database</p>';
+                    }
+                    
+                    document.getElementById('response').innerHTML = html;
+                } else {
+                    document.getElementById('response').innerHTML = '<pre>Error: ' + JSON.stringify(result, null, 2) + '</pre>';
+                }
+            } catch (error) {
+                document.getElementById('response').innerHTML = '<pre>Error: ' + error.message + '</pre>';
+            }
+        }
+    </script>
+</body>
+</html> 

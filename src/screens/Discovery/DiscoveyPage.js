@@ -69,16 +69,18 @@ const DiscoveyPage = props => {
           <TouchableOpacity
             activeOpacity={ 0.8 }
             onPress={ () => {
-              navigation.navigate('AlbumSongs', { albumId: item.id, bandId: item.band.id });
+              if (item?.id && item?.band?.id) {
+                navigation.navigate('AlbumSongs', { albumId: item.id, bandId: item.band.id });
+              }
             } }
           >
             <View style={ styles.albumsImageView }>
               <Image
                 style={ styles.albumsImage }
-                source={ item.thumbnail ? { uri: item.thumbnail } : require('../../../assets/images/album_default_img.png') }
+                source={ item?.thumbnail ? { uri: item.thumbnail } : require('../../../assets/images/album_default_img.png') }
               />
               <Text style={ styles.albumsTextStyle }>
-                { item.title }
+                { item?.title || 'Unknown Album' }
               </Text>
               <View style={ styles.AlbumNameView }>
                 <SvgImage
@@ -87,7 +89,7 @@ const DiscoveyPage = props => {
                   width={ 12 }
                   height={ 12 }
                 />
-                <Text style={ styles.AlbumTitle }>{ item.band.title }</Text>
+                <Text style={ styles.AlbumTitle }>{ item?.band?.title || 'Unknown Band' }</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -104,17 +106,19 @@ const DiscoveyPage = props => {
           <TouchableOpacity
             activeOpacity={ 0.8 }
             onPress={ () => {
-              navigation.navigate('RadioStations', { genreId: item.id, genreName: item.name, isDiscovery: true });
+              if (item?.id && item?.name) {
+                navigation.navigate('RadioStations', { genreId: item.id, genreName: item.name, isDiscovery: true });
+              }
             } }
           >
             <View style={ styles.genreImageView }>
               <ImageBackground
                 style={ styles.genreImage }
-                source={ item.thumbnail ? { uri: item.thumbnail } : require('../../../assets/images/music_default_img.png') }
+                source={ item?.thumbnail ? { uri: item.thumbnail } : require('../../../assets/images/music_default_img.png') }
               >
                 <View style={ styles.genreOverlay }>
                   <Text style={ styles.genreTextStyle }>
-                    { item.name }
+                    { item?.name || 'Unknown Genre' }
                   </Text>
                   { /* <View style={ styles.genreNameView }>
                     <SvgImage iconStyle={ { right: 4 } } iconName={ musicVector } height={ 10 } width={ 6 } />
@@ -141,9 +145,9 @@ const DiscoveyPage = props => {
           data={ item }
           even={ (index + 1) % 2 === 0 }
           parallax
-          uri={ item.logo }
-          title={ item.title }
-          onDone={ () => navigation.navigate('BandDetails', { bandId: item.id }) }
+          uri={ item?.logo }
+          title={ item?.title }
+          onDone={ () => item?.id && navigation.navigate('BandDetails', { bandId: item.id }) }
           parallaxProps={ parallaxProps }
           defultImage={ require('../../../assets/images/band_defult_img.png') }
         />
@@ -224,9 +228,9 @@ const DiscoveyPage = props => {
           data={ item }
           even={ (index + 1) % 2 === 0 }
           parallax
-          uri={ item.thumbnail }
-          title={ item.title }
-          onDone={ () => navOndemandPage(item) }
+          uri={ item?.thumbnail }
+          title={ item?.title }
+          onDone={ () => item?.id && navOndemandPage(item) }
           parallaxProps={ parallaxProps }
           defultImage={ require('../../../assets/images/band_defult_img.png') }
         />
@@ -302,13 +306,19 @@ const DiscoveyPage = props => {
     // </View>
   );
   const navOndemandPage = async item => {
+    // Safety check for item and required properties
+    if (!item || !item.id || !item.band?.id) {
+      console.log('navOndemandPage: Missing required item properties');
+      return;
+    }
+    
     await AsyncStorage.setItem('onDemandPlayer', 'active');
     const songDetails = [{
       id: item.id,
-      artist: item.band.title,
+      artist: item.band?.title || 'Unknown Artist',
       artwork: item.thumbnail,
       url: item.song,
-      title: item.title,
+      title: item.title || 'Unknown Title',
       duration: item.duration,
       isSongFavorite: item.isSongFavorite,
     }];

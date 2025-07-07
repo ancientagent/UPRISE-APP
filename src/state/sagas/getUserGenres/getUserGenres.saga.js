@@ -1,30 +1,36 @@
 import {
-  call, put, takeLatest, select,
+  call, put, takeLatest,
 } from 'redux-saga/effects';
-import getUserGenresRequest from '../../../services/getUserGenres/getUserGenres.service';
+import getAllGenresRequest from '../../../services/getAllGenres/getAllGenres.service';
 import { getUserGenresSagaType } from '../../types/sagas';
 import { getUserGenresActions } from '../../actions/request/getUserGenres/getUserGenres.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
 
 export default function* getUserGenresWatcherSaga() {
   yield takeLatest(getUserGenresSagaType, getUserGenresWorkerSaga);
 }
 
-export function* getUserGenresWorkerSaga() {
+export function* getUserGenresWorkerSaga(action) {
   yield put(getUserGenresActions.start());
   try {
-    const userToken = yield select(accessToken);
-    const payload = {
-      accessToken: userToken,
-    };
-    const response = yield call(getUserGenresRequest, payload);
-    if (response !== null) {
-      yield put(getUserGenresActions.succeed(response));
+    console.log('--- getUserGenres SAGA: Calling API service ---', action.payload);
+    const response = yield call(getAllGenresRequest, action.payload);
+
+    // Check if the response and the data inside are valid
+    // API returns genres directly in response.data (not response.data.data)
+    if (response && response.data && Array.isArray(response.data)) {
+      console.log('--- getUserGenres SAGA: SUCCESS! Response Data ---', response.data);
+      // Dispatch the success action with the actual list of genres
+      yield put(getUserGenresActions.succeed(response.data));
+    } else {
+      // Handle cases where the API returns a success status but no data
+      console.error('--- getUserGenres SAGA: ERROR - No data in response ---', response);
+      yield put(getUserGenresActions.fail('No genre data received from server.'));
     }
-  } catch (e) {
-    yield put(getUserGenresActions.fail(e));
-    yield call(showAlert, e.error);
+  } catch (error) {
+    console.error('--- getUserGenres SAGA: CATCH BLOCK ERROR ---', error.response || error);
+    yield put(getUserGenresActions.fail(error.response?.data?.message || 'Failed to fetch genres.'));
+    yield call(showAlert, error.response?.data?.message || 'Failed to fetch genres.');
   }
 }
 

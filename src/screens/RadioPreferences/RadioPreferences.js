@@ -81,7 +81,7 @@ const RadioPreferences = ({ route }) => {
     const selectedGenres = _.map(listenerId.radioPrefrence && listenerId.radioPrefrence.genres,
       prefrence => prefrence.name);
     if (genres.length < 1) {
-      Alert.alert(strings('GenreSelection.emptyAlertText'));
+      Alert.alert(strings('OnDemandMusic.selectPickText'));
     } else if (!(_.isEqual(genres.sort(), selectedGenres.sort()))) {
       await (async () => new Promise(resolve => {
         const payload = {
@@ -172,7 +172,7 @@ const RadioPreferences = ({ route }) => {
       }
       <View style={ { height: '100%', justifyContent: 'space-evenly' } }>
         <Text style={ styles.selectGenrText }>
-          { strings('GenreSelection.selectText') }
+          { strings('userProfile.addDescription') }
         </Text>
         <ScrollView>
           <View style={ styles.chipView }>
@@ -185,7 +185,7 @@ const RadioPreferences = ({ route }) => {
           containerStyle={ styles.containerStyle }
           buttonStyle={ styles.buttonStyle }
           titleStyle={ styles.titleStyle }
-          title={ strings('GenreSelection.save') }
+          title={ strings('General.save') }
         />
       </View>
     </View>
@@ -193,7 +193,7 @@ const RadioPreferences = ({ route }) => {
   return (
     <URContainer safeAreaViewStyle={ { flex: 1 } }>
       <Text style={ styles.selectPickText }>
-        { strings('GenreSelection.selectLocation') }
+        { strings('Location.manualText') }
       </Text>
       <RadioButton
         Data={ locationData }

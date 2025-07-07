@@ -22,7 +22,10 @@ const ShowModelView = props => {
   const [disableState, setDisableState] = useState(true);
   const locationData = _.map(locationList, (data, index) => ({ ...data, isChecked: false, id: index + 1 }));
   const [location, setLocation] = useState();
-  useEffect(() => { setLocation(locationData); }, [locationList]);
+  
+  useEffect(() => { 
+    setLocation(locationData); 
+  }, [locationList]);
 
   const updateCheck = id => {
     const temp = _.map(location, product => {
@@ -37,6 +40,7 @@ const ShowModelView = props => {
     setLocation(temp);
     setDisableState(false);
   };
+  
   const renderChips = items => (
     _.map(items, item => (
       <Chip
@@ -54,6 +58,7 @@ const ShowModelView = props => {
       />
     ))
   );
+  
   const handleSaveBtn = () => {
     const stateObj = _.find(location, ['isChecked', true]);
     _.map(location, data => {
@@ -63,10 +68,20 @@ const ShowModelView = props => {
           stationType: parseInt(initialState) === 1 ? '1' : '2',
         };
         dispatch(stationSwitchingSagaAction(payload));
+        // Close modal after saving
+        if (onDone) onDone();
       } else {
         setDisableState(true);
       }
     });
+  };
+
+  // Enhanced onDone function to ensure modal closes
+  const handleDone = () => {
+    console.log('ShowModelView: User clicked OK, closing modal');
+    if (onDone) {
+      onDone();
+    }
   };
 
   const renderEmptySongModel = () => (
@@ -92,12 +107,12 @@ const ShowModelView = props => {
           {
           (parseInt(initialState) === 3 || (locationList && locationList.length === 0)) && (
           <Button
-            onPress={ onDone }
+            onPress={ handleDone }
             TouchableComponent={ TouchableOpacity }
             containerStyle={ styles.containerStyle }
             buttonStyle={ styles.buttonStyle }
             titleStyle={ styles.titleStyle }
-            title={ strings('GenreSelection.ok') }
+            title={ strings('Alert.ok') }
           />
           )
           }
@@ -125,13 +140,14 @@ const ShowModelView = props => {
             containerStyle={ styles.containerStyle }
             buttonStyle={ styles.buttonStyle }
             titleStyle={ styles.titleStyle }
-            title={ strings('GenreSelection.save') }
+            title={ strings('General.save') }
           />
         </View>
         ) }
       </View>
     </View>
   );
+  
   return (
     <View style={ styles.popUpView }>
       {

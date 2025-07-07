@@ -1,4 +1,3 @@
-
 const transformPackageNames = [
   'native-base-shoutem-theme',
   '@react-native',
@@ -37,9 +36,6 @@ module.exports = {
     'tsx',
     'js',
   ],
-  transform: {
-    '^.+\\.(js)$': './node_modules/babel-jest',
-  },
   testRegex: '(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$',
   testPathIgnorePatterns: [
     '\\.snap$',

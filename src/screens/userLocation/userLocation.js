@@ -1,261 +1,362 @@
-/* eslint-disable radix */
-/* eslint-disable global-require */
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  View, Text, Image, Alert, Linking, Dimensions,
-  Platform,
-  PermissionsAndroid,
-  ToastAndroid,
+  View,
+  Text,
+  TextInput,
+  ScrollView,
   TouchableOpacity,
+  StyleSheet,
+  Platform,
+  Image,
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useSelector, useDispatch } from 'react-redux';
+import { CommonActions } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Button } from 'react-native-elements';
-import Geocoder from 'react-native-geocoding';
-import Geolocation from 'react-native-geolocation-service';
 import PlacesInput from 'react-native-places-input';
-import SvgImage from '../../components/SvgImage/SvgImage';
-import orText from '../../../assets/images/orText.svg';
-import URContainer from '../../components/URContainer/URContainer';
-import styles from './userLocation.styles';
-import { strings } from '../../utilities/localization/localization';
+import Config from 'react-native-config';
+
+import { getUserGenresSagaAction, userLocationSagaAction } from '../../state/actions/sagas';
 import { getUserDetails } from '../../state/selectors/UserProfile';
-import { userLocationSagaAction, getUserGenresSagaAction } from '../../state/actions/sagas';
-import Colors from '../../theme/colors';
+import { getUserGenresList } from '../../state/selectors/UserProfile';
+import URContainer from '../../components/URContainer/URContainer';
 import Loader from '../../components/Loader/Loader';
+import Colors from '../../theme/colors';
+import { strings } from '../../utilities/localization/localization';
 
-const UserLocation = () => {
-  const listenerId = useSelector(getUserDetails);
+const UserLocation = ({ navigation }) => {
   const dispatch = useDispatch();
-  const showLoading = useSelector(state => state.userLocation.isWaiting);
-  const MAP_API_KEY = 'AIzaSyCNNmfTGsBatXy77JEAcjxuHCR2WSxVhvg';
+
+  // --- State Variables ---
+  const [genreQuery, setGenreQuery] = useState('');
+  const [filteredGenres, setFilteredGenres] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [isGenreInputFocused, setIsGenreInputFocused] = useState(false);
+
+  // --- Redux Selectors ---
+  const userDetails = useSelector(getUserDetails);
+  const genreList = useSelector(getUserGenresList);
+  const isGenresLoading = useSelector(state => state.getUserGenres.isWaiting);
+  const genresError = useSelector(state => state.getUserGenres.error);
+  const accessToken = useSelector(state => state.userAuth.accessToken);
+
+  // --- Effects ---
   useEffect(() => {
-    dispatch(getUserGenresSagaAction());
-  }, []);
-  const hasPermissionIOS = async () => {
-    const openSetting = () => {
-      Linking.openSettings().catch(() => {
-        Alert.alert(strings('Location.unableToOpen'));
-      });
-    };
-    const status = await Geolocation.requestAuthorization('whenInUse');
-    if (status === 'granted') {
-      return true;
+    if (accessToken) {
+      console.log('--- USER LOCATION: Dispatching getUserGenresSagaAction ---');
+      dispatch(getUserGenresSagaAction({ accessToken }));
     }
-    if (status === 'denied') {
-      Alert.alert(strings('Location.permissionDenied'));
-    }
-    if (status === 'disabled') {
-      Alert.alert(
-        strings('Location.turnOnLocation'),
-        '',
-        [
-          { text: strings('Location.settings'), onPress: openSetting },
-          { text: strings('Location.dontUseText'), onPress: () => {} },
-        ],
+  }, [dispatch, accessToken]);
+
+  // --- Event Handlers ---
+  const handleGenreChange = (text) => {
+    setGenreQuery(text);
+    if (text && genreList) {
+      const filtered = genreList.filter(genre =>
+        genre.name.toLowerCase().includes(text.toLowerCase())
       );
+      setFilteredGenres(filtered);
+    } else {
+      setFilteredGenres([]);
     }
-    return false;
   };
 
-  const hasLocationPermission = async () => {
-    if (Platform.OS === 'ios') {
-      const hasPermission = await hasPermissionIOS();
-      return hasPermission;
-    }
-    if (Platform.OS === 'android' && Platform.Version < 23) {
-      return true;
-    }
-    const hasPermission = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    );
-    if (hasPermission) {
-      return true;
-    }
-    const status = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    );
-    if (status === PermissionsAndroid.RESULTS.GRANTED) {
-      return true;
-    }
-    if (status === PermissionsAndroid.RESULTS.DENIED) {
-      ToastAndroid.show(
-        strings('Location.deniedByUser'),
-        ToastAndroid.LONG,
-      );
-    } else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-      ToastAndroid.show(
-        strings('Location.revokedByUser'),
-        ToastAndroid.LONG,
-      );
-    }
-    return false;
+  const handleGenreSelect = (genre) => {
+    setGenreQuery(genre.name);
+    setSelectedGenre(genre);
+    setFilteredGenres([]);
+    setIsGenreInputFocused(false);
   };
 
-  // eslint-disable-next-line consistent-return
-  const getSplitedAddress = location => {
-    const splitedAddress = location.split(',');
-    const addressLength = splitedAddress.length;
-    if (addressLength > 0) {
-      switch (addressLength) {
-        case 1: {
-          return {
-            country: splitedAddress[addressLength - 1].trim(),
-            zipcode: null,
-            state: null,
-            city: null,
-            street: null,
-          };
-        }
-        case 2: {
-          const stateWithoutPincode = splitedAddress[addressLength - 2].replace(/[0-9]/g, '');
-          const pincode = splitedAddress[addressLength - 2].replace(/^\D+/g, '');
-          return {
-            country: splitedAddress[addressLength - 1].trim(),
-            zipcode: pincode,
-            state: stateWithoutPincode === '' ? null : stateWithoutPincode.trim(),
-            city: null,
-            street: null,
-          };
-        }
-        case 3: {
-          const stateWithoutPincode = splitedAddress[addressLength - 2].replace(/[0-9]/g, '');
-          const pincode = splitedAddress[addressLength - 2].replace(/^\D+/g, '');
-          return {
-            country: splitedAddress[addressLength - 1].trim(),
-            zipcode: pincode,
-            state: stateWithoutPincode === '' ? null : stateWithoutPincode.trim(),
-            city: splitedAddress[addressLength - 3].trim(),
-            street: null,
-          };
-        }
-        default: {
-          if (addressLength >= 4) {
-            const stateWithoutPincode = splitedAddress[addressLength - 2].replace(/[0-9]/g, '');
-            const pincode = splitedAddress[addressLength - 2].replace(/^\D+/g, '');
-            return {
-              country: splitedAddress[addressLength - 1].trim(),
-              zipcode: pincode,
-              state: stateWithoutPincode === '' ? null : stateWithoutPincode.trim(),
-              city: splitedAddress[addressLength - 3].trim(),
-              street: splitedAddress.splice(0, addressLength - 3).toString(),
-            };
+  const handleLocationSelect = (place) => {
+    console.log('--- USER LOCATION: Location Selected ---', place);
+    setSelectedLocation(place.result);
+  };
+
+  const onContinue = () => {
+    if (!selectedLocation || !selectedGenre || !userDetails) {
+      console.warn('Continue button pressed but required data is missing.');
+      return;
+    }
+    
+    // Handle location data safely - extract from formatted_address if address_components is missing
+    let country = '', state = '', city = '', zipcode = '';
+    let latitude = 0, longitude = 0;
+    
+    if (selectedLocation.address_components) {
+      // Full address components available
+      country = selectedLocation.address_components.find(c => c.types.includes('country'))?.long_name || '';
+      state = selectedLocation.address_components.find(c => c.types.includes('administrative_area_level_1'))?.long_name || '';
+      city = selectedLocation.address_components.find(c => c.types.includes('locality'))?.long_name || '';
+      zipcode = selectedLocation.address_components.find(c => c.types.includes('postal_code'))?.long_name || '';
+    } else if (selectedLocation.formatted_address) {
+      // Parse formatted address as fallback
+      const addressParts = selectedLocation.formatted_address.split(', ');
+      if (addressParts.length >= 2) {
+        city = addressParts[0];
+        const stateCountry = addressParts[addressParts.length - 1];
+        if (stateCountry.includes('USA')) {
+          country = 'USA';
+          if (addressParts.length >= 3) {
+            state = addressParts[addressParts.length - 2].replace(' USA', '');
           }
+        } else {
+          country = stateCountry;
         }
       }
     }
-  };
-
-  const getManuallLocation = address => {
-    const position = address.result.geometry;
-    const manuallLocation = getSplitedAddress(address.result.formatted_address);
-    const payload = {
-      country: manuallLocation.country,
-      zipcode: parseInt(manuallLocation.zipcode),
-      state: manuallLocation.state,
-      city: manuallLocation.city,
-      street: manuallLocation.street,
-      latitude: position.location.lat,
-      longitude: position.location.lng,
-      userId: listenerId.id,
-    };
-    dispatch(userLocationSagaAction(payload));
-  };
-
-  const getLocation = async () => {
-    const hasPermission = await hasLocationPermission();
-    if (!hasPermission) {
-      return;
+    
+    // Get coordinates
+    if (selectedLocation.geometry && selectedLocation.geometry.location) {
+      latitude = selectedLocation.geometry.location.lat || 0;
+      longitude = selectedLocation.geometry.location.lng || 0;
     }
-    Geolocation.getCurrentPosition(
-      position => {
-        Geocoder.init(MAP_API_KEY);
-        Geocoder.from(position.coords.latitude, position.coords.longitude)
-          .then(json => {
-            const formattedAddress = json.results[1].formatted_address;
-            const detectedLocation = getSplitedAddress(formattedAddress);
-            const payload = {
-              country: detectedLocation.country,
-              zipcode: parseInt(detectedLocation.zipcode),
-              state: detectedLocation.state,
-              city: detectedLocation.city,
-              street: detectedLocation.street,
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              userId: listenerId.id,
-            };
-            dispatch(userLocationSagaAction(payload));
-          })
-          .catch(error => console.warn(error));
-      },
-      error => {
-        Alert.alert(`Code ${error.code}`, error.message);
-        console.log(error);
-      },
-      {
-        accuracy: {
-          android: 'high',
-          ios: 'best',
-        },
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 10000,
-        distanceFilter: 0,
-      },
-    );
+    
+    // FIXED: Separate location and genre payloads to match backend API structure
+    const locationPayload = {
+        country,
+        state,
+        city,
+        zipcode: zipcode || '', // Ensure zipcode is string, not undefined
+        latitude,
+        longitude,
+        userId: userDetails.id,
+        street: '', // Backend expects street field
+    };
+    
+    console.log('--- USER LOCATION: Dispatching userLocationSagaAction with location payload ---', locationPayload);
+    dispatch(userLocationSagaAction(locationPayload));
+    
+    // TODO: Genre preferences should be handled separately via a different saga/API call
+    // For now, navigate after location is saved. Genre handling can be added later.
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Dashboard' }],
+    });
   };
-  const scrollHeight = Platform.OS === 'android' ? 360 : 0;
-  const height = Dimensions.get('window').height + scrollHeight;
+  
+  // --- Render Logic ---
+  if (isGenresLoading) {
+    return <Loader visible={true} />;
+  }
+
+  if (genresError) {
+    return (
+      <URContainer>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Could not load required data.</Text>
+          <Text style={styles.errorDetail}>Error: {JSON.stringify(genresError)}</Text>
+        </View>
+      </URContainer>
+    );
+  }
+
   return (
     <URContainer>
-      <Loader
-        visible={ showLoading }
-      />
       <KeyboardAwareScrollView
-        contentContainerStyle={ { height } }
+        contentContainerStyle={styles.scrollContainer}
         enableOnAndroid
-        keyboardOpeningTime={ 0 }
-        keyboardShouldPersistTaps='handled'
+        extraScrollHeight={Platform.OS === 'ios' ? 20 : 0}
+        keyboardShouldPersistTaps="handled"
       >
-        <View style={ styles.locationContainer }>
-          <Image
-            style={ styles.locationIcon }
-            source={ require('../../../assets/images/location.png') }
-          />
-          <Text style={ styles.detectText }>
-            { strings('Location.setupText') }
-          </Text>
-          <Text style={ styles.welcomeText }>
-            { strings('Location.welcomeText') }
-          </Text>
-          <Text style={ styles.hintText }>{ strings('Location.hintText') }</Text>
+        <View style={styles.contentView}>
+          <Text style={styles.titleText}>Let's Create Your Home Scene</Text>
+          <Text style={styles.subtitleText}>This helps us tune your UPRISE experience.</Text>
+
+          {/* Location Input */}
+          <View style={styles.locationInputWrapper}>
+            <Text style={styles.label}>Your Location</Text>
+            <PlacesInput
+              googleApiKey="AIzaSyD5AX4I4r7AZj0QB4a4IgrqdGm5PeNH6g0"
+              onSelect={handleLocationSelect}
+              placeHolder="Start typing your city..."
+              textInputProps={{
+                placeholderTextColor: '#999',
+                style: styles.textInput,
+              }}
+              stylesContainer={styles.placesContainer}
+              stylesInput={styles.textInput}
+              stylesList={styles.locationPlacesList}
+            />
+          </View>
+          
+          {/* Genre Input */}
+          <View style={styles.genreInputWrapper}>
+            <Text style={styles.label}>Your Primary Genre</Text>
+            <TextInput
+              style={[styles.textInput, styles.genreTextInput]}
+              placeholder="Start typing a genre..."
+              placeholderTextColor="#999"
+              value={genreQuery}
+              onChangeText={handleGenreChange}
+              onFocus={() => setIsGenreInputFocused(true)}
+              onBlur={() => {
+                // Add a small delay to allow selection
+                setTimeout(() => setIsGenreInputFocused(false), 200);
+              }}
+            />
+            {isGenreInputFocused && filteredGenres.length > 0 && (
+              <View style={styles.suggestionsList}>
+                <ScrollView
+                  style={styles.suggestionsScrollView}
+                  keyboardShouldPersistTaps="handled"
+                  nestedScrollEnabled={true}
+                >
+                  {filteredGenres.map((item) => (
+                    <TouchableOpacity
+                      key={item.id.toString()}
+                      style={styles.suggestionItem}
+                      onPress={() => handleGenreSelect(item)}
+                    >
+                      <Text style={styles.suggestionText}>{item.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            )}
+          </View>
+
           <Button
-            onPress={ getLocation }
-            TouchableComponent={ TouchableOpacity }
-            containerStyle={ styles.containerStyle }
-            buttonStyle={ styles.detectbtn }
-            titleStyle={ styles.btnTitle }
-            title={ strings('Location.detectText') }
-          />
-          <SvgImage iconStyle={ { marginBottom: 32 } } iconName={ orText } width={ 41 } height={ 15 } />
-          <PlacesInput
-            placeHolder={ strings('Location.manualText') }
-            textInputProps={ styles.textInputProps }
-            stylesInput={ styles.stylesInput }
-            queryCountries={ ['us'] }
-            queryTypes='(cities)'
-            stylesContainer={ styles.stylesContainer }
-            stylesItem={ { borderColor: Colors.textColor } }
-            stylesItemText={ styles.stylesItemText }
-            stylesList={ styles.stylesList }
-            googleApiKey={ MAP_API_KEY }
-            language='en-US'
-            onSelect={ place => getManuallLocation(place) }
+            title="Find My Scene"
+            onPress={onContinue}
+            disabled={!selectedLocation || !selectedGenre}
+            containerStyle={styles.buttonContainer}
+            buttonStyle={styles.button}
+            disabledStyle={styles.disabledButton}
           />
         </View>
       </KeyboardAwareScrollView>
     </URContainer>
   );
 };
+
+// --- Styles ---
+const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+  },
+  contentView: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: 60,
+    paddingHorizontal: 20,
+  },
+  titleText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: Colors.White,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  subtitleText: {
+    fontSize: 16,
+    color: '#999',
+    marginBottom: 40,
+    textAlign: 'center',
+  },
+  locationInputWrapper: {
+    width: '100%',
+    marginBottom: 30,
+    zIndex: 1000, // Higher z-index for location dropdown
+  },
+  genreInputWrapper: {
+    width: '100%',
+    marginBottom: 25,
+    zIndex: 100, // Lower z-index for genre dropdown
+  },
+  label: {
+    color: Colors.White,
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 12,
+    marginLeft: 2,
+  },
+  textInput: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#555',
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    color: '#000', // Changed to black for visibility
+    backgroundColor: '#fff', // White background
+    fontSize: 16,
+  },
+  genreTextInput: {
+    // Additional styles for genre input if needed
+  },
+  placesContainer: {
+    width: '100%',
+  },
+  locationPlacesList: {
+    position: 'absolute',
+    top: 50,
+    left: 0,
+    right: 0,
+    backgroundColor: '#2c2c2c',
+    borderRadius: 8,
+    zIndex: 1001,
+    maxHeight: 200,
+    elevation: 10, // For Android shadow
+    shadowColor: '#000', // For iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  suggestionsList: {
+    position: 'absolute',
+    top: 58,
+    left: 0,
+    right: 0,
+    backgroundColor: '#2c2c2c',
+    maxHeight: 200,
+    borderRadius: 8,
+    zIndex: 101,
+    elevation: 5, // For Android shadow
+    shadowColor: '#000', // For iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  suggestionsScrollView: {
+    flex: 1,
+  },
+  suggestionItem: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#444',
+  },
+  suggestionText: {
+    color: Colors.White,
+    fontSize: 16,
+  },
+  buttonContainer: {
+    width: '100%',
+    marginTop: 30,
+  },
+  button: {
+    backgroundColor: Colors.URbtnColor,
+    height: 50,
+    borderRadius: 8,
+  },
+  disabledButton: {
+    backgroundColor: '#666',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    color: Colors.White,
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  errorDetail: {
+    color: '#999',
+    marginTop: 10,
+    textAlign: 'center',
+  },
+});
 
 export default UserLocation;

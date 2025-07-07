@@ -1,30 +1,35 @@
 import Config from 'react-native-config';
 import TrackPlayer from 'react-native-track-player';
 import * as RootNavigation from '../../navigators/RootNavigation';
-import API from './API';
+import api from './apiSauce';
 import NetworkUtils from '../../utilities/networkUtils';
-import { showNoNetworkAlert } from '../../state/sagas/AlertUtility';
 import { reduxHelpers } from '../../state/store/reduxHelpers';
 import { SIGN_OUT } from '../../state/types/ActionTypes';
+import { networkError } from '../../state/actions/sagas/networkError/networkError.actions';
 
-function setHeaders(headers) {
+function setHeaders(headers, isFormData = false) {
   const header = {
     'Accept-Language': 'en-US',
-    'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     Accept: 'application/json',
     'client-id': Config.CLIENT_ID,
     'client-secret': Config.CLIENT_SECRET,
     ...headers,
   };
+  
+  // Only set Content-Type to application/json if it's not FormData
+  if (!isFormData) {
+    header['Content-Type'] = 'application/json';
+  }
+  
   return header;
 }
 
-export function combineHeaders(options, omitAuth) {
+export function combineHeaders(options, omitAuth, isFormData = false) {
   if (!omitAuth) {
-    return setHeaders({ ...options });
+    return setHeaders({ ...options }, isFormData);
   }
-  return setHeaders(options);
+  return setHeaders(options, isFormData);
 }
 
 export function errorResponse(error, status) {
@@ -46,12 +51,16 @@ export function errorResponse(error, status) {
 // eslint-disable-next-line consistent-return
 export async function request(requestOptions, omitAuth) {
   const requestData = requestOptions;
-  requestData.headers = combineHeaders(requestOptions.headers, omitAuth);
+  
+  // Check if the data is FormData
+  const isFormData = requestData.data instanceof FormData;
+  
+  requestData.headers = combineHeaders(requestOptions.headers, omitAuth, isFormData);
   const isNetworkConnected = await NetworkUtils.isNetworkAvailable();
   if (isNetworkConnected) {
     try {
       console.log('requestData', requestData);
-      const res = await API(requestData);
+      const res = await api(requestData);
       console.log('res', res);
       return res.data;
     } catch (error) {
@@ -74,6 +83,6 @@ export async function request(requestOptions, omitAuth) {
       }
     }
   } else {
-    showNoNetworkAlert();
+    reduxHelpers.dispatch(networkError());
   }
 }

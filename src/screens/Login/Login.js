@@ -7,12 +7,12 @@ import { useSelector } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import SvgImage from '../../components/SvgImage/SvgImage';
 import URContainer from '../../components/URContainer/URContainer';
-import Googlebtn from '../../components/Googlebtn/Googlebtn';
+// import Googlebtn from '../../components/Googlebtn/Googlebtn';
 import upriseTxt from '../../../assets/images/upriseTxt.svg';
 import orText from '../../../assets/images/orText.svg';
 import LoginForm from './Login.form';
 import styles from './Login.styles';
-import Loader from '../../components/Loader/Loader';
+import Loader from '~/components/Loader/Loader';
 import Applebtn from '../../components/Applebtn/Applebtn';
 
 const Login = props => {
@@ -50,7 +50,7 @@ const Login = props => {
               source={ require('../../../assets/images/upriseRadiyoIcon.png') }
             />
             <SvgImage iconName={ upriseTxt } width={ 115 } height={ 27 } iconStyle={ styles.container } />
-            <Googlebtn navigation={ navigation } />
+            {/* <Googlebtn navigation={ navigation } /> */}
             { /* { Platform.OS === 'ios' && (
             <Applebtn />
             ) } */ }

@@ -27,4 +27,14 @@ export default StyleSheet.create({
     leftBtnStyle: { marginRight: 120 },
     rightTextStyle: { color: Colors.labelColor, alignSelf: 'center', left: 4 },
   },
+  voteButtonDisabled: {
+    opacity: 0.5,
+  },
+  votingDisabledText: {
+    color: Colors.labelColor,
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: 5,
+    fontStyle: 'italic',
+  },
 });

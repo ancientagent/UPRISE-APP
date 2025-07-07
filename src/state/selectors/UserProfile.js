@@ -49,6 +49,13 @@ export const getMostPopularAlbumsList = state => _.get(state.mostPopularAlbums, 
 export const getMostPopularGenresList = state => _.get(state.mostPopularGenres, 'result.data.genres', []);
 export const getsongsByGenre = state => _.get(state.songsByGenre, 'result.genres', []);
 export const getUserAvatar = state => _.get(state.getUserAvatar, 'result.data', []);
-export const getUserGenresList = state => _.get(state.getUserGenres, 'result.data', []);
+export const getIsWaiting = state => _.get(state.getUserDetails, 'isWaiting', false)
+  || _.get(state.updateUserDetails, 'isWaiting', false)
+  || _.get(state.changePasswordDetails, 'isWaiting', false);
+
+export const getUserGenresList = state => _.get(state.getUserGenres, 'result', []);
+
+export const getAvailableCities = state => _.get(state.getAvailableCities, 'result.data', []);
+
 export const getInstrumentList = state => _.get(state.getInstrument, 'result.data', []);
 export const updateInstrument = state => _.get(state.updateInstrument, 'result.data', []);

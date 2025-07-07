@@ -29,6 +29,7 @@ import styles from './radioScreen.styles';
 import { getRadioSong, getUserDetails } from '../../state/selectors/UserProfile';
 import {
   getRadioSongSagaAction, songBlastSagaAction, postSongIdSagaAction, songfavoriteSagaAction, songUnfavoriteSagaAction,
+  stationSwitchingSagaAction,
 } from '../../state/actions/sagas';
 import favSymbolIcon from '../../../assets/images/favSymbolIcon.svg';
 import favSymbolFilledIcon from '../../../assets/images/favSymbolFilledIcon.svg';
@@ -39,14 +40,17 @@ const RadioScreen = () => {
   const [handleBlast, setHandleBlast] = useState();
   const playbackState = usePlaybackState();
   const songData = useSelector(getRadioSong);
+  const userDetails = useSelector(getUserDetails);
   const dispatch = useDispatch();
-  const listenerId = useSelector(getUserDetails);
-  const [initialState, setInitialState] = useState(listenerId.radioPrefrence && listenerId.radioPrefrence.stationType);
+  const [initialState, setInitialState] = useState(userDetails.radioPrefrence && userDetails.radioPrefrence.stationType);
   const [trackArtwork, setTrackArtwork] = useState();
   const [trackTitle, setTrackTitle] = useState();
   const [trackArtist, setTrackArtist] = useState();
   const [favSong, setFav] = useState();
   const [hideSkip, setHideSkip] = useState(false);
+  const [currentTier, setCurrentTier] = useState('CITYWIDE');
+  const [tierLoading, setTierLoading] = useState(false);
+
   useEffect(() => {
     async function Storage() {
       await AsyncStorage.setItem('page', 'radio');
@@ -59,6 +63,17 @@ const RadioScreen = () => {
       setupIfNecessary();
     }
   }, [songData]);
+
+  useEffect(() => {
+    // Set current tier based on user's station preference
+    const stationType = userDetails.radioPrefrence?.stationType;
+    switch (stationType) {
+      case '1': setCurrentTier('CITYWIDE'); break;
+      case '2': setCurrentTier('STATEWIDE'); break;
+      case '3': setCurrentTier('NATIONAL'); break;
+      default: setCurrentTier('CITYWIDE'); break;
+    }
+  }, [userDetails.radioPrefrence]);
 
   const songInfo = {
     url: songData.url,
@@ -147,6 +162,7 @@ const RadioScreen = () => {
     };
     dispatch(songfavoriteSagaAction(payload));
   };
+  
   const songunfavorite = () => {
     setFav(false);
     const payload = {
@@ -154,6 +170,7 @@ const RadioScreen = () => {
     };
     dispatch(songUnfavoriteSagaAction(payload));
   };
+  
   const skipNext = async () => {
     await (() => new Promise(resolve => {
       const payload = {
@@ -168,30 +185,110 @@ const RadioScreen = () => {
     await TrackPlayer.updateMetadataForTrack(0, songInfo);
     await TrackPlayer.play();
   };
-  const returnPlayBtn = () => {
-    switch (playbackState) {
-      case State.Playing:
-        return <SvgImage iconName={ Pause } height={ 32 } width={ 32 } />;
-      case State.Paused:
-        return <SvgImage iconName={ playBtn } height={ 32 } width={ 32 } />;
-      case State.Ready:
-        return <SvgImage iconName={ playBtn } height={ 32 } width={ 32 } />;
-      default:
-        return (
-          Platform.OS === 'ios'
-            ? (
-              <Image
-                style={ styles.songLoader }
-                source={ require('../../../assets/images/song_loader.gif') }
-              />
-            )
-            : (
-              <ActivityIndicator size={ 30 } color={ Colors.URbtnColor } />
-            )
-        );
+
+  /**
+   * Handle tier switching
+   * @param {string} newTier - New tier to switch to
+   */
+  const handleTierSwitch = async (newTier) => {
+    if (newTier === currentTier) return;
+    
+    setTierLoading(true);
+    try {
+      const stationType = {
+        'CITYWIDE': '1',
+        'STATEWIDE': '2',
+        'NATIONAL': '3'
+      }[newTier];
+
+      const payload = {
+        stationPrefrence: newTier === 'NATIONAL' ? 'USA' : userDetails[newTier === 'CITYWIDE' ? 'city' : 'state'],
+        stationType: stationType,
+        selectedTabId: 1, // Home tab
+      };
+
+      await new Promise(resolve => {
+        dispatch(stationSwitchingSagaAction(payload));
+        resolve();
+      });
+
+      setCurrentTier(newTier);
+      
+      // Get new song for the tier
+      dispatch(getRadioSongSagaAction());
+      await TrackPlayer.reset();
+      await TrackPlayer.updateMetadataForTrack(0, songInfo);
+      await TrackPlayer.play();
+    } catch (error) {
+      console.error('Error switching tier:', error);
+    } finally {
+      setTierLoading(false);
     }
   };
-  const defaultPlayerImg = require('../../../assets/images/Fullprev_muisc_img.png');
+
+  /**
+   * Get tier description
+   * @param {string} tier - Tier name
+   * @returns {string} Tier description
+   */
+  const getTierDescription = (tier) => {
+    switch (tier) {
+      case 'CITYWIDE':
+        return `Latest local uploads from ${userDetails.city}`;
+      case 'STATEWIDE':
+        return `Best tracks curated by ${userDetails.state} communities`;
+      case 'NATIONAL':
+        return 'Best tracks curated by statewide communities • No voting available';
+      default:
+        return '';
+    }
+  };
+
+  /**
+   * Render tier toggle buttons
+   */
+  const renderTierToggle = () => {
+    const tiers = ['CITYWIDE', 'STATEWIDE', 'NATIONAL'];
+    
+    return (
+      <View style={styles.tierToggleContainer}>
+        <Text style={styles.tierToggleTitle}>RaDIYo Broadcast</Text>
+        <View style={styles.tierButtonsContainer}>
+          {tiers.map((tier) => (
+            <TouchableOpacity
+              key={tier}
+              style={[
+                styles.tierButton,
+                currentTier === tier && styles.tierButtonActive
+              ]}
+              onPress={() => handleTierSwitch(tier)}
+              disabled={tierLoading}
+            >
+              <Text style={[
+                styles.tierButtonText,
+                currentTier === tier && styles.tierButtonTextActive
+              ]}>
+                {tier}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        <Text style={styles.tierDescription}>
+          {getTierDescription(currentTier)}
+        </Text>
+      </View>
+    );
+  };
+
+  const returnPlayBtn = () => {
+    if (playbackState === State.Playing) {
+      return <SvgImage iconName={Pause} height={ 32 } width={ 32 } />;
+    }
+    return <SvgImage iconName={playBtn} height={ 32 } width={ 32 } />;
+  };
+
+  const defaultPlayerImg = require('../../../assets/images/music_default_img.png');
+
   return (
     <URContainer>
       <ScrollView contentContainerStyle={ {
@@ -199,6 +296,9 @@ const RadioScreen = () => {
         height: '100%',
       } }
       >
+        {/* Tier Toggle Section */}
+        {renderTierToggle()}
+
         <View style={ styles.Container }>
           <Image
             style={ styles.playerImage }

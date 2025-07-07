@@ -12,38 +12,59 @@ import styles from './Signup.styles';
 import SignupValidators from './SignupValidators';
 import { signupRequestSagaAction } from '../../state/actions/sagas';
 import URCheckBox from '../../components/URCheckBox/URCheckBox';
+import RadioButton from '../../components/RadioButton/RadioButton';
+
+const genderData = [{
+  id: 1,
+  label: 'Male',
+  value: 'MALE',
+}, {
+  id: 2,
+  label: 'Female',
+  value: 'FEMALE',
+}, {
+  id: 3,
+  label: 'Prefer not to say',
+  value: 'PREFER NOT TO SAY',
+}];
 
 const SignupForm = props => {
-  const { navigation } = props;
+  const { navigation, onComplete } = props;
   const [hidePassword, setHidePassword] = useState(true);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
   const [showRequire, setShowRequire] = useState(false);
+  const [selectedGender, setSelectedGender] = useState('PREFER NOT TO SAY');
   const dispatch = useDispatch();
+  
   const onSubmitForm = values => {
-    // eslint-disable-next-line no-undef
-    const formData = new FormData();
-    formData.append('userName', values.userName.trim());
-    formData.append('email', values.email);
-    formData.append('password', values.password.trim());
-    formData.append('role', values.artistCheck ? 'artist' : 'listener');
-    formData.append('title', values.bandName);
-    dispatch(signupRequestSagaAction(formData));
+    if (onComplete) {
+      // Pass form values directly with additional fields
+      const completeData = {
+        ...values,
+        gender: selectedGender,
+        country: 'USA',
+        role: values.artistCheck ? 'artist' : 'listener',
+      };
+      onComplete(completeData);
+    }
   };
+  
   const screenHeight = Platform.OS === 'ios' ? 200 : 100;
   const height = Dimensions.get('window').height - screenHeight;
+  
   return (
     <View style={ { height, width: '100%' } }>
       <Formik
         initialValues={ {
           userName: '',
           email: '',
-          bandName: '',
           password: '',
           confirmPassword: '',
+          bandName: '',
           artistCheck: false,
-          privacyCheck: false,
+          acceptTerms: false,
         } }
-        validationSchema={ SignupValidators(showRequire) }
+        validationSchema={ SignupValidators(showRequire, false) }
         onSubmit={ value => onSubmitForm(value) }
       >
         { ({
@@ -116,54 +137,37 @@ const SignupForm = props => {
               secureTextEntry={ !!hideConfirmPassword }
               label={ strings('SignUp.confirmPasswordLabel') }
             />
-            { values.artistCheck && (
-            <Field
-              inputBox={ styles.inputBox }
-              placeholder='Enter your band name'
-              component={ URTextfield }
-              name='bandName'
-              autoCapitalize='none'
-              autoCorrect={ false }
-              label='Band name'
-              showAstric
-            />
-            ) }
-            <View style={ { marginTop: 10 } }>
-              <View style={ { flexDirection: 'row', alignItems: 'center' } }>
-                <URCheckBox
-                  checked={ values.artistCheck }
-                  iconSize={ 16 }
-                  containerStyle={ styles.iconContainer }
-                  onPress={ () => {
-                    setShowRequire(!values.artistCheck);
-                    setFieldValue('artistCheck', !values.artistCheck);
-                  } }
-                />
-                <Text style={ styles.checkText }>
-                  { strings('SignUp.registerArtist') }
-                </Text>
-              </View>
-              <View style={ { flexDirection: 'row', alignItems: 'center' } }>
-                <URCheckBox
-                  checked={ values.privacyCheck }
-                  containerStyle={ styles.iconContainer }
-                  iconSize={ 16 }
-                  onPress={ () => setFieldValue('privacyCheck', !values.privacyCheck) }
-                />
-                <Text style={ styles.checkText }>
-                  { strings('SignUp.conditionsAgree') }
-                </Text>
-                <Text style={ styles.highlightedText }>
-                  { strings('SignUp.conditions') }
-                </Text>
-                <Text style={ styles.checkText }>
-                  { strings('SignUp.and') }
-                </Text>
-                <Text style={ styles.highlightedText }>
-                  { strings('SignUp.privacy') }
-                </Text>
-              </View>
+
+            {/* Artist Registration Checkbox */}
+            <View style={styles.checkboxContainer}>
+              <URCheckBox
+                checked={values.artistCheck}
+                onPress={() => setFieldValue('artistCheck', !values.artistCheck)}
+                label={strings('SignUp.registerAsArtist')}
+              />
             </View>
+
+            {/* Band Name Field (conditional) */}
+            {values.artistCheck && (
+              <Field
+                inputBox={ styles.inputBox }
+                placeholder={strings('SignUp.bandNamePlaceholder')}
+                component={ URTextfield }
+                name='bandName'
+                autoCapitalize='words'
+                label={strings('SignUp.bandNameLabel')}
+              />
+            )}
+
+            {/* Terms and Conditions Checkbox */}
+            <View style={styles.checkboxContainer}>
+              <URCheckBox
+                checked={values.acceptTerms}
+                onPress={() => setFieldValue('acceptTerms', !values.acceptTerms)}
+                label={strings('SignUp.acceptTerms')}
+              />
+            </View>
+
             <View style={ { marginTop: 23 } }>
               <Button
                 buttonStyle={ styles.signupBtn }

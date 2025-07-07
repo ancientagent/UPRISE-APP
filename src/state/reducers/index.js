@@ -16,7 +16,6 @@ import ssoLoginReducer from './request/signup/ssoLogin.reducer';
 import verifyUserReducer from './request/signup/verifyuser.reducer';
 import verifyUserNameReducer from './request/signup/verifyUserName.reducer';
 import userLocationReducer from './request/userLocation/userLocation.reducer';
-import userGenresReducer from './request/genreSelection/genreSelection.reducer';
 import getUserDetailsReducer from './request/getUserDetails/getUserDetails.reducer';
 import upDateProfileReducer from './request/upDateProfile/upDateProfile.reducer';
 import undoBandFollowReducer from './request/undoBandFollow/undoBandFollow.reducer';
@@ -85,8 +84,10 @@ import getBandsStatisticsReducer from './request/getBandsStatistics/getBandsStat
 import getRadioStationStatisticsReducer from './request/getRadioStationStatistics/getRadioStationStatistics.reducer';
 import getPopularArtistStatisticsReducer from './request/getPopularArtistStatistics/getPopularArtistStatistics.reducer';
 import getPopularArtistGenresStatisticsReducer from './request/getPopularArtistGenresStatistics/getPopularArtistGenresStatistics.reducer';
+import onboardingReducer from './onboarding';
 
 const appReducer = combineReducers({
+  onboarding: onboardingReducer,
   sampleReducer,
   network,
   networkPopup,
@@ -113,7 +114,6 @@ const appReducer = combineReducers({
   verifyUser: verifyUserReducer,
   verifyUserName: verifyUserNameReducer,
   userLocation: userLocationReducer,
-  userGenres: userGenresReducer,
   getUserDetails: getUserDetailsReducer,
   upDateProfile: upDateProfileReducer,
   undoBandFollow: undoBandFollowReducer,

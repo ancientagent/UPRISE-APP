@@ -13,5 +13,5 @@ export function getRequestURL(path) {
 
 export function hasValue(value) {
   const isValuePresent = !(_.isNil(value)) && !(_.isEmpty(value));
-  return isValuePresent && value.trim().length > 0;
+  return isValuePresent && (typeof value === 'string' ? value.trim().length > 0 : true);
 }

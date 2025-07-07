@@ -150,7 +150,7 @@ const Feed = props => {
     return (
       Alert.alert(
         'Uprise',
-        'Now your’re switching to on-demand player',
+        "Now you're switching to on-demand player",
         [
           {
             text: 'Cancel',
@@ -398,7 +398,7 @@ const Feed = props => {
               onPress={ async () => {
                 Alert.alert(
                   'Uprise',
-                  'Now your’re switching to on-demand player',
+                  "Now you're switching to on-demand player",
                   [
                     {
                       text: 'Cancel',

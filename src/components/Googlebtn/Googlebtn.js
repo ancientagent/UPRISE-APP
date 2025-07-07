@@ -13,7 +13,12 @@ import styles from './Googlebtn.styles';
 const Googlebtn = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    GoogleSignin.configure();
+    GoogleSignin.configure({
+      webClientId: '', // Add your web client ID from Firebase Console
+      offlineAccess: true,
+      hostedDomain: '',
+      forceConsentPrompt: true,
+    });
   }, []);
   const signIn = async () => {
     try {
@@ -26,15 +31,16 @@ const Googlebtn = () => {
       };
       dispatch(verifyUserSagaAction(payload));
     } catch (error) {
-      console.log('signIn', error);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log('user cancelled the login flow');
       } else if (error.code === statusCodes.IN_PROGRESS) {
         console.log('operation (f.e. sign in) is in progress already');
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         console.log('play services not available or outdated');
+      } else if (error.message && error.message.includes('DEVELOPER_ERROR')) {
+        console.log('Google Sign-In configuration error. Please add webClientId from Firebase Console.');
       } else {
-        console.log('some other error happened');
+        console.log('Google Sign-In error:', error.message);
       }
     }
   };

@@ -1,4 +1,3 @@
-
 import { createNavigationContainerRef } from '@react-navigation/native';
 
 export const navigationRef = createNavigationContainerRef();
@@ -16,11 +15,11 @@ export function getRootState() {
   return navigationRef.current.getCurrentRoute().name;
 }
 
-export function resetRoot() {
+export function resetRoot(routeName = 'Dashboard') {
   return navigationRef.resetRoot({
     index: 0,
     key: null,
-    routes: [{ name: 'Dashboard' }],
+    routes: [{ name: routeName }],
   });
 }
 

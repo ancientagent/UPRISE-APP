@@ -37,7 +37,7 @@ function DiscoveryStackScreen() {
     <DiscoveryStack.Navigator
       initialRouteName='Discovery'
       screenOptions={ ({ navigation }) => ({
-        animationTypeForReplace: 'pop' && 'push',
+        animationTypeForReplace: 'pop',
         animation: 'none',
         headerStyle: { borderBottomWidth: 0 },
         animationEnabled: false,
@@ -464,7 +464,7 @@ function DiscoveryStackScreen() {
                 onPress={ async () => {
                   Alert.alert(
                     'Uprise',
-                    'Now your’re switching to fairplayer',
+                    "Now you're switching to fairplayer",
                     [
                       {
                         text: 'Cancel',

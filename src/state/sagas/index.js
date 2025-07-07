@@ -8,8 +8,8 @@ import ssoLoginWatcherSaga from './signup/ssoLogin.saga';
 import verifyUserWatcherSaga from './signup/verifyuser.saga';
 import verifyUserNameWatcherSaga from './signup/verifyUserName.saga';
 import userLocationWatcherSaga from './userLocation/userLocation.saga';
-import genresSelectionWatcherSaga from './genreSelection/genreSelection.saga';
 import getUserDetailsWatcherSaga from './getUserDetails/getUserDetails.saga';
+import watchAuthNavigationSaga from './authNavigation.saga';
 import upDateProfileWatcherSaga from './upDateProfile/upDateProfile.saga';
 import undoBandFollowWatcherSaga from './undoBandFollow/undoBandFollow.saga';
 import bandFollowWatcherSaga from './bandFollow/bandFollow.saga';
@@ -73,10 +73,13 @@ import getBandsStatisticsTypeWatcherSaga from './getBandsStatistics/getBandsStat
 import getRadioStationStatisticsWatcherSaga from './getRadioStationStatistics/getRadioStationStatistics.saga';
 import getPopularArtistStatisticsWatcherSaga from './getPopularArtistStatistics/getPopularArtistStatistics.saga';
 import getPopularArtistGenresStatisticsWatcherSaga from './getPopularArtistGenresStatistics/getPopularArtistGenresStatistics.saga';
+import onboardingSaga from './onboarding/onboarding.saga';
+import watchNetworkError from './networkError/networkError.saga';
 
 export default function* initialSaga() {
   yield all([
     fork(networkSaga, { pingInterval: 20000 }),
+    onboardingSaga(),
     sampleWatcherSaga(),
     signUpWatcherSaga(),
     loginWatcherSaga(),
@@ -85,8 +88,8 @@ export default function* initialSaga() {
     verifyUserWatcherSaga(),
     verifyUserNameWatcherSaga(),
     userLocationWatcherSaga(),
-    genresSelectionWatcherSaga(),
     getUserDetailsWatcherSaga(),
+    watchAuthNavigationSaga(),
     upDateProfileWatcherSaga(),
     undoBandFollowWatcherSaga(),
     bandFollowWatcherSaga(),
@@ -150,5 +153,6 @@ export default function* initialSaga() {
     getRadioStationStatisticsWatcherSaga(),
     getPopularArtistStatisticsWatcherSaga(),
     getPopularArtistGenresStatisticsWatcherSaga(),
+    watchNetworkError(),
   ]);
 }

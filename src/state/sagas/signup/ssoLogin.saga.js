@@ -40,14 +40,10 @@ export function* ssoLoginWorkerSaga(action) {
         }));
       }
       yield put(getUserDetailsSagaAction());
-      if (response.data.user.onBoardingStatus === 0) {
-        RootNavigation.navigate({ name: 'UserLocation' });
-      } else if (response.data.user.onBoardingStatus === 1) {
-        RootNavigation.navigate({ name: 'GenreSelection' });
-      } else if (response.data.user.onBoardingStatus === 2) {
+      if (response.data.onBoardingStatus === 0) {
+        RootNavigation.navigate({ name: 'HomeSceneCreation' });
+      } else {
         RootNavigation.navigate({ name: 'Dashboard' });
-      } else if (response.data.user.onBoardingStatus === 3) {
-        RootNavigation.navigate({ name: 'MailConfirmation', params: { showData: false } });
       }
     }
   } catch (e) {

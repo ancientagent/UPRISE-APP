@@ -5,8 +5,7 @@ import {
   View, Image, Platform, TouchableOpacity, Modal, Text, TextInput, BackHandler,
 } from 'react-native';
 import TrackPlayer from 'react-native-track-player';
-import AsyncStorage
-from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Button } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +20,6 @@ import Colors from '../theme/colors';
 import { songReportSagaAction } from '../state/actions/sagas';
 import * as RootNavigation from './RootNavigation';
 import styles from './BottomTabs.styles';
-import ShowModelView from '../state/sagas/ShowModelView';
 import { strings } from '../utilities/localization/localization';
 
 const ModelView = () => <View />;
@@ -53,11 +51,6 @@ const BottomTabs = () => {
   }, [currentRoute]);
   const songData = useSelector(getRadioSong);
   const [modalVisible, setModalVisible] = useState(false);
-  const radioState = useSelector(state => state.getRadioSong.error);
-  const [modelView, setModelView] = useState(false);
-  useEffect(() => {
-    setModelView(radioState !== null);
-  }, [radioState]);
   const [reportModel, setReportModel] = useState(false);
   const [description, setDescription] = useState(null);
   const tabHiddenRoutes = ['ChangePassword', 'RadioPreferences', 'ChangeAvatar', 'OnDemandMusic', 'ChangeInstrument'];
@@ -71,12 +64,8 @@ const BottomTabs = () => {
     };
     dispatch(songReportSagaAction(payload));
   };
-  const onDone = () => setModelView(false);
   return (
     <>
-      <Modal transparent statusBarTranslucent visible={ modelView }>
-        <ShowModelView onDone={ onDone } />
-      </Modal>
       <Modal
         transparent
         statusBarTranslucent
@@ -139,7 +128,7 @@ const BottomTabs = () => {
         initialRouteName='HomeStackScreen'
         screenOptions={ {
           animation: 'none',
-          animationTypeForReplace: 'pop' && 'push',
+          animationTypeForReplace: 'pop',
           animationDuration: 0,
           animationEnabled: false,
           gestureEnabled: false,

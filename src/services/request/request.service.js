@@ -6,6 +6,7 @@ import NetworkUtils from '../../utilities/networkUtils';
 import { reduxHelpers } from '../../state/store/reduxHelpers';
 import { SIGN_OUT } from '../../state/types/ActionTypes';
 import { networkError } from '../../state/actions/sagas/networkError/networkError.actions';
+import TokenService from '../../utilities/TokenService';
 
 function setHeaders(headers, isFormData = false) {
   const header = {
@@ -32,16 +33,28 @@ export function combineHeaders(options, omitAuth, isFormData = false) {
   return setHeaders(options, isFormData);
 }
 
-export function errorResponse(error, status) {
+export async function errorResponse(error, status) {
   // Should check error object here and do req changes checking different error objects
   const errorObject = {
     status,
     error,
   };
   console.log(`errorResponse ${JSON.stringify(errorObject)}`);
-  if (errorObject.status === 403) {
+  
+  // Handle authentication errors (401 Unauthorized, 403 Forbidden)
+  if (errorObject.status === 401 || errorObject.status === 403) {
+    console.log('--- REQUEST SERVICE: Authentication error detected, clearing tokens and signing out ---');
+    
+    // Clear tokens from AsyncStorage
+    await TokenService.clearTokens();
+    
+    // Dispatch sign out action (clears Redux persist data)
     reduxHelpers.dispatch({ type: SIGN_OUT });
+    
+    // Stop track player
     TrackPlayer.stop();
+    
+    // Navigate to login screen
     RootNavigation.navigate({ name: 'Login' });
   } else {
     throw errorObject;
@@ -68,18 +81,18 @@ export async function request(requestOptions, omitAuth) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         if (error.response.data.error) {
-          errorResponse(error.response.data.error, error.response.status);
+          await errorResponse(error.response.data.error, error.response.status);
         } else {
-          errorResponse(error.response.data.message, error.response.status);
+          await errorResponse(error.response.data.message, error.response.status);
         }
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        errorResponse(error.request);
+        await errorResponse(error.request);
       } else {
         // Something happened in setting up the request that triggered an Error
-        errorResponse(error.error);
+        await errorResponse(error.error);
       }
     }
   } else {

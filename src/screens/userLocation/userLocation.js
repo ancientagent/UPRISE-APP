@@ -73,28 +73,18 @@ const UserLocation = () => {
   }, []);
 
   // --- Event Handlers ---
+  
+  // Fixed Genre Autocomplete Logic - Simple case-insensitive search
   const handleGenreChange = (text) => {
-    setGenreQuery(text);
+    setGenreQuery(text); // Update the text in the input box
+
     if (text && genreList) {
-      const filtered = genreList.filter(genre =>
+      const filtered = genreList.filter(genre => 
         genre.name.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredGenres(filtered);
-      
-      // Auto-select if there's an exact match
-      const exactMatch = genreList.find(genre => 
-        genre.name.toLowerCase() === text.toLowerCase()
-      );
-      if (exactMatch) {
-        console.log('--- USER LOCATION: Auto-selecting exact genre match ---', exactMatch);
-        setSelectedGenre(exactMatch);
-      } else {
-        // Clear selection if no exact match
-        setSelectedGenre(null);
-      }
     } else {
-      setFilteredGenres([]);
-      setSelectedGenre(null);
+      setFilteredGenres([]); // Clear suggestions if input is empty
     }
   };
 
@@ -105,11 +95,11 @@ const UserLocation = () => {
     setIsGenreInputFocused(false);
   };
 
+  // Fixed Location Selection Handler
   const handleLocationSelect = (place) => {
     console.log('--- USER LOCATION: Location Selected ---', place);
-    console.log('--- USER LOCATION: Place.result structure ---', JSON.stringify(place.result, null, 2));
-    setSelectedLocation(place.result);
-    setLocationText(place.result.formatted_address);
+    setSelectedLocation(place);
+    setLocationText(place.formatted_address || place.description || '');
   };
 
   const handleLocationError = (error) => {
@@ -203,10 +193,9 @@ const UserLocation = () => {
     }
   };
 
-
-
+  // Fixed Continue Button Logic
   const onContinue = () => {
-    if (!selectedGenre || !userDetails) {
+    if (!selectedGenre) {
       Alert.alert("Selection Incomplete", "Please select a genre.");
       return;
     }
@@ -222,12 +211,12 @@ const UserLocation = () => {
     if (selectedLocation) {
       // Use Places API data if available
       payload = {
-        country: selectedLocation.address_components.find(c => c.types.includes('country'))?.long_name || '',
-        state: selectedLocation.address_components.find(c => c.types.includes('administrative_area_level_1'))?.long_name || '',
-        city: selectedLocation.address_components.find(c => c.types.includes('locality'))?.long_name || selectedLocation.address_components.find(c => c.types.includes('administrative_area_level_2'))?.long_name || '',
-        zipcode: parseInt(selectedLocation.address_components.find(c => c.types.includes('postal_code'))?.long_name) || null,
-        latitude: selectedLocation.geometry.location.lat,
-        longitude: selectedLocation.geometry.location.lng,
+        country: selectedLocation.address_components?.find(c => c.types.includes('country'))?.long_name || '',
+        state: selectedLocation.address_components?.find(c => c.types.includes('administrative_area_level_1'))?.long_name || '',
+        city: selectedLocation.address_components?.find(c => c.types.includes('locality'))?.long_name || selectedLocation.address_components?.find(c => c.types.includes('administrative_area_level_2'))?.long_name || '',
+        zipcode: parseInt(selectedLocation.address_components?.find(c => c.types.includes('postal_code'))?.long_name) || null,
+        latitude: selectedLocation.geometry?.location?.lat || null,
+        longitude: selectedLocation.geometry?.location?.lng || null,
         genreIds: [selectedGenre.id],
         userId: userDetails.id,
       };
@@ -349,7 +338,7 @@ const UserLocation = () => {
           <Button
             title="Find My Scene"
             onPress={onContinue}
-            disabled={(!selectedLocation && !locationText.trim()) || !selectedGenre}
+            disabled={!selectedGenre || (!selectedLocation && !locationText.trim())}
             containerStyle={styles.buttonContainer}
             buttonStyle={styles.button}
             disabledStyle={styles.disabledButton}
@@ -505,17 +494,19 @@ const styles = StyleSheet.create({
     width: '100%', // Ensure full width alignment
   },
   placeItem: {
-    padding: 10,
+    padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#444',
   },
   placeMainText: {
     color: Colors.White,
     fontSize: 16,
+    fontWeight: '500',
   },
   placeSecondaryText: {
     color: 'grey',
     fontSize: 14,
+    marginTop: 2,
   },
   loadingContainer: {
     padding: 10,

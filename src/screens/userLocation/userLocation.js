@@ -125,7 +125,12 @@ const UserLocation = () => {
 
   // Custom Google Places autocomplete function
   const fetchPlacePredictions = async (input) => {
+    console.log('--- CUSTOM PLACES: Starting fetch for input ---', input);
+    console.log('--- CUSTOM PLACES: API Key available ---', !!Config.MAP_API_KEY);
+    console.log('--- CUSTOM PLACES: Input length ---', input.length);
+    
     if (!Config.MAP_API_KEY || input.length < 3) {
+      console.log('--- CUSTOM PLACES: Skipping fetch - no API key or input too short ---');
       setPlacePredictions([]);
       setShowPlaceSuggestions(false);
       return;
@@ -301,6 +306,19 @@ const UserLocation = () => {
                 <Text style={styles.loadingText}>Searching locations...</Text>
               </View>
             )}
+            
+            {/* Debug indicator - shows when API key is available */}
+            <View style={styles.debugContainer}>
+              <Text style={styles.debugText}>
+                API Key: {Config.MAP_API_KEY ? '✅ Available' : '❌ Missing'}
+              </Text>
+              <Text style={styles.debugText}>
+                Predictions: {placePredictions.length} found
+              </Text>
+              <Text style={styles.debugText}>
+                Show Suggestions: {showPlaceSuggestions ? 'Yes' : 'No'}
+              </Text>
+            </View>
           </View>
 
           {/* Genre Input */}
@@ -417,20 +435,20 @@ const styles = StyleSheet.create({
   },
   placesList: {
     position: 'absolute',
-    top: 60, // Position list correctly below the input
+    top: 50, // Position it directly below the 50px-high input
     left: 0,
     right: 0,
-    backgroundColor: '#2c2c2c',
+    backgroundColor: '#2c2c2c', // A dark, visible background
+    borderColor: 'red',        // A bright red border for easy spotting
+    borderWidth: 2,
+    zIndex: 9999,              // A very high zIndex to ensure it appears on top
     borderRadius: 8,
-    zIndex: 1000,
     elevation: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
     maxHeight: 200,
-    borderWidth: 1,
-    borderColor: '#444',
   },
   suggestionsList: {
     position: 'absolute',
@@ -520,16 +538,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   debugContainer: {
-    marginTop: 20,
+    marginTop: 10,
     padding: 10,
     backgroundColor: '#333',
     borderRadius: 8,
-    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: 'yellow',
   },
   debugText: {
     color: Colors.White,
-    fontSize: 14,
-    marginBottom: 5,
+    fontSize: 12,
+    marginBottom: 3,
   },
 });
 

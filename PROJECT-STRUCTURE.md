@@ -4,6 +4,7 @@
 - **React Native App**: Main mobile application
 - **Backend API**: Node.js server in `Webapp_API-Develop/`
 - **Web UI**: Angular app in `Webapp_UI-Develop/`
+- **Webapp-UI**: React/TypeScript web app in `webapp-ui/` ✅ **NEW**
 
 ---
 
@@ -43,6 +44,34 @@
 - **`Applebtn/`** - Apple sign-in button
 - **`Googlebtn/`** - Google sign-in button
 - **`URTextfield/`** - Custom text input component
+
+---
+
+## 🌐 **Webapp-UI (React/TypeScript Web App)**
+
+### **Project Location**
+- **Directory**: `webapp-ui/`
+- **Status**: ✅ Fully initialized and tracked in version control
+- **Framework**: React + TypeScript + Vite
+
+### **Key Files**
+- **`.env.example`** - Complete environment template (85+ variables)
+- **`package.json`** - Dependencies and scripts
+- **`vite.config.ts`** - Vite configuration
+- **`src/`** - Source code directory
+
+### **Environment Configuration**
+```env
+# Main API URL for the backend server
+VITE_API_BASE_URL=http://10.0.2.2:3000
+# Plus 85+ additional environment variables from template
+```
+
+### **Setup Instructions**
+1. Copy `webapp-ui/.env.example` to `webapp-ui/.env`
+2. Configure environment variables with actual values
+3. Run `npm install` to install dependencies
+4. Run `npm run dev` to start development server
 
 ---
 

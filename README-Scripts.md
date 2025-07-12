@@ -2,6 +2,31 @@
 
 This directory contains PowerShell scripts to help you start and stop the development services without making common mistakes.
 
+## Project Structure
+
+### **React Native App** (Main Directory)
+- Mobile application with full onboarding flow
+- Uses comprehensive `.env` file with 85+ environment variables
+- Analytics dashboard and song management features
+
+### **Webapp-UI** (React/TypeScript Web App)
+- Modern React web application in `webapp-ui/` directory
+- Complete environment template with `.env.example`
+- Artist dashboard, authentication, and API integration
+- **Status**: ✅ Fully initialized and tracked in version control
+
+## Environment Configuration
+
+### **React Native App (`.env`)**
+- Contains 85+ environment variables for API endpoints
+- Includes authentication, user preferences, statistics, and more
+- Template available in `.env.example` (main project)
+
+### **Webapp-UI (`.env.example`)**
+- Complete environment template in `webapp-ui/.env.example`
+- Includes API base URL and all required variables
+- **Setup**: Copy `webapp-ui/.env.example` to `webapp-ui/.env` and configure values
+
 ## Available Scripts
 
 ### 1. `start-backend.ps1`

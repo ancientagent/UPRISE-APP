@@ -51,6 +51,16 @@ LOGIN_URL=/auth/login
 **Symptom**: "API key does not start with 'SG.'" in backend logs
 **Quick Fix**: This is expected - SendGrid not configured. User accounts are created but emails won't be sent.
 
+### **7. Webapp-UI Environment Setup** ⭐ **NEW**
+**Symptom**: Missing environment variables in webapp-ui
+**Quick Fix**: 
+```powershell
+# Copy environment template
+Copy-Item webapp-ui/.env.example webapp-ui/.env
+# Edit webapp-ui/.env with actual values
+notepad webapp-ui/.env
+```
+
 ---
 
 ## 🔧 **Essential Commands**
@@ -87,6 +97,8 @@ netstat -ano | findstr ":3000\|:8081"
 | URL Builder | `src/utilities/utilities.js` |
 | Backend Config | `Webapp_API-Develop/src/config/index.js` |
 | Backend Entry | `Webapp_API-Develop/src/index.js` |
+| Webapp-UI Environment | `webapp-ui/.env.example` |
+| Webapp-UI Config | `webapp-ui/src/config.ts` |
 
 ---
 

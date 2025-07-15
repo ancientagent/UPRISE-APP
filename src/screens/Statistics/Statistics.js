@@ -3,12 +3,13 @@
 /* eslint-disable global-require */
 import React, { useEffect, useState } from 'react';
 import {
-  View, Text, Image, Platform, ActivityIndicator, FlatList, ImageBackground,
+  View, Text, Image, Platform, ActivityIndicator, FlatList, ImageBackground, TouchableOpacity,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ScrollView } from 'react-native-virtualized-view';
 import _ from 'lodash';
 import styles from './Statistics.styles';
+import * as RootNavigation from '../../navigators/RootNavigation';
 import {
   getUserStatistics, getRadioStationStatistics,
   getEventsStatistics, getGenresPrefrenceStatistics,
@@ -204,8 +205,20 @@ const Statistics = () => {
       </View>
     </View>
   );
+  const handleViewAnalytics = () => {
+    RootNavigation.navigate('Analytics');
+  };
+
   return (
     <ScrollView>
+      <View style={styles.analyticsButtonContainer}>
+        <TouchableOpacity
+          style={styles.analyticsButton}
+          onPress={handleViewAnalytics}
+        >
+          <Text style={styles.analyticsButtonText}>View Analytics</Text>
+        </TouchableOpacity>
+      </View>
       { showLoading
         ? (
           <ActivityIndicator

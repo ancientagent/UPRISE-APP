@@ -47,7 +47,12 @@ const Signup = props => {
     formDataObj.append('mobile', data.mobile || '1234567890');
     formDataObj.append('gender', data.gender || 'PREFER NOT TO SAY');
     formDataObj.append('role', data.role || 'listener');
-    formDataObj.append('title', data.bandName || '');
+    
+    // Only add band name if user is an artist
+    if (data.role === 'artist' && data.bandName) {
+      formDataObj.append('title', data.bandName.trim());
+    }
+    
     formDataObj.append('country', data.country || 'USA');
     
     dispatch(signupRequestSagaAction(formDataObj));

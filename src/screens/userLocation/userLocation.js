@@ -23,6 +23,7 @@ import URContainer from '../../components/URContainer/URContainer';
 import Loader from '../../components/Loader/Loader';
 import Colors from '../../theme/colors';
 import { strings } from '../../utilities/localization/localization';
+import { searchCities, getLocationDetails } from '../../services/googlePlaces/googlePlaces.service';
 
 const UserLocation = () => {
   const dispatch = useDispatch();
@@ -50,8 +51,9 @@ const UserLocation = () => {
 
   // --- Effects ---
   useEffect(() => {
-    console.log('--- USER LOCATION: Config.MAP_API_KEY ---', Config.MAP_API_KEY ? 'AVAILABLE' : 'MISSING');
-    console.log('--- USER LOCATION: Full MAP_API_KEY value ---', Config.MAP_API_KEY);
+    const apiKey = Config.GOOGLE_PLACES_API_KEY || Config.MAP_API_KEY;
+    console.log('--- USER LOCATION: API Key ---', apiKey ? 'AVAILABLE' : 'MISSING');
+    console.log('--- USER LOCATION: Full API Key value ---', apiKey);
     if (userAccessToken) {
       console.log('--- USER LOCATION: Dispatching getUserGenresSagaAction ---');
       dispatch(getUserGenresSagaAction({ accessToken: userAccessToken }));
@@ -60,16 +62,16 @@ const UserLocation = () => {
 
   // Debug effect for PlacesInput configuration
   useEffect(() => {
+    const apiKey = Config.GOOGLE_PLACES_API_KEY || Config.MAP_API_KEY;
     console.log('--- USER LOCATION: Component Debug Info ---');
-    console.log('  - MAP_API_KEY:', Config.MAP_API_KEY ? `${Config.MAP_API_KEY.substring(0, 20)}...` : 'MISSING');
-    console.log('  - MAP_API_KEY length:', Config.MAP_API_KEY ? Config.MAP_API_KEY.length : 0);
+    console.log('  - API Key:', apiKey ? `${apiKey.substring(0, 20)}...` : 'MISSING');
+    console.log('  - API Key length:', apiKey ? apiKey.length : 0);
     console.log('  - locationText state:', locationText);
     console.log('  - selectedLocation state:', selectedLocation);
-    console.log('--- PlacesInput Props that will be passed ---');
-    console.log('  - googleApiKey:', Config.MAP_API_KEY ? 'PRESENT' : 'MISSING');
-    console.log('  - queryCountries: [\'us\']');
-    console.log('  - queryTypes: (cities)');
-    console.log('  - language: en-US');
+    console.log('--- Google Places Service Info ---');
+    console.log('  - API Key:', apiKey ? 'PRESENT' : 'MISSING');
+    console.log('  - Service: searchCities function available');
+    console.log('  - Language: en-US');
   }, []);
 
   // --- Event Handlers ---
@@ -114,8 +116,9 @@ const UserLocation = () => {
     
     // Debug: Log if suggestions should appear
     if (text.length > 2) {
+      const apiKey = Config.GOOGLE_PLACES_API_KEY || Config.MAP_API_KEY;
       console.log('--- USER LOCATION: Text length > 2, Places API should be queried ---');
-      console.log('--- USER LOCATION: API Key being used ---', Config.MAP_API_KEY ? Config.MAP_API_KEY.substring(0, 20) + '...' : 'MISSING');
+      console.log('--- USER LOCATION: API Key being used ---', apiKey ? apiKey.substring(0, 20) + '...' : 'MISSING');
       fetchPlacePredictions(text);
     } else {
       setPlacePredictions([]);
@@ -123,13 +126,14 @@ const UserLocation = () => {
     }
   };
 
-  // Custom Google Places autocomplete function
+  // Custom Google Places autocomplete function using our service
   const fetchPlacePredictions = async (input) => {
+    const apiKey = Config.GOOGLE_PLACES_API_KEY || Config.MAP_API_KEY;
     console.log('--- CUSTOM PLACES: Starting fetch for input ---', input);
-    console.log('--- CUSTOM PLACES: API Key available ---', !!Config.MAP_API_KEY);
+    console.log('--- CUSTOM PLACES: API Key available ---', !!apiKey);
     console.log('--- CUSTOM PLACES: Input length ---', input.length);
     
-    if (!Config.MAP_API_KEY || input.length < 3) {
+    if (!apiKey || input.length < 3) {
       console.log('--- CUSTOM PLACES: Skipping fetch - no API key or input too short ---');
       setPlacePredictions([]);
       setShowPlaceSuggestions(false);
@@ -140,34 +144,31 @@ const UserLocation = () => {
     console.log('--- CUSTOM PLACES: Fetching predictions for ---', input);
 
     try {
-      // Strictly filter for cities only, US only
-      const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&types=(cities)&components=country:us&language=en-US&key=${Config.MAP_API_KEY}`;
-      console.log('--- CUSTOM PLACES: API URL ---', url.replace(Config.MAP_API_KEY, 'API_KEY_HIDDEN'));
+      // Use our new Google Places service
+      const suggestions = await searchCities(input);
+      console.log('--- CUSTOM PLACES: Service response ---', suggestions);
       
-      const response = await fetch(url);
-      const data = await response.json();
-      
-      console.log('--- CUSTOM PLACES: API Response ---', JSON.stringify(data, null, 2));
-      
-      if (data.status === 'OK' && data.predictions) {
-        // Filter to ensure we only get locality (city) results
-        const cityPredictions = data.predictions.filter(prediction => 
-          prediction.types.includes('locality') && 
-          prediction.types.includes('political') &&
-          !prediction.types.includes('establishment') &&
-          !prediction.types.includes('point_of_interest')
-        );
+      if (suggestions && suggestions.length > 0) {
+        // Transform to match expected format
+        const transformedPredictions = suggestions.map(suggestion => ({
+          place_id: suggestion.placeId,
+          description: suggestion.displayText,
+          structured_formatting: {
+            main_text: suggestion.mainText,
+            secondary_text: suggestion.secondaryText
+          }
+        }));
         
-        console.log('--- CUSTOM PLACES: Filtered city predictions ---', cityPredictions.length);
-        setPlacePredictions(cityPredictions);
-        setShowPlaceSuggestions(cityPredictions.length > 0);
+        console.log('--- CUSTOM PLACES: Transformed predictions ---', transformedPredictions.length);
+        setPlacePredictions(transformedPredictions);
+        setShowPlaceSuggestions(transformedPredictions.length > 0);
       } else {
-        console.log('--- CUSTOM PLACES: No predictions or error ---', data.status, data.error_message);
+        console.log('--- CUSTOM PLACES: No predictions found ---');
         setPlacePredictions([]);
         setShowPlaceSuggestions(false);
       }
     } catch (error) {
-      console.log('--- CUSTOM PLACES: Fetch error ---', error);
+      console.log('--- CUSTOM PLACES: Service error ---', error);
       setPlacePredictions([]);
       setShowPlaceSuggestions(false);
     } finally {
@@ -181,17 +182,20 @@ const UserLocation = () => {
     setLocationText(prediction.description);
     setShowPlaceSuggestions(false);
     
-    // Get place details for coordinates
+    // Get place details for coordinates using our service
     try {
-      const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${prediction.place_id}&fields=geometry,address_components,formatted_address&key=${Config.MAP_API_KEY}`;
       console.log('--- CUSTOM PLACES: Fetching place details ---');
+      const placeDetails = await getLocationDetails(prediction.place_id);
       
-      const response = await fetch(detailsUrl);
-      const data = await response.json();
-      
-      if (data.status === 'OK' && data.result) {
-        console.log('--- CUSTOM PLACES: Place details ---', JSON.stringify(data.result, null, 2));
-        setSelectedLocation(data.result);
+      if (placeDetails) {
+        console.log('--- CUSTOM PLACES: Place details ---', JSON.stringify(placeDetails, null, 2));
+        // Transform to match expected format
+        const transformedResult = {
+          geometry: placeDetails.geometry,
+          address_components: placeDetails.addressComponents,
+          formatted_address: placeDetails.formattedAddress
+        };
+        setSelectedLocation(transformedResult);
       }
     } catch (error) {
       console.log('--- CUSTOM PLACES: Error fetching place details ---', error);
@@ -310,7 +314,7 @@ const UserLocation = () => {
             {/* Debug indicator - shows when API key is available */}
             <View style={styles.debugContainer}>
               <Text style={styles.debugText}>
-                API Key: {Config.MAP_API_KEY ? '✅ Available' : '❌ Missing'}
+                API Key: {(Config.GOOGLE_PLACES_API_KEY || Config.MAP_API_KEY) ? '✅ Available' : '❌ Missing'}
               </Text>
               <Text style={styles.debugText}>
                 Predictions: {placePredictions.length} found

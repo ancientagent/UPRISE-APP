@@ -2,7 +2,16 @@
 
 ## 🚨 **Most Common Issues & Immediate Solutions**
 
-### **1. Login Not Working (Frontend Unresponsive)**
+### **1. Google Places API Testing Issues**
+**Symptom**: PowerShell JSON escaping errors, 400 Bad Request
+**Quick Fix**: 
+```cmd
+# Use Command Prompt (cmd) instead of PowerShell
+curl -X POST "https://places.googleapis.com/v1/places:autocomplete?key=YOUR_API_KEY" -H "Content-Type: application/json" -d "{\"input\":\"Austin\",\"languageCode\":\"en-US\",\"regionCode\":\"US\"}"
+```
+**Note**: Remove `"types": ["locality"]` field - it's not supported in the API request.
+
+### **2. Login Not Working (Frontend Unresponsive)**
 **Symptom**: Login button does nothing, no network requests
 **Quick Fix**: 
 ```powershell

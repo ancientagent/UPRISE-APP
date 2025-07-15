@@ -76,3 +76,4 @@ export const getBandsStatisticsType = createRequestResponseActionTypeSet(`${Acti
 export const getRadioStationStatisticsType = createRequestResponseActionTypeSet(`${ActionNamespace}/GET_RADIO_STATIONS_STATISTICS`);
 export const getPopularArtistStatisticsType = createRequestResponseActionTypeSet(`${ActionNamespace}/GET_POPULAR_ARTIST_STATISTICS`);
 export const getPopularArtistGenresStatisticsType = createRequestResponseActionTypeSet(`${ActionNamespace}/GET_POPULAR_ARTIST_GENRES_STATISTICS`);
+export const getSongAnalyticsType = createRequestResponseActionTypeSet(`${ActionNamespace}/GET_SONG_ANALYTICS`);

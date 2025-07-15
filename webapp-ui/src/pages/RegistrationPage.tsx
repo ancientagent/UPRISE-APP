@@ -8,8 +8,7 @@ const RegistrationPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [role, setRole] = useState('listener'); // Default to 'listener'
-  const [isArtist, setIsArtist] = useState(false);
+  const [isArtist, setIsArtist] = useState(false); // This is the only role selector
   const [bandName, setBandName] = useState('');
   const navigate = useNavigate();
 
@@ -26,7 +25,7 @@ const RegistrationPage: React.FC = () => {
           setLoading(false);
           return;
         }
-        payload.title = bandName.trim(); // Use 'title' instead of 'bandName'
+        payload.title = bandName.trim();
       }
       const response = await signup(payload);
       // Treat any 2xx response as success
@@ -51,16 +50,14 @@ const RegistrationPage: React.FC = () => {
         </div>
       )}
       <form onSubmit={handleSubmit}>
+        {/* Artist Checkbox for role selection */}
         <div style={{ marginBottom: '15px' }}>
           <label htmlFor="isArtist" style={{ color: 'white', display: 'block', marginBottom: '5px' }}>Register as Artist</label>
           <input
             type="checkbox"
             id="isArtist"
             checked={isArtist}
-            onChange={(e) => {
-              setIsArtist(e.target.checked);
-              setRole(e.target.checked ? 'artist' : 'listener');
-            }}
+            onChange={(e) => setIsArtist(e.target.checked)}
             style={{
               width: '20px',
               height: '20px',
@@ -72,7 +69,7 @@ const RegistrationPage: React.FC = () => {
           />
           <span style={{ color: 'white', fontSize: '16px', verticalAlign: 'middle' }}>Check if you are an Artist</span>
         </div>
-        {role === 'artist' && (
+        {isArtist && (
           <div style={{ marginBottom: '15px' }}>
             <label htmlFor="bandName" style={{ display: 'block', marginBottom: '5px', color: 'white' }}>
               Band Name:
@@ -82,7 +79,7 @@ const RegistrationPage: React.FC = () => {
               id="bandName"
               value={bandName}
               onChange={(e) => setBandName(e.target.value)}
-              required={role === 'artist'}
+              required={isArtist}
               style={{ width: '100%', padding: '8px', border: '1px solid #ccc' }}
             />
           </div>

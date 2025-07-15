@@ -56,6 +56,12 @@ const Colors = {
   Grey: 'grey',
   textInputBorder: '#E0E0E0',
   correct: '#27AE60',
+  primary: 'rgba(220, 247, 99, 1)',
+  background: '#212121',
+  text: '#FFFFFF',
+  textSecondary: 'rgba(255, 255, 255, 0.6)',
+  border: 'rgba(240, 240, 240, 0.2)',
+  error: '#FF0000',
 };
 
 export default Colors;

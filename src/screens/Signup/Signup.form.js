@@ -13,6 +13,7 @@ import SignupValidators from './SignupValidators';
 import { signupRequestSagaAction } from '../../state/actions/sagas';
 import URCheckBox from '../../components/URCheckBox/URCheckBox';
 import RadioButton from '../../components/RadioButton/RadioButton';
+import { Picker } from '@react-native-picker/picker';
 
 const genderData = [{
   id: 1,
@@ -38,12 +39,12 @@ const SignupForm = props => {
   
   const onSubmitForm = values => {
     if (onComplete) {
-      // Pass form values directly with additional fields
       const completeData = {
         ...values,
         gender: selectedGender,
         country: 'USA',
         role: values.artistCheck ? 'artist' : 'listener',
+        bandName: values.artistCheck ? values.bandName : '',
       };
       onComplete(completeData);
     }
@@ -60,8 +61,8 @@ const SignupForm = props => {
           email: '',
           password: '',
           confirmPassword: '',
-          bandName: '',
           artistCheck: false,
+          bandName: '',
           acceptTerms: false,
         } }
         validationSchema={ SignupValidators(showRequire, false) }
@@ -156,6 +157,7 @@ const SignupForm = props => {
                 name='bandName'
                 autoCapitalize='words'
                 label={strings('SignUp.bandNameLabel')}
+                showAstric
               />
             )}
 

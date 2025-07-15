@@ -14,6 +14,8 @@ import WelcomeScreen from '../screens/WelcomeScreen/WelcomeScreen';
 import AuthLoading from '../screens/AuthLoading/AuthLoading';
 import Dashboard from './BottomTabs';
 import SignupUserName from '../screens/Signup/Signup.userName.js';
+import Analytics from '../screens/Analytics/Analytics';
+import TestPlaces from '../screens/userLocation/testPlaces';
 
 enableScreens();
 
@@ -40,6 +42,8 @@ const AppNavigator = () => {
         options={{ headerShown: false }}
       />
       <RootStack.Screen name='ChangePassword' component={ChangePassword} />
+      <RootStack.Screen name="Analytics" component={Analytics} />
+      <RootStack.Screen name="TestPlaces" component={TestPlaces} />
 
       {/* Main App Screen */}
       <RootStack.Screen name="Dashboard" component={Dashboard} />

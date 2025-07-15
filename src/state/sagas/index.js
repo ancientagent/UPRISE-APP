@@ -73,6 +73,7 @@ import getBandsStatisticsTypeWatcherSaga from './getBandsStatistics/getBandsStat
 import getRadioStationStatisticsWatcherSaga from './getRadioStationStatistics/getRadioStationStatistics.saga';
 import getPopularArtistStatisticsWatcherSaga from './getPopularArtistStatistics/getPopularArtistStatistics.saga';
 import getPopularArtistGenresStatisticsWatcherSaga from './getPopularArtistGenresStatistics/getPopularArtistGenresStatistics.saga';
+import getSongAnalyticsWatcherSaga from './getSongAnalytics/getSongAnalytics.saga';
 import onboardingSaga from './onboarding/onboarding.saga';
 import watchNetworkError from './networkError/networkError.saga';
 
@@ -153,6 +154,7 @@ export default function* initialSaga() {
     getRadioStationStatisticsWatcherSaga(),
     getPopularArtistStatisticsWatcherSaga(),
     getPopularArtistGenresStatisticsWatcherSaga(),
+    getSongAnalyticsWatcherSaga(),
     watchNetworkError(),
   ]);
 }

@@ -210,7 +210,25 @@ const ArtistDashboardPage: React.FC = () => {
   const bandTitle = band?.title || band?.band?.title || 'Artist Dashboard';
   const bandDescription = band?.description || band?.band?.description;
   return (
-    <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div style={{ maxWidth: 1000, margin: '40px auto', background: '#fff', color: '#222', padding: 24, borderRadius: 8 }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+        <button
+          onClick={() => navigate('/analytics')}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#28a745',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            fontSize: '16px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+          }}
+        >
+          View Analytics
+        </button>
+      </div>
       <h2>{bandTitle}</h2>
       <p>{bandDescription}</p>
       <hr />

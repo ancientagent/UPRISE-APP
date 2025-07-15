@@ -11,6 +11,7 @@ export const getBandsStatistics = state => _.get(state.getBandsStatistics, 'resu
 export const getGenresPrefrenceStatistics = state => _.get(state.getGenresPrefrenceStatistics, 'result.data', []);
 export const getPopularArtistGenresStatistics = state => _.get(state.getPopularArtistGenresStatistics, 'result.data', []);
 export const getPopularArtistStatistics = state => _.get(state.getPopularArtistStatistics, 'result.artist', {});
+export const getSongAnalytics = state => _.get(state.getSongAnalytics, 'result.data.songs', []);
 export const getEventsStatistics = state => _.get(state.getEventsStatistics, 'result.data', {});
 export const nearestLocations = state => _.get(state.nearestLocations, 'result.data', []);
 export const loginData = state => _.get(state.login, 'result.data', {});

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Login</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; }
+        button { background-color: #007bff; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 4px; }
+        .success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .debug { background-color: #f8f9fa; border: 1px solid #dee2e6; color: #495057; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h2>Debug Login API</h2>
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="email">Email/Username:</label>
+            <input type="text" id="email" name="email" value="testartist@example.com" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" value="Loca$h2682" required>
+        </div>
+        
+        <button type="submit">Debug Login</button>
+    </form>
+    
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const resultDiv = document.getElementById('result');
+            
+            // Debug: Show what we're sending
+            let debugInfo = '<div class="debug"><h3>🔍 Debug Info:</h3>';
+            debugInfo += '<p><strong>Form Data:</strong></p>';
+            for (let [key, value] of formData.entries()) {
+                debugInfo += `<p>${key}: ${value}</p>`;
+            }
+            debugInfo += '</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'client-id': '437920819fa89d19abe380073d28839c',
+                        'client-secret': '28649120bdf32812f433f428b15ab1a1'
+                    },
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                debugInfo += `<div class="debug"><p><strong>Response Status:</strong> ${response.status}</p>`;
+                debugInfo += `<p><strong>Response Headers:</strong></p>`;
+                for (let [key, value] of response.headers.entries()) {
+                    debugInfo += `<p>${key}: ${value}</p>`;
+                }
+                debugInfo += '</div>';
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = debugInfo + `
+                        <h3>✅ Login Successful!</h3>
+                        <p><strong>Message:</strong> ${data.message}</p>
+                        <p><strong>User:</strong> ${data.data.user.firstName} ${data.data.user.lastName}</p>
+                        <p><strong>Email:</strong> ${data.data.user.email}</p>
+                        <p><strong>Username:</strong> ${data.data.user.userName}</p>
+                        <p><strong>Status:</strong> ${data.data.user.status}</p>
+                        <p><strong>Role:</strong> ${data.data.user.role?.name}</p>
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = debugInfo + `<h3>❌ Login Failed</h3><p><strong>Error:</strong> ${data.error || data.message}</p>`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = debugInfo + `<h3>❌ Network Error</h3><p>${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html> 

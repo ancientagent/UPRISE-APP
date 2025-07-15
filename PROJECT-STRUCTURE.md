@@ -23,6 +23,7 @@
 - **`signup/signup.service.js`** - Signup API calls
 - **`request/request.service.js`** - Base HTTP request service
 - **`constants/Constants.js`** - API constants (GET, POST, etc.)
+- **`googlePlaces/googlePlaces.service.js`** - Google Places API integration ⭐ **NEW**
 
 #### **`src/utilities/`** - Utility Functions
 - **`utilities.js`** - Contains `getRequestURL()` function for building API URLs
@@ -156,6 +157,10 @@ LOGIN_URL=/auth/login
 GET_USER_DETAILS_URL=/user/me
 CLIENT_ID=437920819fa89d19abe380073d28839c
 CLIENT_SECRET=28649120bdf32812f433f428b15ab1a1
+
+# Google Places API Integration
+GOOGLE_PLACES_API_KEY=AIzaSyDmEqT-zOSEIP_YlvyZQUAVd7SRlQvmH2g
+GOOGLE_PLACES_AUTOCOMPLETE_URL=https://places.googleapis.com/v1/places:autocomplete
 ```
 
 ### **Backend Server (Environment Variables)**

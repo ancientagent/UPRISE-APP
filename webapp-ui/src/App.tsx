@@ -7,6 +7,7 @@ import ArtistDashboardPage from './pages/ArtistDashboardPage';
 import CreateEventPage from './pages/CreateEventPage';
 import WelcomePage from './pages/WelcomePage';
 import RequireAuth from './components/RequireAuth';
+import AnalyticsPage from './pages/AnalyticsPage';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <li><Link to="/dashboard" style={{ textDecoration: 'none', color: '#007bff' }}>Dashboard</Link></li>
             <li><Link to="/create-band" style={{ textDecoration: 'none', color: '#007bff' }}>Create Band</Link></li>
             <li><Link to="/create-event" style={{ textDecoration: 'none', color: '#007bff' }}>Create Event</Link></li>
+            <li><Link to="/analytics" style={{ textDecoration: 'none', color: '#007bff' }}>Analytics</Link></li>
           </ul>
         </nav>
         <Routes>
@@ -34,6 +36,7 @@ function App() {
             <Route path="/create-band" element={<CreateBandPage />} />
             <Route path="/create-event" element={<CreateEventPage />} />
             <Route path="/event/:eventId/edit" element={<CreateEventPage />} />
+            <Route path="/analytics" element={<AnalyticsPage />} />
           </Route>
           
           <Route path="/welcome" element={<WelcomePage />} />

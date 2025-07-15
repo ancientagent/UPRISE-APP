@@ -8,6 +8,7 @@ This directory contains PowerShell scripts to help you start and stop the develo
 - Mobile application with full onboarding flow
 - Uses comprehensive `.env` file with 85+ environment variables
 - Analytics dashboard and song management features
+- **Google Places API Integration** - Location autocomplete functionality ⭐ **NEW**
 
 ### **Webapp-UI** (React/TypeScript Web App)
 - Modern React web application in `webapp-ui/` directory
@@ -97,6 +98,13 @@ Stops all services and frees up ports.
 ✅ **Automatic port management** - Easy to stop conflicting processes
 ✅ **Clear feedback** - Colored output shows what's happening
 ✅ **Separate windows** - Each service runs in its own window for better debugging
+✅ **Google Places API integration** - Location autocomplete functionality ready ⭐ **NEW**
+
+## 📚 **Documentation**
+
+- **`GOOGLE-PLACES-API-DOCUMENTATION.md`** - Complete Google Places API integration guide
+- **`QUICK-FIXES.md`** - Common issues and solutions
+- **`PROJECT-STRUCTURE.md`** - Detailed project architecture
 
 ## Troubleshooting
 

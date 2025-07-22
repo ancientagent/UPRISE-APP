@@ -13,6 +13,7 @@ This directory contains PowerShell scripts to help you start and stop the develo
 - **Google Places API Integration** - Location autocomplete functionality ✅ **WORKING**
 - **Comprehensive Genre System** - 97 genres with sub-genres ✅ **IMPLEMENTED**
 - **Statistics Dashboard** - All endpoints working ✅ **FIXED**
+- **Artist Unification System** - Unified ArtistProfile model ✅ **COMPLETE**
 
 ### **Webapp-UI** (React/TypeScript Web App)
 - Modern React web application in `webapp-ui/` directory
@@ -109,6 +110,7 @@ Stops all services and frees up ports.
 - **`GOOGLE-PLACES-API-DOCUMENTATION.md`** - Complete Google Places API integration guide
 - **`QUICK-FIXES.md`** - Common issues and solutions
 - **`PROJECT-STRUCTURE.md`** - Detailed project architecture
+- **`ARTIST-UNIFICATION-IMPLEMENTATION.md`** - Complete Artist Unification implementation guide
 
 ## Troubleshooting
 

@@ -77,4 +77,6 @@ export const getRadioStationStatisticsSagaAction = () => ({ type: types.getRadio
 export const getPopularArtistStatisticsSagaAction = () => ({ type: types.getPopularArtistStatisticsSagaType });
 export const getPopularArtistGenresStatisticsSagaAction = () => ({ type: types.getPopularArtistGenresStatisticsSagaType });
 export const getSongAnalyticsSagaAction = () => ({ type: types.getSongAnalyticsSagaType });
+export const artistProfileSagaAction = () => ({ type: types.artistProfileSagaType });
+export const updateArtistProfileSagaAction = payload => ({ type: types.updateArtistProfileSagaType, payload });
 

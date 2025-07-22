@@ -103,9 +103,13 @@ const ProfileTab = props => {
     formData.append('email', userDetails.email);
     { values.description === null || '' ? formData.append('about', null) : formData.append('about', values.description); }
     { values.mobile === null || '' ? formData.append('mobile', null) : formData.append('mobile', values.mobile); }
-    { values.faceBookID === null || '' ? formData.append('facebook', null) : formData.append('facebook', values.faceBookID); }
-    { values.instaID === null || '' ? formData.append('instagram', null) : formData.append('instagram', values.instaID); }
-    { values.tweetID === null || '' ? formData.append('twitter', null) : formData.append('twitter', values.tweetID); }
+    // Social media fields are now handled by ArtistProfileTab for artists
+    // Only include if user is not an artist
+    if (userDetails.roleName !== 'ARTIST') {
+      { values.faceBookID === null || '' ? formData.append('facebook', null) : formData.append('facebook', values.faceBookID); }
+      { values.instaID === null || '' ? formData.append('instagram', null) : formData.append('instagram', values.instaID); }
+      { values.tweetID === null || '' ? formData.append('twitter', null) : formData.append('twitter', values.tweetID); }
+    }
     if (profileImage === null) {
       formData.append('avatar', null);
     } else {
@@ -230,50 +234,53 @@ const ProfileTab = props => {
                 width={ 0.4 }
                 color={ Colors.dividerColor }
               />
-              <View style={ { marginHorizontal: 24 } }>
-                <Text style={ styles.socialPlatform }>
-                  { strings('socialPlatform.socialPlatform') }
-                </Text>
-                <>
-                  <Text style={ styles.socialPlatformTitle }>
-                    { strings('socialPlatform.facebook') }
+              {/* Only show social media for non-artists - artists use ArtistProfileTab */}
+              {userDetails.roleName !== 'ARTIST' && (
+                <View style={{ marginHorizontal: 24 }}>
+                  <Text style={styles.socialPlatform}>
+                    {strings('socialPlatform.socialPlatform')}
                   </Text>
-                  <Text style={ styles.socialPlatformUserId }>
-                    { userDetails.facebook }
-                  </Text>
-                  <Divider
-                    orientation='horizontal'
-                    width={ 1 }
-                    color={ Colors.dividerColor }
-                  />
-                </>
-                <>
-                  <Text style={ styles.socialPlatformTitle }>
-                    { strings('socialPlatform.instagram') }
-                  </Text>
-                  <Text style={ styles.socialPlatformUserId }>
-                    { userDetails.instagram }
-                  </Text>
-                  <Divider
-                    orientation='horizontal'
-                    width={ 1 }
-                    color={ Colors.dividerColor }
-                  />
-                </>
-                <>
-                  <Text style={ styles.socialPlatformTitle }>
-                    { strings('socialPlatform.twitter') }
-                  </Text>
-                  <Text style={ styles.socialPlatformUserId }>
-                    { userDetails.twitter }
-                  </Text>
-                  <Divider
-                    orientation='horizontal'
-                    width={ 1 }
-                    color={ Colors.dividerColor }
-                  />
-                </>
-              </View>
+                  <>
+                    <Text style={styles.socialPlatformTitle}>
+                      {strings('socialPlatform.facebook')}
+                    </Text>
+                    <Text style={styles.socialPlatformUserId}>
+                      {userDetails.facebook}
+                    </Text>
+                    <Divider
+                      orientation='horizontal'
+                      width={1}
+                      color={Colors.dividerColor}
+                    />
+                  </>
+                  <>
+                    <Text style={styles.socialPlatformTitle}>
+                      {strings('socialPlatform.instagram')}
+                    </Text>
+                    <Text style={styles.socialPlatformUserId}>
+                      {userDetails.instagram}
+                    </Text>
+                    <Divider
+                      orientation='horizontal'
+                      width={1}
+                      color={Colors.dividerColor}
+                    />
+                  </>
+                  <>
+                    <Text style={styles.socialPlatformTitle}>
+                      {strings('socialPlatform.twitter')}
+                    </Text>
+                    <Text style={styles.socialPlatformUserId}>
+                      {userDetails.twitter}
+                    </Text>
+                    <Divider
+                      orientation='horizontal'
+                      width={1}
+                      color={Colors.dividerColor}
+                    />
+                  </>
+                </View>
+              )}
               <TouchableOpacity
                 onPress={ () => navigation.navigate('ChangePassword') }
                 style={ { marginTop: 10 } }
@@ -389,69 +396,72 @@ const ProfileTab = props => {
                     color={ Colors.dividerColor }
                     style={ { marginTop: 14 } }
                   />
-                  <View style={ { marginHorizontal: 24 } }>
-                    <Text style={ styles.socialPlatform }>
-                      { strings('socialPlatform.socialPlatform') }
+                  {/* Only show social media for non-artists - artists use ArtistProfileTab */}
+                  {userDetails.roleName !== 'ARTIST' && (
+                    <View style={{ marginHorizontal: 24 }}>
+                      <Text style={styles.socialPlatform}>
+                        {strings('socialPlatform.socialPlatform')}
+                      </Text>
+                      <>
+                        <Text style={styles.socialPlatformTitle}>
+                          {strings('socialPlatform.facebook')}
+                        </Text>
+                        <TextInput
+                          style={styles.socialPlatformUserId}
+                          onChangeText={handleChange('faceBookID')}
+                          value={values.faceBookID}
+                          numberOfLines={1}
+                          maxLength={20}
+                        />
+                        <Divider
+                          orientation='horizontal'
+                          width={1}
+                          color={Colors.dividerColor}
+                        />
+                      </>
+                      <>
+                        <Text style={styles.socialPlatformTitle}>
+                          {strings('socialPlatform.instagram')}
+                        </Text>
+                        <TextInput
+                          style={styles.socialPlatformUserId}
+                          onChangeText={handleChange('instaID')}
+                          value={values.instaID}
+                          numberOfLines={1}
+                          maxLength={20}
+                        />
+                        <Divider
+                          orientation='horizontal'
+                          width={1}
+                          color={Colors.dividerColor}
+                        />
+                      </>
+                      <>
+                        <Text style={styles.socialPlatformTitle}>
+                          {strings('socialPlatform.twitter')}
+                        </Text>
+                        <TextInput
+                          style={styles.socialPlatformUserId}
+                          onChangeText={handleChange('tweetID')}
+                          value={values.tweetID}
+                          numberOfLines={1}
+                          maxLength={20}
+                        />
+                        <Divider
+                          orientation='horizontal'
+                          width={1}
+                          color={Colors.dividerColor}
+                        />
+                      </>
+                    </View>
+                  )}
+                  <TouchableOpacity onPress={handleSubmit} disabled={!isValid}>
+                    <Text
+                      style={[styles.saveText, { color: !isValid ? Colors.sideHeadingText : Colors.radiumColour }]}
+                    >
+                      {strings('userProfile.save')}
                     </Text>
-                    <>
-                      <Text style={ styles.socialPlatformTitle }>
-                        { strings('socialPlatform.facebook') }
-                      </Text>
-                      <TextInput
-                        style={ styles.socialPlatformUserId }
-                        onChangeText={ handleChange('faceBookID') }
-                        value={ values.faceBookID }
-                        numberOfLines={ 1 }
-                        maxLength={ 20 }
-                      />
-                      <Divider
-                        orientation='horizontal'
-                        width={ 1 }
-                        color={ Colors.dividerColor }
-                      />
-                    </>
-                    <>
-                      <Text style={ styles.socialPlatformTitle }>
-                        { strings('socialPlatform.instagram') }
-                      </Text>
-                      <TextInput
-                        style={ styles.socialPlatformUserId }
-                        onChangeText={ handleChange('instaID') }
-                        value={ values.instaID }
-                        numberOfLines={ 1 }
-                        maxLength={ 20 }
-                      />
-                      <Divider
-                        orientation='horizontal'
-                        width={ 1 }
-                        color={ Colors.dividerColor }
-                      />
-                    </>
-                    <>
-                      <Text style={ styles.socialPlatformTitle }>
-                        { strings('socialPlatform.twitter') }
-                      </Text>
-                      <TextInput
-                        style={ styles.socialPlatformUserId }
-                        onChangeText={ handleChange('tweetID') }
-                        value={ values.tweetID }
-                        numberOfLines={ 1 }
-                        maxLength={ 20 }
-                      />
-                      <Divider
-                        orientation='horizontal'
-                        width={ 1 }
-                        color={ Colors.dividerColor }
-                      />
-                    </>
-                    <TouchableOpacity onPress={ handleSubmit } disabled={ !isValid }>
-                      <Text
-                        style={ [styles.saveText, { color: !isValid ? Colors.sideHeadingText : Colors.radiumColour }] }
-                      >
-                        { strings('userProfile.save') }
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                  </TouchableOpacity>
                 </View>
               ) }
             </Formik>

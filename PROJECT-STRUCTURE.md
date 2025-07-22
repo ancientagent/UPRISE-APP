@@ -83,12 +83,16 @@ VITE_API_BASE_URL=http://10.0.2.2:3000
 ### **Key Files**
 - **`src/index.js`** - Main server entry point
 - **`src/config/index.js`** - Environment configuration and client authentication
-- **`src/routes/auth/`** - Authentication routes (signup, login, etc.)
-- **`src/routes/home.js`** - Home feed and community content (⚠️ **Location filtering issues**)
-- **`src/routes/discovery.js`** - Discovery content (⚠️ **Location filtering issues**)
+- **`src/routes/auth.js`** - Authentication routes (signup, login, etc.) ✅ **ARTIST UNIFICATION COMPLETE**
+- **`src/routes/user.js`** - User profile and artist management ✅ **ARTIST UNIFICATION COMPLETE**
+- **`src/routes/band.js`** - Legacy band routes (⚠️ **DEPRECATED**)
+- **`src/routes/home.js`** - Home feed and community content ✅ **Location filtering working**
+- **`src/routes/discovery.js`** - Discovery content ✅ **Location filtering working**
 - **`src/routes/radio.js`** - Radio system with tier-based filtering
 - **`src/routes/statistics.js`** - Statistics with proper location filtering
 - **`src/utils/fairPlayAlgorithm.js`** - Fair Play algorithm for song selection
+- **`src/database/models/artistprofile.js`** - Unified ArtistProfile model ✅ **NEW**
+- **`src/database/migrations/20241202000002-unify-bands-into-artist-profiles.js`** - Artist unification migration ✅ **NEW**
 - **`package.json`** - Backend dependencies and scripts
 
 ### **Location Filtering System** ✅ **RESOLVED**
@@ -98,6 +102,17 @@ The backend location filtering has been implemented and tested:
 - **✅ Impact**: Users now see local community content as intended
 
 **See**: `BACKEND-FORENSIC-ANALYSIS.md` for complete implementation details
+
+### **Artist Unification System** ✅ **COMPLETE**
+The backend artist unification has been fully implemented:
+- **✅ Database Migration**: ArtistProfiles table created with 48 records migrated
+- **✅ Model Refactoring**: New ArtistProfile model with User associations
+- **✅ API Endpoint Refactoring**: All endpoints use unified ArtistProfile model
+- **✅ Signup Integration**: New artists create ArtistProfile records
+- **✅ Profile Management**: Unified artist profile management endpoints
+- **✅ Backward Compatibility**: Legacy Band model preserved during transition
+
+**See**: `ARTIST-UNIFICATION-IMPLEMENTATION.md` for complete implementation details
 
 ### **Environment Variables Needed**
 ```bash

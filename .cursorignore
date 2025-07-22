@@ -1,3 +1,7 @@
-# Add directories or file patterns to ignore during indexing (e.g. foo/ or *.csv)
+# Ignore the local git repository to protect the project's version history.
 .git/
-.env
+
+# Ignore ONLY the root .env file, which contains secrets.
+# The leading slash anchors this to the root directory and ensures
+# it does not incorrectly ignore .env.example or .env.dev.
+/.env

@@ -60,3 +60,5 @@ export const getAvailableCities = state => _.get(state.getAvailableCities, 'resu
 
 export const getInstrumentList = state => _.get(state.getInstrument, 'result.data', []);
 export const updateInstrument = state => _.get(state.updateInstrument, 'result.data', []);
+export const getArtistProfile = state => _.get(state.artistProfile, 'result.data', {});
+export const getUpdateArtistProfile = state => _.get(state.updateArtistProfile, 'result.data', {});

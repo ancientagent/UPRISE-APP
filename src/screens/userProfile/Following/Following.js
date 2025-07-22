@@ -36,7 +36,7 @@ const Following = props => {
   },
   {
     id: 2,
-    title: 'Bands',
+    title: 'Artists',
   },
   ];
   const renderToggleButtons = () => {

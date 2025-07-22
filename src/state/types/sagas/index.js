@@ -76,3 +76,5 @@ export const getRadioStationStatisticsSagaType = `${namespace}/GET_RADIO_STATION
 export const getPopularArtistStatisticsSagaType = `${namespace}/GET_POPULAR_ARTIST_STATISTICS`;
 export const getPopularArtistGenresStatisticsSagaType = `${namespace}/GET_POPULAR_ARTIST_GENRES_STATISTICS`;
 export const getSongAnalyticsSagaType = `${namespace}/GET_SONG_ANALYTICS`;
+export const artistProfileSagaType = `${namespace}/GET_ARTIST_PROFILE`;
+export const updateArtistProfileSagaType = `${namespace}/UPDATE_ARTIST_PROFILE`;

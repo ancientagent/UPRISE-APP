@@ -142,7 +142,7 @@ function HomeStackScreen() {
         name='AllMostPopularBands'
         component={ AllMostPopularBands }
         options={ () => ({
-          headerTitle: 'Most Popular Bands',
+          headerTitle: 'Most Popular Artists',
           headerLeftContainerStyle: {
             marginLeft: 24,
           },
@@ -398,7 +398,7 @@ function HomeStackScreen() {
         name='BandDetails'
         component={ BandDetails }
         options={ () => ({
-          headerTitle: 'Band Details',
+          headerTitle: 'Artist Details',
           headerLeftContainerStyle: {
             marginLeft: 24,
           },

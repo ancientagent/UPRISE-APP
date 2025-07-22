@@ -174,7 +174,7 @@ const BandDetails = ({ navigation, route }) => {
               source={ BandData.logo ? { uri: BandData.logo } : require('../../../assets/images/band_defult_img.png') }
             />
             <Text style={ styles.bandNameText }>
-              Band Name:
+              Artist Name:
             </Text>
             <View style={ styles.bandTitleView }>
               <Text style={ styles.bandTitle }>

@@ -118,7 +118,7 @@ function DiscoveryStackScreen() {
         name='AllPopularBands'
         component={ AllPopularBands }
         options={ () => ({
-          headerTitle: 'Popular Bands',
+          headerTitle: 'Popular Artists',
           headerLeftContainerStyle: {
             marginLeft: 24,
           },
@@ -401,7 +401,7 @@ function DiscoveryStackScreen() {
         name='BandDetails'
         component={ BandDetails }
         options={ () => ({
-          headerTitle: 'Band Details',
+          headerTitle: 'Artist Details',
           headerLeftContainerStyle: {
             marginLeft: 24,
           },

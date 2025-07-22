@@ -43,7 +43,7 @@ export default {
     users: 'Users',
     eventsPerYear: 'Events Per Year',
     genrePreference: 'Genre Preference',
-    bands: 'Bands',
+    bands: 'Artists',
   },
   socialPlatform: {
     socialPlatform: 'SOCIAL PLATFORMS',
@@ -72,7 +72,7 @@ export default {
     rememberPassword: 'Remember Password?',
   },
   DiscoveyPage: {
-    popularBands: 'Popular Bands',
+    popularBands: 'Popular Artists',
     popularAlbums: 'Popular Albums',
     popularSongs: 'Popular Songs',
     popularGenre: 'Popular Genre',
@@ -139,9 +139,9 @@ export default {
     confirmPasswordPlaceholder: 'Confirm your password',
     signupButton: 'Sign Up',
     signUp: 'Sign Up',
-    registerAsArtist: 'Register as Artist',
-    bandNameLabel: 'Band/Artist Name',
-    bandNamePlaceholder: 'Enter your band or artist name',
+    registerAsArtist: 'Register as an Artist',
+    bandNameLabel: 'Artist / Band Name',
+    bandNamePlaceholder: 'Enter your artist or band name',
     acceptTerms: 'I accept the Terms and Conditions',
     account: 'Already have an account?',
   },
@@ -201,8 +201,8 @@ export default {
     hasBlasted: ' has blasted a song ',
   },
   otherProfile: {
-    appearsBand: 'Appears in band:',
-    bandList: 'Bands',
+    appearsBand: 'Appears in artist:',
+    bandList: 'Artists',
   },
   General: {
     addedToCalendar: 'Added to calendar',

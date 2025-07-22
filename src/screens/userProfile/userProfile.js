@@ -12,6 +12,7 @@ import Edit from '../../../assets/images/Edit.svg';
 import SvgImage from '../../components/SvgImage/SvgImage';
 import styles from './userProfile.styles';
 import ProfileTab from './ProfileTab/ProfileTab';
+import ArtistProfileTab from './ArtistProfileTab/ArtistProfileTab';
 import Colors from '../../theme/colors';
 import { currentScreenAction } from '../../state/actions/currentScreen/currentScreen.action';
 import Events from '../Events/Events';
@@ -37,10 +38,14 @@ const UserProfile = props => {
   },
   {
     id: 2,
-    title: 'Calendar',
+    title: 'Artist Profile',
   },
   {
     id: 3,
+    title: 'Calendar',
+  },
+  {
+    id: 4,
     title: 'Favorites',
   },
   ];
@@ -48,6 +53,8 @@ const UserProfile = props => {
     if (selectedTab === 1) {
       return <ProfileTab navigation={ navigation } EditMode={ EditMode } setEditMode={ setEditMode } />;
     } else if (selectedTab === 2) {
+      return <ArtistProfileTab navigation={ navigation } EditMode={ EditMode } setEditMode={ setEditMode } />;
+    } else if (selectedTab === 3) {
       return <Events navigation={ navigation } />;
     } else {
       return <FavoritesTab navigation={ navigation } />;
@@ -94,7 +101,7 @@ const UserProfile = props => {
         justifyContent: 'space-between',
       } }
       >
-        <View style={ [styles.userProfileView, !screenDetails.userProfileEdit && { height: selectedTab === 3 ? '78%' : '87%' }] }>
+        <View style={ [styles.userProfileView, !screenDetails.userProfileEdit && { height: selectedTab === 4 ? '78%' : '87%' }] }>
           <View style={ styles.homeContainer }>
             <View style={ styles.profileContainer }>
               { /* <Icon

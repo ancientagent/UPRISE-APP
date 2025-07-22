@@ -65,4 +65,4 @@ coverage/
 /ios/Podfile.lock
 
 # Environment Variables
-# .env
+/.env

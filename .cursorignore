@@ -1,7 +1,7 @@
 # Ignore the local git repository to protect the project's version history.
 .git/
 
-# Ignore ONLY the root .env file, which contains secrets.
-# The leading slash anchors this to the root directory and ensures
-# it does not incorrectly ignore .env.example or .env.dev.
+# Ignore ONLY the specific .env file in the project root, which contains secrets.
+# The leading slash (/) anchors the pattern to the root directory, ensuring
+# that it does NOT incorrectly ignore other files like .env.example or .env.dev.
 /.env

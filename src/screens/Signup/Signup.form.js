@@ -37,7 +37,13 @@ const SignupForm = props => {
   const [selectedGender, setSelectedGender] = useState('PREFER NOT TO SAY');
   const dispatch = useDispatch();
   
+  console.log('--- SIGNUP FORM is rendering ---');
+  console.log('Navigation:', navigation);
+  console.log('OnComplete:', onComplete);
+  
   const onSubmitForm = values => {
+    console.log('--- SUBMIT BUTTON PRESSED ---');
+    console.log('Values:', values);
     if (onComplete) {
       const completeData = {
         ...values,
@@ -46,15 +52,24 @@ const SignupForm = props => {
         role: values.artistCheck ? 'artist' : 'listener',
         bandName: values.artistCheck ? values.bandName : '',
       };
+      console.log('Complete data:', completeData);
       onComplete(completeData);
     }
   };
   
-  const screenHeight = Platform.OS === 'ios' ? 200 : 100;
-  const height = Dimensions.get('window').height - screenHeight;
-  
   return (
-    <View style={ { height, width: '100%' } }>
+    <View style={{ 
+      borderWidth: 5, 
+      borderColor: 'red', 
+      flex: 1, 
+      width: '100%',
+      paddingHorizontal: 20,
+      paddingVertical: 10
+    }}>
+      <Text style={{color: 'white', fontSize: 16, textAlign: 'center', marginBottom: 20}}>
+        DEBUG: Signup Form is rendering
+      </Text>
+      
       <Formik
         initialValues={ {
           userName: '',
@@ -73,121 +88,160 @@ const SignupForm = props => {
           isValid,
           values,
           setFieldValue,
-        }) => (
-          <>
-            <Field
-              inputBox={ styles.inputBox }
-              placeholder={ strings('SignUp.usernamePlaceholder') }
-              component={ URTextfield }
-              value={ values.userName.trim() }
-              name='userName'
-              autoCapitalize='none'
-              autoCorrect={ false }
-              label={ strings('SignUp.usernameLabel') }
-              showAstric
-            />
-            <Field
-              inputBox={ styles.inputBox }
-              placeholder={ strings('SignUp.emailPlaceholder') }
-              component={ URTextfield }
-              name='email'
-              autoCapitalize='none'
-              autoCorrect={ false }
-              label={ strings('SignUp.emailLabel') }
-              showAstric
-            />
-            <Field
-              inputBox={ styles.inputBox }
-              placeholder={ strings('SignUp.passwordPlaceholder') }
-              component={ URTextfield }
-              value={ values.password.trim() }
-              name='password'
-              showAstric
-              autoCapitalize='none'
-              rightIcon={ (
-                <Icon
-                  type='ionicon'
-                  name={ hidePassword ? 'eye-off-outline' : 'eye-outline' }
-                  size={ 18 }
-                  color={ hidePassword ? Colors.textColor : Colors.URbtnColor }
-                  onPress={ () => setHidePassword(!hidePassword) }
-                />
-                ) }
-              autoCorrect={ false }
-              secureTextEntry={ !!hidePassword }
-              label={ strings('SignUp.passwordLabel') }
-            />
-            <Field
-              inputBox={ styles.inputBox }
-              placeholder={ strings('SignUp.confirmPasswordPlaceholder') }
-              component={ URTextfield }
-              value={ values.confirmPassword.trim() }
-              name='confirmPassword'
-              showAstric
-              autoCapitalize='none'
-              rightIcon={ (
-                <Icon
-                  type='ionicon'
-                  name={ hideConfirmPassword ? 'eye-off-outline' : 'eye-outline' }
-                  size={ 18 }
-                  color={ hideConfirmPassword ? Colors.textColor : Colors.URbtnColor }
-                  onPress={ () => setHideConfirmPassword(!hideConfirmPassword) }
-                />
-                ) }
-              autoCorrect={ false }
-              secureTextEntry={ !!hideConfirmPassword }
-              label={ strings('SignUp.confirmPasswordLabel') }
-            />
-
-            {/* Artist Registration Checkbox */}
-            <View style={styles.checkboxContainer}>
-              <URCheckBox
-                checked={values.artistCheck}
-                onPress={() => setFieldValue('artistCheck', !values.artistCheck)}
-                label={strings('SignUp.registerAsArtist')}
-              />
-            </View>
-
-            {/* Band Name Field (conditional) */}
-            {values.artistCheck && (
+        }) => {
+          console.log('=== FORM VALUES ===', values);
+          console.log('=== FORM VALID ===', isValid);
+          
+          return (
+            <>
+              <Text style={{color: 'white', fontSize: 14, marginBottom: 10}}>
+                DEBUG: Form is valid: {isValid ? 'YES' : 'NO'}
+              </Text>
+              
+              {/* Test Button */}
+              <TouchableOpacity 
+                style={{
+                  backgroundColor: 'green',
+                  padding: 10,
+                  marginBottom: 20,
+                  borderRadius: 5,
+                  alignItems: 'center'
+                }}
+                onPress={() => {
+                  console.log('=== TEST BUTTON PRESSED ===');
+                  alert('Touch events are working!');
+                }}
+              >
+                <Text style={{color: 'white', fontSize: 16}}>TEST BUTTON - Press Me!</Text>
+              </TouchableOpacity>
+              
               <Field
                 inputBox={ styles.inputBox }
-                placeholder={strings('SignUp.bandNamePlaceholder')}
+                placeholder={ strings('SignUp.usernamePlaceholder') }
                 component={ URTextfield }
-                name='bandName'
-                autoCapitalize='words'
-                label={strings('SignUp.bandNameLabel')}
+                value={ values.userName.trim() }
+                name='userName'
+                autoCapitalize='none'
+                autoCorrect={ false }
+                label={ strings('SignUp.usernameLabel') }
                 showAstric
               />
-            )}
-
-            {/* Terms and Conditions Checkbox */}
-            <View style={styles.checkboxContainer}>
-              <URCheckBox
-                checked={values.acceptTerms}
-                onPress={() => setFieldValue('acceptTerms', !values.acceptTerms)}
-                label={strings('SignUp.acceptTerms')}
+              <Field
+                inputBox={ styles.inputBox }
+                placeholder={ strings('SignUp.emailPlaceholder') }
+                component={ URTextfield }
+                name='email'
+                autoCapitalize='none'
+                autoCorrect={ false }
+                label={ strings('SignUp.emailLabel') }
+                showAstric
               />
-            </View>
-
-            <View style={ { marginTop: 23 } }>
-              <Button
-                buttonStyle={ styles.signupBtn }
-                titleStyle={ styles.signupTitle }
-                onPress={ handleSubmit }
-                TouchableComponent={ TouchableOpacity }
-                title={ strings('SignUp.signUp') }
-                // disabled={ !isValid }
+              <Field
+                inputBox={ styles.inputBox }
+                placeholder={ strings('SignUp.passwordPlaceholder') }
+                component={ URTextfield }
+                value={ values.password.trim() }
+                name='password'
+                showAstric
+                autoCapitalize='none'
+                rightIcon={ (
+                  <Icon
+                    type='ionicon'
+                    name={ hidePassword ? 'eye-off-outline' : 'eye-outline' }
+                    size={ 18 }
+                    color={ hidePassword ? Colors.textColor : Colors.URbtnColor }
+                    onPress={ () => setHidePassword(!hidePassword) }
+                  />
+                  ) }
+                autoCorrect={ false }
+                secureTextEntry={ !!hidePassword }
+                label={ strings('SignUp.passwordLabel') }
               />
-              <View style={ styles.signUpContainer }>
-                <Text style={ styles.accountText }>{ strings('SignUp.account') }</Text>
-                <TouchableOpacity onPress={ () => navigation.navigate('Login') }>
-                  <Text style={ styles.loginText }>{ strings('General.login') }</Text>
-                </TouchableOpacity>
+              <Field
+                inputBox={ styles.inputBox }
+                placeholder={ strings('SignUp.confirmPasswordPlaceholder') }
+                component={ URTextfield }
+                value={ values.confirmPassword.trim() }
+                name='confirmPassword'
+                showAstric
+                autoCapitalize='none'
+                rightIcon={ (
+                  <Icon
+                    type='ionicon'
+                    name={ hideConfirmPassword ? 'eye-off-outline' : 'eye-outline' }
+                    size={ 18 }
+                    color={ hideConfirmPassword ? Colors.textColor : Colors.URbtnColor }
+                    onPress={ () => setHideConfirmPassword(!hideConfirmPassword) }
+                  />
+                  ) }
+                autoCorrect={ false }
+                secureTextEntry={ !!hideConfirmPassword }
+                label={ strings('SignUp.confirmPasswordLabel') }
+              />
+
+              {/* Artist Registration Checkbox */}
+              <View style={[styles.checkboxContainer, { borderWidth: 2, borderColor: 'yellow' }]}>
+                <Text style={{color: 'white', fontSize: 12}}>DEBUG: Artist checkbox</Text>
+                <URCheckBox
+                  checked={values.artistCheck}
+                  onPress={() => {
+                    console.log('Artist checkbox pressed');
+                    setFieldValue('artistCheck', !values.artistCheck);
+                  }}
+                  label={strings('SignUp.registerAsArtist')}
+                  containerStyle={{ backgroundColor: 'transparent', borderWidth: 0 }}
+                />
               </View>
-            </View>
-          </>
-        ) }
+
+              {/* Band Name Field (conditional) */}
+              {values.artistCheck && (
+                <Field
+                  inputBox={ styles.inputBox }
+                  placeholder={strings('SignUp.bandNamePlaceholder')}
+                  component={ URTextfield }
+                  name='bandName'
+                  autoCapitalize='words'
+                  label={strings('SignUp.bandNameLabel')}
+                  showAstric
+                />
+              )}
+
+              {/* Terms and Conditions Checkbox */}
+              <View style={[styles.checkboxContainer, { borderWidth: 2, borderColor: 'yellow' }]}>
+                <Text style={{color: 'white', fontSize: 12}}>DEBUG: Terms checkbox</Text>
+                <URCheckBox
+                  checked={values.acceptTerms}
+                  onPress={() => {
+                    console.log('Terms checkbox pressed');
+                    setFieldValue('acceptTerms', !values.acceptTerms);
+                  }}
+                  label={strings('SignUp.acceptTerms')}
+                  containerStyle={{ backgroundColor: 'transparent', borderWidth: 0 }}
+                />
+              </View>
+
+              <View style={ { marginTop: 23 } }>
+                <Button
+                  buttonStyle={ styles.signupBtn }
+                  titleStyle={ styles.signupTitle }
+                  onPress={ () => {
+                    console.log('=== SIGNUP BUTTON PRESSED ===');
+                    handleSubmit();
+                  }}
+                  TouchableComponent={ TouchableOpacity }
+                  title={ strings('SignUp.signUp') }
+                  // disabled={ !isValid }
+                />
+                <View style={ styles.signUpContainer }>
+                  <Text style={ styles.accountText }>{ strings('SignUp.account') }</Text>
+                  <TouchableOpacity onPress={ () => navigation.navigate('Login') }>
+                    <Text style={ styles.loginText }>{ strings('General.login') }</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </>
+          );
+        } }
       </Formik>
     </View>
   );

@@ -7,9 +7,12 @@ import { getRequestURL } from '../../utilities/utilities';
 
 export default function getAllGenresRequest(payload) {
   // The endpoint URL for getting genres
-  const url = Config.GET_ALL_GENRES_URL;
+  // Use the comprehensive genres list from onboarding instead of basic auth genres
+const url = '/onboarding/all-genres';
 
   console.log(`--- DEBUG: Attempting to GET genres from ${url} ---`);
+  console.log(`--- DEBUG: Full URL will be: ${getRequestURL(url)} ---`);
+  console.log(`--- DEBUG: Access token present: ${payload.accessToken ? 'YES' : 'NO'} ---`);
 
   const requestOptions = {
     method: GET,
@@ -20,5 +23,12 @@ export default function getAllGenresRequest(payload) {
   };
   
   return request(requestOptions)
-    .then(response => response);
+    .then(response => {
+      console.log(`--- DEBUG: Genres API response received ---`, response);
+      return response;
+    })
+    .catch(error => {
+      console.error(`--- DEBUG: Genres API error ---`, error);
+      throw error;
+    });
 } 

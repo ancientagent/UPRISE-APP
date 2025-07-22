@@ -32,18 +32,49 @@ const Promos = () => {
   const [playerState, setPlayerState] = useState(null);
   const [videoLoad, setVideoLoad] = useState(false);
 
+  console.log('--- PROMOS COMPONENT: Component rendered ---');
+  console.log('--- PROMOS COMPONENT: PromosData from Redux ---', PromosData);
+  console.log('--- PROMOS COMPONENT: PromosData length ---', PromosData?.length || 0);
+  console.log('--- PROMOS COMPONENT: PromosData type ---', typeof PromosData);
+  console.log('--- PROMOS COMPONENT: PromosData is array ---', Array.isArray(PromosData));
+
   const formatedSongList = _.map(PromosData, data => {
     const mediaType = !!_.endsWith(data.banner, 'mp4');
     return {
       ...data, mediaType,
     };
   });
+  
+  console.log('--- PROMOS COMPONENT: formatedSongList ---', formatedSongList);
+  console.log('--- PROMOS COMPONENT: formatedSongList length ---', formatedSongList?.length || 0);
+  
   const showLoading = useSelector(state => state.homePromos.isWaiting);
+  console.log('--- PROMOS COMPONENT: showLoading ---', showLoading);
+  
+  // Log Redux state details
+  const fullReduxState = useSelector(state => state.homePromos);
+  console.log('--- PROMOS COMPONENT: Full Redux state ---', fullReduxState);
+  console.log('--- PROMOS COMPONENT: Redux state isWaiting ---', fullReduxState?.isWaiting);
+  console.log('--- PROMOS COMPONENT: Redux state error ---', fullReduxState?.error);
+  console.log('--- PROMOS COMPONENT: Redux state data ---', fullReduxState?.data);
+  
   useEffect(() => {
+    console.log('--- PROMOS COMPONENT: useEffect triggered - dispatching homePromosSagaAction ---');
+    console.log('--- PROMOS COMPONENT: About to dispatch homePromosSagaAction ---');
     dispatch(homePromosSagaAction());
+    console.log('--- PROMOS COMPONENT: homePromosSagaAction dispatched ---');
   }, []);
+  
   const onVideoLoadStart = () => setVideoLoad(true);
   const onVideoLoadEnd = () => setVideoLoad(false);
+  
+  console.log('--- PROMOS COMPONENT: Rendering component ---');
+  console.log('--- PROMOS COMPONENT: PromosData.length === 0 ---', PromosData.length === 0);
+  console.log('--- PROMOS COMPONENT: !showLoading ---', !showLoading);
+  console.log('--- PROMOS COMPONENT: Will show empty component ---', PromosData.length === 0 && !showLoading);
+  console.log('--- PROMOS COMPONENT: Will show loading ---', showLoading);
+  console.log('--- PROMOS COMPONENT: Will show FlatList ---', PromosData.length > 0 && !showLoading);
+  
   return (
     <ScrollView>
       { showLoading

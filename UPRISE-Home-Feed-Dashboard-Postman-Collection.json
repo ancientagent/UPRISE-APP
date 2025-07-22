@@ -1,0 +1,862 @@
+{
+	"info": {
+		"_postman_id": "uprise-home-feed-dashboard-collection",
+		"name": "UPRISE Home Feed & Dashboard API",
+		"description": "Complete API collection for UPRISE mobile app home feed, dashboard, events, and promotions functionality. This collection covers all endpoints for the main community dashboard including feed content, events, promotions, new releases, and radio stations.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "uprise-home-feed-dashboard"
+	},
+	"item": [
+		{
+			"name": "Main Dashboard Feed",
+			"item": [
+				{
+					"name": "Get Main Feed",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "client-id",
+								"value": "437920819fa89d19abe380073d28839c",
+								"type": "text"
+							},
+							{
+								"key": "client-secret",
+								"value": "28649120bdf32812f433f428b15ab1a1",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/home/feed",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"home",
+								"feed"
+							]
+						},
+						"description": "Get the main community feed for the user's location. Returns posts, activities, and community updates filtered by user's station preference."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has data property\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"});",
+									"",
+									"pm.test(\"Data is an array\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Get Main Feed - Unauthorized",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "client-id",
+								"value": "437920819fa89d19abe380073d28839c",
+								"type": "text"
+							},
+							{
+								"key": "client-secret",
+								"value": "28649120bdf32812f433f428b15ab1a1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/home/feed",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"home",
+								"feed"
+							]
+						},
+						"description": "Test main feed endpoint without authentication token."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Response has error message\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('message');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			],
+			"description": "Main dashboard feed endpoints for community content and activities."
+		},
+		{
+			"name": "Events Feed",
+			"item": [
+				{
+					"name": "Get Events Feed",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "client-id",
+								"value": "437920819fa89d19abe380073d28839c",
+								"type": "text"
+							},
+							{
+								"key": "client-secret",
+								"value": "28649120bdf32812f433f428b15ab1a1",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/home/events",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"home",
+								"events"
+							]
+						},
+						"description": "Get events feed for the user's location. Returns upcoming events, concerts, and community gatherings filtered by user's station preference."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has data property\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"});",
+									"",
+									"pm.test(\"Data is an array\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"Events have required properties\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.length > 0) {",
+									"        const event = jsonData.data[0];",
+									"        pm.expect(event).to.have.property('id');",
+									"        pm.expect(event).to.have.property('title');",
+									"        pm.expect(event).to.have.property('date');",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Get Events Feed - Unauthorized",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "client-id",
+								"value": "437920819fa89d19abe380073d28839c",
+								"type": "text"
+							},
+							{
+								"key": "client-secret",
+								"value": "28649120bdf32812f433f428b15ab1a1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/home/events",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"home",
+								"events"
+							]
+						},
+						"description": "Test events feed endpoint without authentication token."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			],
+			"description": "Events feed endpoints for upcoming events and community gatherings."
+		},
+		{
+			"name": "Promotions Feed",
+			"item": [
+				{
+					"name": "Get Promotions Feed",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "client-id",
+								"value": "437920819fa89d19abe380073d28839c",
+								"type": "text"
+							},
+							{
+								"key": "client-secret",
+								"value": "28649120bdf32812f433f428b15ab1a1",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/home/promos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"home",
+								"promos"
+							]
+						},
+						"description": "Get promotions feed for the user's location. Returns local deals, offers, and promotional content filtered by user's station preference."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has data property\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"});",
+									"",
+									"pm.test(\"Data is an array\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"Promotions have required properties\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.length > 0) {",
+									"        const promo = jsonData.data[0];",
+									"        pm.expect(promo).to.have.property('id');",
+									"        pm.expect(promo).to.have.property('title');",
+									"        pm.expect(promo).to.have.property('description');",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Get Promotions Feed - Unauthorized",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "client-id",
+								"value": "437920819fa89d19abe380073d28839c",
+								"type": "text"
+							},
+							{
+								"key": "client-secret",
+								"value": "28649120bdf32812f433f428b15ab1a1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/home/promos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"home",
+								"promos"
+							]
+						},
+						"description": "Test promotions feed endpoint without authentication token."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			],
+			"description": "Promotions feed endpoints for local deals and promotional content."
+		},
+		{
+			"name": "New Releases",
+			"item": [
+				{
+					"name": "Get New Releases",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "client-id",
+								"value": "437920819fa89d19abe380073d28839c",
+								"type": "text"
+							},
+							{
+								"key": "client-secret",
+								"value": "28649120bdf32812f433f428b15ab1a1",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/home/new-releases",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"home",
+								"new-releases"
+							]
+						},
+						"description": "Get new music releases for the user's location. Returns recently released songs and albums filtered by user's station preference."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has data property\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"});",
+									"",
+									"pm.test(\"Data is an array\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"New releases have required properties\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.length > 0) {",
+									"        const release = jsonData.data[0];",
+									"        pm.expect(release).to.have.property('id');",
+									"        pm.expect(release).to.have.property('title');",
+									"        pm.expect(release).to.have.property('artist');",
+									"        pm.expect(release).to.have.property('releaseDate');",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Get New Releases - Unauthorized",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "client-id",
+								"value": "437920819fa89d19abe380073d28839c",
+								"type": "text"
+							},
+							{
+								"key": "client-secret",
+								"value": "28649120bdf32812f433f428b15ab1a1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/home/new-releases",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"home",
+								"new-releases"
+							]
+						},
+						"description": "Test new releases endpoint without authentication token."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			],
+			"description": "New releases endpoints for recently released music content."
+		},
+		{
+			"name": "Radio Stations",
+			"item": [
+				{
+					"name": "Get Recommended Radio Stations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "client-id",
+								"value": "437920819fa89d19abe380073d28839c",
+								"type": "text"
+							},
+							{
+								"key": "client-secret",
+								"value": "28649120bdf32812f433f428b15ab1a1",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/home/radio-stations",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"home",
+								"radio-stations"
+							]
+						},
+						"description": "Get recommended radio stations for the user's location. Returns local and relevant radio stations based on user's station preference."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has data property\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"});",
+									"",
+									"pm.test(\"Data is an array\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"Radio stations have required properties\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.length > 0) {",
+									"        const station = jsonData.data[0];",
+									"        pm.expect(station).to.have.property('id');",
+									"        pm.expect(station).to.have.property('name');",
+									"        pm.expect(station).to.have.property('frequency');",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Get Radio Stations - Unauthorized",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "client-id",
+								"value": "437920819fa89d19abe380073d28839c",
+								"type": "text"
+							},
+							{
+								"key": "client-secret",
+								"value": "28649120bdf32812f433f428b15ab1a1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/home/radio-stations",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"home",
+								"radio-stations"
+							]
+						},
+						"description": "Test radio stations endpoint without authentication token."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			],
+			"description": "Radio stations endpoints for local radio recommendations."
+		},
+		{
+			"name": "Statistics",
+			"item": [
+				{
+					"name": "Get Dashboard Statistics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "client-id",
+								"value": "437920819fa89d19abe380073d28839c",
+								"type": "text"
+							},
+							{
+								"key": "client-secret",
+								"value": "28649120bdf32812f433f428b15ab1a1",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/home/statistics",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"home",
+								"statistics"
+							]
+						},
+						"description": "Get dashboard statistics for the user's location. Returns community metrics, engagement data, and activity statistics filtered by user's station preference."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has data property\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"});",
+									"",
+									"pm.test(\"Statistics have required properties\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    if (jsonData.data) {",
+									"        pm.expect(jsonData.data).to.have.property('totalUsers');",
+									"        pm.expect(jsonData.data).to.have.property('totalEvents');",
+									"        pm.expect(jsonData.data).to.have.property('totalSongs');",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Get Statistics - Unauthorized",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "client-id",
+								"value": "437920819fa89d19abe380073d28839c",
+								"type": "text"
+							},
+							{
+								"key": "client-secret",
+								"value": "28649120bdf32812f433f428b15ab1a1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/home/statistics",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"home",
+								"statistics"
+							]
+						},
+						"description": "Test statistics endpoint without authentication token."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			],
+			"description": "Statistics endpoints for dashboard metrics and community data."
+		},
+		{
+			"name": "Error Handling",
+			"item": [
+				{
+					"name": "Invalid Client Credentials",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "client-id",
+								"value": "invalid-client-id",
+								"type": "text"
+							},
+							{
+								"key": "client-secret",
+								"value": "invalid-client-secret",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/home/feed",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"home",
+								"feed"
+							]
+						},
+						"description": "Test endpoint with invalid client credentials to verify proper error handling."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response has error message\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('message');",
+									"    pm.expect(jsonData.message).to.include('you dont have access');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Invalid Token",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "client-id",
+								"value": "437920819fa89d19abe380073d28839c",
+								"type": "text"
+							},
+							{
+								"key": "client-secret",
+								"value": "28649120bdf32812f433f428b15ab1a1",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer invalid-token",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/home/feed",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"home",
+								"feed"
+							]
+						},
+						"description": "Test endpoint with invalid authentication token to verify proper error handling."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Response has error message\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('message');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				}
+			],
+			"description": "Error handling tests for various failure scenarios."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Pre-request script to set up environment variables",
+					"console.log('Running Home Feed & Dashboard API tests...');",
+					"console.log('Base URL:', pm.environment.get('baseURL'));",
+					"console.log('Auth Token:', pm.environment.get('authToken') ? 'Present' : 'Missing');"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Global test script for common validations",
+					"pm.test(\"Response time is reasonable\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(5000);",
+					"});",
+					"",
+					"pm.test(\"Response has valid JSON\", function () {",
+					"    pm.response.to.be.json;",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://10.0.2.2:3000",
+			"type": "string"
+		},
+		{
+			"key": "authToken",
+			"value": "",
+			"type": "string"
+		}
+	]
+} 

@@ -1,5 +1,7 @@
 # Uprise Mobile App - Project Structure & Key Files
 
+> **🧠 Development Mindset:** Always trace the full user journey and consider edge cases. See `DEVELOPMENT-MINDSET-GUIDE.md` for critical thinking principles.
+
 ## 🏗️ **Project Overview**
 - **React Native App**: Main mobile application
 - **Backend API**: Node.js server in `Webapp_API-Develop/`
@@ -82,13 +84,42 @@ VITE_API_BASE_URL=http://10.0.2.2:3000
 - **`src/index.js`** - Main server entry point
 - **`src/config/index.js`** - Environment configuration and client authentication
 - **`src/routes/auth/`** - Authentication routes (signup, login, etc.)
+- **`src/routes/home.js`** - Home feed and community content (⚠️ **Location filtering issues**)
+- **`src/routes/discovery.js`** - Discovery content (⚠️ **Location filtering issues**)
+- **`src/routes/radio.js`** - Radio system with tier-based filtering
+- **`src/routes/statistics.js`** - Statistics with proper location filtering
+- **`src/utils/fairPlayAlgorithm.js`** - Fair Play algorithm for song selection
 - **`package.json`** - Backend dependencies and scripts
+
+### **Location Filtering System** ✅ **RESOLVED**
+The backend location filtering has been implemented and tested:
+- **✅ Working**: Events, Promos, Statistics, Radio endpoints
+- **✅ Working**: Home feed, Discovery endpoints (recently fixed)
+- **✅ Impact**: Users now see local community content as intended
+
+**See**: `BACKEND-FORENSIC-ANALYSIS.md` for complete implementation details
 
 ### **Environment Variables Needed**
 ```bash
+# Server Configuration
+PORT=3000
+
+# Database Configuration
+DB_HOST=localhost
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_NAME=postgres
+DB_PORT=5432
+
+# JWT Configuration (Required for authentication)
+JWT_ACCESS_TOKEN_SECRET=uprise_access_token_secret_key_2024
+JWT_REFRESH_TOKEN_SECRET=uprise_refresh_token_secret_key_2024
+JWT_ACCESS_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
+
+# Client Authentication
 CLIENT_ID=437920819fa89d19abe380073d28839c
 CLIENT_SECRET=28649120bdf32812f433f428b15ab1a1
-PORT=3000
 ```
 
 ---
@@ -161,6 +192,15 @@ CLIENT_SECRET=28649120bdf32812f433f428b15ab1a1
 # Google Places API Integration
 GOOGLE_PLACES_API_KEY=AIzaSyDmEqT-zOSEIP_YlvyZQUAVd7SRlQvmH2g
 GOOGLE_PLACES_AUTOCOMPLETE_URL=https://places.googleapis.com/v1/places:autocomplete
+
+# Statistics Endpoints (Fixed - Updated to /popular/...)
+GET_RADIO_STATIONS_STATISTICS=/popular/radio_stations
+GET_POPULAR_ARTIST_STATISTICS=/popular/artist
+GET_GENRES_PREFRENCE_STATISTICS=/popular/genres
+GET_EVENTS_STATISTICS=/popular/events
+GET_BANDS_STATISTICS=/popular/bands
+GET_POPULAR_ARTIST_GENRES_STATISTICS=/popular/artist_per_genre
+GET_USERS_STATISTICS=/popular/users
 ```
 
 ### **Backend Server (Environment Variables)**

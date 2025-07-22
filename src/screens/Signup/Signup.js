@@ -21,12 +21,17 @@ const Signup = props => {
   const showLoading = useSelector(state => state.signup.isWaiting);
   const dispatch = useDispatch();
 
+  console.log('--- SIGNUP SCREEN is rendering ---');
+  console.log('Props:', props);
+  console.log('ShowLoading:', showLoading);
+
   function handleBackButtonClick() {
     navigation.navigate('Login');
     return true;
   }
 
   useEffect(() => {
+    console.log('=== SIGNUP SCREEN MOUNTED ===');
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     return async () => {
       BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
@@ -34,7 +39,7 @@ const Signup = props => {
   }, []);
 
   const handleSignupComplete = (data) => {
-    // Debug log
+    console.log('=== SIGNUP COMPLETE CALLED ===');
     console.log('Signup data:', data);
     // Submit to backend
     // eslint-disable-next-line no-undef
@@ -55,6 +60,7 @@ const Signup = props => {
     
     formDataObj.append('country', data.country || 'USA');
     
+    console.log('=== DISPATCHING SIGNUP ACTION ===');
     dispatch(signupRequestSagaAction(formDataObj));
   };
 
@@ -67,9 +73,15 @@ const Signup = props => {
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 60 }}
         enableOnAndroid={true}
         extraScrollHeight={Platform.OS === 'ios' ? 20 : 100}
-        keyboardShouldPersistTaps="handled"
+        keyboardShouldPersistTaps="always"
+        showsVerticalScrollIndicator={false}
+        bounces={false}
       >
-        <View style={ styles.container }>
+        <View style={[styles.container, { flex: 1, alignItems: 'center' }]}>
+          <Text style={{color: 'white', fontSize: 18, textAlign: 'center', marginBottom: 20}}>
+            DEBUG: Signup Screen is rendering
+          </Text>
+          
           <SvgImage iconName={ upriseTxt } width={ 115 } height={ 27 } iconStyle={ styles.container } />
           
           {/* <Googlebtn /> */}

@@ -1,0 +1,521 @@
+{
+  "info": {
+    "name": "UPRISE - Statistics & Popular",
+    "description": "Comprehensive test suite for UPRISE Statistics API endpoints. Tests all /popular routes and statistics functionality.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseURL",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Get Popular Artists Statistics",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "client-id",
+            "value": "437920819fa89d19abe380073d28839c",
+            "type": "text"
+          },
+          {
+            "key": "client-secret",
+            "value": "28649120bdf32812f433f428b15ab1a1",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseURL}}/popular/artist",
+          "host": ["{{baseURL}}"],
+          "path": ["popular", "artist"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has data property\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response).to.have.property('data');",
+              "});",
+              "",
+              "pm.test(\"Data is an array\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response.data).to.be.an('array');",
+              "});",
+              "",
+              "pm.test(\"Response time is less than 2000ms\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Events Statistics",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "client-id",
+            "value": "437920819fa89d19abe380073d28839c",
+            "type": "text"
+          },
+          {
+            "key": "client-secret",
+            "value": "28649120bdf32812f433f428b15ab1a1",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseURL}}/popular/events",
+          "host": ["{{baseURL}}"],
+          "path": ["popular", "events"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has data property\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response).to.have.property('data');",
+              "});",
+              "",
+              "pm.test(\"Data is an array\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response.data).to.be.an('array');",
+              "});",
+              "",
+              "pm.test(\"Response time is less than 2000ms\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Bands Statistics",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "client-id",
+            "value": "437920819fa89d19abe380073d28839c",
+            "type": "text"
+          },
+          {
+            "key": "client-secret",
+            "value": "28649120bdf32812f433f428b15ab1a1",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseURL}}/popular/bands",
+          "host": ["{{baseURL}}"],
+          "path": ["popular", "bands"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has data property\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response).to.have.property('data');",
+              "});",
+              "",
+              "pm.test(\"Data is an array\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response.data).to.be.an('array');",
+              "});",
+              "",
+              "pm.test(\"Response time is less than 2000ms\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Radio Stations Statistics",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "client-id",
+            "value": "437920819fa89d19abe380073d28839c",
+            "type": "text"
+          },
+          {
+            "key": "client-secret",
+            "value": "28649120bdf32812f433f428b15ab1a1",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseURL}}/popular/radio_stations",
+          "host": ["{{baseURL}}"],
+          "path": ["popular", "radio_stations"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has data property\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response).to.have.property('data');",
+              "});",
+              "",
+              "pm.test(\"Data is an array\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response.data).to.be.an('array');",
+              "});",
+              "",
+              "pm.test(\"Response time is less than 2000ms\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Genres Preference Statistics",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "client-id",
+            "value": "437920819fa89d19abe380073d28839c",
+            "type": "text"
+          },
+          {
+            "key": "client-secret",
+            "value": "28649120bdf32812f433f428b15ab1a1",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseURL}}/popular/genres",
+          "host": ["{{baseURL}}"],
+          "path": ["popular", "genres"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has data property\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response).to.have.property('data');",
+              "});",
+              "",
+              "pm.test(\"Data is an array\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response.data).to.be.an('array');",
+              "});",
+              "",
+              "pm.test(\"Response time is less than 2000ms\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Popular Artist Genres Statistics",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "client-id",
+            "value": "437920819fa89d19abe380073d28839c",
+            "type": "text"
+          },
+          {
+            "key": "client-secret",
+            "value": "28649120bdf32812f433f428b15ab1a1",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseURL}}/popular/artist_per_genre",
+          "host": ["{{baseURL}}"],
+          "path": ["popular", "artist_per_genre"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has data property\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response).to.have.property('data');",
+              "});",
+              "",
+              "pm.test(\"Data is an array\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response.data).to.be.an('array');",
+              "});",
+              "",
+              "pm.test(\"Response time is less than 2000ms\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Users Statistics",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "client-id",
+            "value": "437920819fa89d19abe380073d28839c",
+            "type": "text"
+          },
+          {
+            "key": "client-secret",
+            "value": "28649120bdf32812f433f428b15ab1a1",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseURL}}/popular/users",
+          "host": ["{{baseURL}}"],
+          "path": ["popular", "users"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has data property\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response).to.have.property('data');",
+              "});",
+              "",
+              "pm.test(\"Data is an array\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response.data).to.be.an('array');",
+              "});",
+              "",
+              "pm.test(\"Response time is less than 2000ms\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Test Authentication - Invalid Token",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "client-id",
+            "value": "437920819fa89d19abe380073d28839c",
+            "type": "text"
+          },
+          {
+            "key": "client-secret",
+            "value": "28649120bdf32812f433f428b15ab1a1",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer invalid_token_here",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseURL}}/popular/artist",
+          "host": ["{{baseURL}}"],
+          "path": ["popular", "artist"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 401 Unauthorized\", function () {",
+              "    pm.response.to.have.status(401);",
+              "});",
+              "",
+              "pm.test(\"Response has error message\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response).to.have.property('error');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Test Missing Client Credentials",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/popular/artist",
+          "host": ["{{baseURL}}"],
+          "path": ["popular", "artist"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test(\"Response has error message\", function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response).to.have.property('error');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Test Invalid Endpoint",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "client-id",
+            "value": "437920819fa89d19abe380073d28839c",
+            "type": "text"
+          },
+          {
+            "key": "client-secret",
+            "value": "28649120bdf32812f433f428b15ab1a1",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseURL}}/popular/invalid_endpoint",
+          "host": ["{{baseURL}}"],
+          "path": ["popular", "invalid_endpoint"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404 Not Found\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Pre-request script to validate environment",
+          "if (!pm.environment.get('authToken')) {",
+          "    console.warn('Warning: authToken not set in environment variables');",
+          "}",
+          "",
+          "if (!pm.environment.get('baseURL')) {",
+          "    console.warn('Warning: baseURL not set in environment variables');",
+          "}"
+        ]
+      }
+    }
+  ]
+} 

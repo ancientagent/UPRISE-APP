@@ -86,8 +86,10 @@ import getPopularArtistStatisticsReducer from './request/getPopularArtistStatist
 import getPopularArtistGenresStatisticsReducer from './request/getPopularArtistGenresStatistics/getPopularArtistGenresStatistics.reducer';
 import getSongAnalyticsReducer from './request/getSongAnalytics/getSongAnalytics.reducer';
 import onboardingReducer from './onboarding';
+import logoutReducer from './logout/logout.reducer';
 
 const appReducer = combineReducers({
+  logout: logoutReducer,
   onboarding: onboardingReducer,
   sampleReducer,
   network,
@@ -172,17 +174,20 @@ const appReducer = combineReducers({
 });
 
 const rootReducer = (state, action) => {
-  let initialState = { ...state };
+  // Handle case where state is undefined (initial load or logout)
   if (action.type === SIGN_OUT) {
     TrackPlayer.stop();
     AsyncStorage.removeItem('persist:root');
     GoogleSignin.revokeAccess();
-    initialState = {
+    const initialState = {
       welcomeSlide: { showIntro: true },
     };
     reduxHelpers.dispatch(unRegisterDeviceTokenSagaAction({ token: null }));
     return appReducer(initialState, { type: '' });
   }
+  
+  // Ensure state is not undefined before spreading
+  const initialState = state ? { ...state } : {};
   return appReducer(initialState, action);
 };
 

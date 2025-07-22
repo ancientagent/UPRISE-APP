@@ -151,7 +151,7 @@ if (-not $SkipBuild) {
     try {
         $env:NODE_OPTIONS="--openssl-legacy-provider"
         Write-Status "Set NODE_OPTIONS to: $env:NODE_OPTIONS" "Green"
-        npm run android
+        npx react-native run-android
         Write-Success "App built and installed successfully!"
     } catch {
         Write-Error "Failed to build and install app: $_"

@@ -17,7 +17,7 @@ export function* getUserGenresWorkerSaga(action) {
     const response = yield call(getAllGenresRequest, action.payload);
 
     // Check if the response and the data inside are valid
-    // API returns genres directly in response.data (not response.data.data)
+    // Backend returns {data: genres} directly as response.data
     if (response && response.data && Array.isArray(response.data)) {
       console.log('--- getUserGenres SAGA: SUCCESS! Response Data ---', response.data);
       // Dispatch the success action with the actual list of genres

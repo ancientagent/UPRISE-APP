@@ -1,0 +1,1017 @@
+{
+	"info": {
+		"_postman_id": "uprise-auth-collection-2024",
+		"name": "UPRISE - Authentication Module",
+		"description": "Complete Postman Collection for testing UPRISE Authentication API endpoints. Based on WEBAPP-SYSTEM-ANALYSIS.md and backend specifications.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "uprise-auth-module"
+	},
+	"item": [
+		{
+			"name": "1. SUCCESSFUL User Registration (Listener)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains accessToken\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.accessToken).to.not.be.empty;",
+							"});",
+							"",
+							"pm.test(\"Response contains user data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.user).to.exist;",
+							"    pm.expect(jsonData.data.user.email).to.exist;",
+							"});",
+							"",
+							"pm.test(\"Response contains refreshToken\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.refreshToken).to.not.be.empty;",
+							"});",
+							"",
+							"// Save user data for subsequent requests",
+							"if (pm.response.code === 200) {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"testUserEmail\", jsonData.data.user.email);",
+							"    pm.collectionVariables.set(\"testUserName\", jsonData.data.user.userName);",
+							"    pm.collectionVariables.set(\"testUserId\", jsonData.data.user.id);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client-id",
+						"value": "437920819fa89d19abe380073d28839c",
+						"type": "text"
+					},
+					{
+						"key": "client-secret",
+						"value": "28649120bdf32812f433f428b15ab1a1",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\",\n  \"userName\": \"testuser_listener_{{$randomInt}}\",\n  \"email\": \"test_listener_{{$randomInt}}@uprise.com\",\n  \"password\": \"Password123!\",\n  \"mobile\": \"5551234567\",\n  \"gender\": \"PREFER NOT TO SAY\",\n  \"role\": \"listener\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/signup",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				},
+				"description": "Register a new listener user with valid credentials. Tests user registration flow and validates response structure."
+			},
+			"response": []
+		},
+		{
+			"name": "2. SUCCESSFUL User Registration (Artist)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains accessToken\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.accessToken).to.not.be.empty;",
+							"});",
+							"",
+							"pm.test(\"Artist user has band data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.user.roleName).to.equal('ARTIST');",
+							"});",
+							"",
+							"// Save artist data for subsequent requests",
+							"if (pm.response.code === 200) {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"testArtistEmail\", jsonData.data.user.email);",
+							"    pm.collectionVariables.set(\"testArtistUserName\", jsonData.data.user.userName);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client-id",
+						"value": "437920819fa89d19abe380073d28839c",
+						"type": "text"
+					},
+					{
+						"key": "client-secret",
+						"value": "28649120bdf32812f433f428b15ab1a1",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"firstName\": \"Test\",\n  \"lastName\": \"Artist\",\n  \"userName\": \"testartist_{{$randomInt}}\",\n  \"email\": \"test_artist_{{$randomInt}}@uprise.com\",\n  \"password\": \"Password123!\",\n  \"mobile\": \"5551234568\",\n  \"gender\": \"MALE\",\n  \"role\": \"artist\",\n  \"title\": \"Test Band {{$randomInt}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/signup",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				},
+				"description": "Register a new artist user with band creation. Tests artist registration flow and band creation."
+			},
+			"response": []
+		},
+		{
+			"name": "3. SUCCESSFUL User Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains a valid accessToken\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.accessToken).to.be.a('string').and.not.be.empty;",
+							"    // Save the token for subsequent requests",
+							"    pm.collectionVariables.set(\"authToken\", jsonData.data.accessToken);",
+							"});",
+							"",
+							"pm.test(\"Response contains user data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.user).to.exist;",
+							"    pm.expect(jsonData.data.user.id).to.exist;",
+							"    pm.expect(jsonData.data.user.email).to.exist;",
+							"});",
+							"",
+							"pm.test(\"Response contains refreshToken\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.refreshToken).to.not.be.empty;",
+							"});",
+							"",
+							"pm.test(\"User has radio preferences\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.user.radioPrefrence).to.exist;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client-id",
+						"value": "437920819fa89d19abe380073d28839c",
+						"type": "text"
+					},
+					{
+						"key": "client-secret",
+						"value": "28649120bdf32812f433f428b15ab1a1",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"test_listener_01@uprise.com\",\n  \"password\": \"Password123!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				},
+				"description": "Login with valid credentials. Tests authentication flow and token generation."
+			},
+			"response": []
+		},
+		{
+			"name": "4. FAILED User Login (Wrong Password)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 Bad Request\", function () {",
+							"    pm.expect(pm.response.code).to.equal(400);",
+							"});",
+							"",
+							"pm.test(\"Response contains error message\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.exist;",
+							"    pm.expect(jsonData.error).to.include('Invalid credentials');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client-id",
+						"value": "437920819fa89d19abe380073d28839c",
+						"type": "text"
+					},
+					{
+						"key": "client-secret",
+						"value": "28649120bdf32812f433f428b15ab1a1",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"test_listener_01@uprise.com\",\n  \"password\": \"WrongPassword!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				},
+				"description": "Login with invalid password. Tests error handling for authentication failures."
+			},
+			"response": []
+		},
+		{
+			"name": "5. FAILED User Login (Non-existent Email)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 Bad Request\", function () {",
+							"    pm.expect(pm.response.code).to.equal(400);",
+							"});",
+							"",
+							"pm.test(\"Response contains error message\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.exist;",
+							"    pm.expect(jsonData.error).to.include('Invalid email address or password');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client-id",
+						"value": "437920819fa89d19abe380073d28839c",
+						"type": "text"
+					},
+					{
+						"key": "client-secret",
+						"value": "28649120bdf32812f433f428b15ab1a1",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"nonexistent@uprise.com\",\n  \"password\": \"Password123!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				},
+				"description": "Login with non-existent email. Tests error handling for invalid users."
+			},
+			"response": []
+		},
+		{
+			"name": "6. FAILED Registration (Duplicate Email)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 Bad Request\", function () {",
+							"    pm.expect(pm.response.code).to.equal(400);",
+							"});",
+							"",
+							"pm.test(\"Response contains error message\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.exist;",
+							"    pm.expect(jsonData.error).to.include('Email is already exists');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client-id",
+						"value": "437920819fa89d19abe380073d28839c",
+						"type": "text"
+					},
+					{
+						"key": "client-secret",
+						"value": "28649120bdf32812f433f428b15ab1a1",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\",\n  \"userName\": \"testuser_duplicate_{{$randomInt}}\",\n  \"email\": \"test_listener_01@uprise.com\",\n  \"password\": \"Password123!\",\n  \"mobile\": \"5551234569\",\n  \"gender\": \"PREFER NOT TO SAY\",\n  \"role\": \"listener\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/signup",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				},
+				"description": "Register with existing email. Tests duplicate email validation."
+			},
+			"response": []
+		},
+		{
+			"name": "7. FAILED Registration (Weak Password)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 Bad Request\", function () {",
+							"    pm.expect(pm.response.code).to.equal(400);",
+							"});",
+							"",
+							"pm.test(\"Response contains password error\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.exist;",
+							"    pm.expect(jsonData.error).to.include('password must have atleast 8 characters');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client-id",
+						"value": "437920819fa89d19abe380073d28839c",
+						"type": "text"
+					},
+					{
+						"key": "client-secret",
+						"value": "28649120bdf32812f433f428b15ab1a1",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\",\n  \"userName\": \"testuser_weakpass_{{$randomInt}}\",\n  \"email\": \"test_weakpass_{{$randomInt}}@uprise.com\",\n  \"password\": \"weak\",\n  \"mobile\": \"5551234570\",\n  \"gender\": \"PREFER NOT TO SAY\",\n  \"role\": \"listener\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/signup",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				},
+				"description": "Register with weak password. Tests password validation requirements."
+			},
+			"response": []
+		},
+		{
+			"name": "8. FAILED Registration (Invalid Role)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 Bad Request\", function () {",
+							"    pm.expect(pm.response.code).to.equal(400);",
+							"});",
+							"",
+							"pm.test(\"Response contains role error\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.exist;",
+							"    pm.expect(jsonData.error).to.include('Invalid role');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client-id",
+						"value": "437920819fa89d19abe380073d28839c",
+						"type": "text"
+					},
+					{
+						"key": "client-secret",
+						"value": "28649120bdf32812f433f428b15ab1a1",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\",\n  \"userName\": \"testuser_invalidrole_{{$randomInt}}\",\n  \"email\": \"test_invalidrole_{{$randomInt}}@uprise.com\",\n  \"password\": \"Password123!\",\n  \"mobile\": \"5551234571\",\n  \"gender\": \"PREFER NOT TO SAY\",\n  \"role\": \"invalid_role\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/signup",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				},
+				"description": "Register with invalid role. Tests role validation."
+			},
+			"response": []
+		},
+		{
+			"name": "9. FAILED Registration (Missing Required Fields)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 Bad Request\", function () {",
+							"    pm.expect(pm.response.code).to.equal(400);",
+							"});",
+							"",
+							"pm.test(\"Response contains validation error\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.exist;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client-id",
+						"value": "437920819fa89d19abe380073d28839c",
+						"type": "text"
+					},
+					{
+						"key": "client-secret",
+						"value": "28649120bdf32812f433f428b15ab1a1",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\",\n  \"password\": \"Password123!\",\n  \"mobile\": \"5551234572\",\n  \"gender\": \"PREFER NOT TO SAY\",\n  \"role\": \"listener\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/signup",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				},
+				"description": "Register with missing required fields (email, userName). Tests field validation."
+			},
+			"response": []
+		},
+		{
+			"name": "10. Token Refresh",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains new accessToken\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.accessToken).to.not.be.empty;",
+							"});",
+							"",
+							"pm.test(\"Response contains new refreshToken\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.refreshToken).to.not.be.empty;",
+							"});",
+							"",
+							"// Save new tokens",
+							"if (pm.response.code === 200) {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"authToken\", jsonData.accessToken);",
+							"    pm.collectionVariables.set(\"refreshToken\", jsonData.refreshToken);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client-id",
+						"value": "437920819fa89d19abe380073d28839c",
+						"type": "text"
+					},
+					{
+						"key": "client-secret",
+						"value": "28649120bdf32812f433f428b15ab1a1",
+						"type": "text"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refreshToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/generate-tokens",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"generate-tokens"
+					]
+				},
+				"description": "Refresh access token using refresh token. Tests token refresh mechanism."
+			},
+			"response": []
+		},
+		{
+			"name": "11. Get Available Genres",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains genres array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.be.an('array');",
+							"    pm.expect(jsonData.data.length).to.be.greaterThan(0);",
+							"});",
+							"",
+							"pm.test(\"Each genre has required fields\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    jsonData.data.forEach(function(genre) {",
+							"        pm.expect(genre.id).to.exist;",
+							"        pm.expect(genre.name).to.exist;",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "client-id",
+						"value": "437920819fa89d19abe380073d28839c",
+						"type": "text"
+					},
+					{
+						"key": "client-secret",
+						"value": "28649120bdf32812f433f428b15ab1a1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/auth/genres",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"genres"
+					]
+				},
+				"description": "Get list of available genres for user preferences. Used in onboarding flow."
+			},
+			"response": []
+		},
+		{
+			"name": "12. Get Hierarchical Genres",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains hierarchical genres\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.be.an('array');",
+							"    pm.expect(jsonData.data.length).to.be.greaterThan(0);",
+							"});",
+							"",
+							"pm.test(\"Each super genre has sub-genres\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    jsonData.data.forEach(function(superGenre) {",
+							"        pm.expect(superGenre.subGenres).to.be.an('array');",
+							"        pm.expect(superGenre.subGenres.length).to.be.greaterThan(0);",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "client-id",
+						"value": "437920819fa89d19abe380073d28839c",
+						"type": "text"
+					},
+					{
+						"key": "client-secret",
+						"value": "28649120bdf32812f433f428b15ab1a1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/auth/genres/hierarchical",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"genres",
+						"hierarchical"
+					]
+				},
+				"description": "Get hierarchical genres structure with super genres and sub-genres. New endpoint for enhanced genre selection."
+			},
+			"response": []
+		},
+		{
+			"name": "13. Forgot Password Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains success message\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.exist;",
+							"    pm.expect(jsonData.message).to.include('Email has been sent');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client-id",
+						"value": "437920819fa89d19abe380073d28839c",
+						"type": "text"
+					},
+					{
+						"key": "client-secret",
+						"value": "28649120bdf32812f433f428b15ab1a1",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"test_listener_01@uprise.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/request-reset-password",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"request-reset-password"
+					]
+				},
+				"description": "Request password reset email. Tests forgot password functionality."
+			},
+			"response": []
+		},
+		{
+			"name": "14. Update Onboarding Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains updated status\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.onBoardingStatus).to.equal(2);",
+							"});",
+							"",
+							"pm.test(\"Response contains success message\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include('Onboarding status updated');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client-id",
+						"value": "437920819fa89d19abe380073d28839c",
+						"type": "text"
+					},
+					{
+						"key": "client-secret",
+						"value": "28649120bdf32812f433f428b15ab1a1",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"{{testUserEmail}}\",\n  \"onBoardingStatus\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/update-onboarding-status",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"update-onboarding-status"
+					]
+				},
+				"description": "Update user onboarding status. Tests onboarding flow management."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Pre-request script to set up test data",
+					"console.log('Running UPRISE Authentication API tests...');"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Collection-level test script",
+					"console.log('UPRISE Authentication API test completed');"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://10.0.2.2:3000",
+			"type": "string"
+		},
+		{
+			"key": "authToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "testUserEmail",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "testUserName",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "testUserId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "testArtistEmail",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "testArtistUserName",
+			"value": "",
+			"type": "string"
+		}
+	]
+} 

@@ -50,7 +50,14 @@ const Analytics = () => {
   const renderErrorState = () => (
     <View style={styles.emptyContainer}>
       <Text style={styles.errorText}>Failed to load analytics</Text>
-      <Text style={styles.errorSubText}>{error?.error || 'Please try again later'}</Text>
+      <Text style={styles.errorSubText}>
+        {error?.error || error?.message || 'Please try again later'}
+      </Text>
+      {error?.error === 'Invalid state name' && (
+        <Text style={styles.errorSubText}>
+          Please complete your location setup in profile settings
+        </Text>
+      )}
     </View>
   );
 

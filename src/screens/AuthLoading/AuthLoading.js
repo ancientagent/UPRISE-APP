@@ -23,15 +23,25 @@ const AuthLoading = props => {
     const checkAuth = async () => {
       if (!hasDispatchedRef.current) {
         hasDispatchedRef.current = true; // Set the flag immediately
-        console.log('--- AUTH LOADING: Dispatching getUserDetailsSagaAction (ONCE) ---');
+        console.log('--- AUTH LOADING: Starting auth check ---');
         
-        const token = await TokenService.getAccessToken();
-        if (token) {
-          console.log('--- AUTH LOADING: Token found, dispatching getUserDetailsSagaAction ---');
-          dispatch(getUserDetailsSagaAction());
-        } else {
-          console.log('--- AUTH LOADING: No token, navigating to Login ---');
-          // No token, navigate to login
+        try {
+          const token = await TokenService.getAccessToken();
+          if (token) {
+            console.log('--- AUTH LOADING: Token found, dispatching getUserDetailsSagaAction ---');
+            dispatch(getUserDetailsSagaAction());
+            // No timeout needed - authNavigation saga will handle navigation
+          } else {
+            console.log('--- AUTH LOADING: No token, navigating to WelcomeScreen ---');
+            // No token, navigate to welcome screen
+            navigation.dispatch(CommonActions.reset({ 
+              index: 0, 
+              routes: [{ name: 'WelcomeScreen' }] 
+            }));
+          }
+        } catch (error) {
+          console.log('--- AUTH LOADING: Error during auth check ---', error);
+          // On error, navigate to welcome screen
           navigation.dispatch(CommonActions.reset({ 
             index: 0, 
             routes: [{ name: 'WelcomeScreen' }] 
@@ -40,7 +50,7 @@ const AuthLoading = props => {
       }
     };
     checkAuth();
-  }, [dispatch, navigation]); // Add 'dispatch' and 'navigation' to the dependency array
+  }, []); // Remove dependencies to prevent infinite loop
   
   return (
     <URContainer safeAreaViewStyle={ { flex: 1 } }>

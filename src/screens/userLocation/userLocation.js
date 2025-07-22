@@ -23,7 +23,6 @@ import URContainer from '../../components/URContainer/URContainer';
 import Loader from '../../components/Loader/Loader';
 import Colors from '../../theme/colors';
 import { strings } from '../../utilities/localization/localization';
-import { searchCities, getLocationDetails } from '../../services/googlePlaces/googlePlaces.service';
 
 const UserLocation = () => {
   const dispatch = useDispatch();
@@ -51,42 +50,70 @@ const UserLocation = () => {
 
   // --- Effects ---
   useEffect(() => {
-    const apiKey = Config.GOOGLE_PLACES_API_KEY || Config.MAP_API_KEY;
-    console.log('--- USER LOCATION: API Key ---', apiKey ? 'AVAILABLE' : 'MISSING');
-    console.log('--- USER LOCATION: Full API Key value ---', apiKey);
+    console.log('--- USER LOCATION: Config.MAP_API_KEY ---', Config.MAP_API_KEY ? 'AVAILABLE' : 'MISSING');
+    console.log('--- USER LOCATION: Full MAP_API_KEY value ---', Config.MAP_API_KEY);
     if (userAccessToken) {
       console.log('--- USER LOCATION: Dispatching getUserGenresSagaAction ---');
       dispatch(getUserGenresSagaAction({ accessToken: userAccessToken }));
     }
   }, [dispatch, userAccessToken]);
 
+  // Debug effect for genres
+  useEffect(() => {
+    console.log('--- USER LOCATION: Genre List Debug ---');
+    console.log('  - genreList:', genreList);
+    console.log('  - genreList length:', genreList ? genreList.length : 0);
+    console.log('  - genreList type:', typeof genreList);
+    if (genreList && genreList.length > 0) {
+      console.log('  - First 5 genres:', genreList.slice(0, 5));
+    }
+  }, [genreList]);
+
   // Debug effect for PlacesInput configuration
   useEffect(() => {
-    const apiKey = Config.GOOGLE_PLACES_API_KEY || Config.MAP_API_KEY;
     console.log('--- USER LOCATION: Component Debug Info ---');
-    console.log('  - API Key:', apiKey ? `${apiKey.substring(0, 20)}...` : 'MISSING');
-    console.log('  - API Key length:', apiKey ? apiKey.length : 0);
+    console.log('  - MAP_API_KEY:', Config.MAP_API_KEY ? `${Config.MAP_API_KEY.substring(0, 20)}...` : 'MISSING');
+    console.log('  - MAP_API_KEY length:', Config.MAP_API_KEY ? Config.MAP_API_KEY.length : 0);
     console.log('  - locationText state:', locationText);
     console.log('  - selectedLocation state:', selectedLocation);
-    console.log('--- Google Places Service Info ---');
-    console.log('  - API Key:', apiKey ? 'PRESENT' : 'MISSING');
-    console.log('  - Service: searchCities function available');
-    console.log('  - Language: en-US');
+    console.log('--- PlacesInput Props that will be passed ---');
+    console.log('  - googleApiKey:', Config.MAP_API_KEY ? 'PRESENT' : 'MISSING');
+    console.log('  - queryCountries: [\'us\']');
+    console.log('  - queryTypes: (cities)');
+    console.log('  - language: en-US');
   }, []);
 
   // --- Event Handlers ---
   
   // Fixed Genre Autocomplete Logic - Simple case-insensitive search
   const handleGenreChange = (text) => {
+    console.log('--- USER LOCATION: Genre input changed ---', text);
+    console.log('--- USER LOCATION: Current genreList ---', genreList);
+    console.log('--- USER LOCATION: genreList length ---', genreList ? genreList.length : 0);
+    
     setGenreQuery(text); // Update the text in the input box
 
     if (text && genreList) {
       const filtered = genreList.filter(genre => 
         genre.name.toLowerCase().includes(text.toLowerCase())
       );
+      console.log('--- USER LOCATION: Filtered genres ---', filtered);
+      console.log('--- USER LOCATION: Filtered count ---', filtered.length);
       setFilteredGenres(filtered);
+      
+      // Check if current text exactly matches any genre (for button activation)
+      const matchingGenre = filtered.find(genre => 
+        genre.name.toLowerCase() === text.toLowerCase()
+      );
+      
+      if (matchingGenre && !selectedGenre) {
+        console.log('--- USER LOCATION: Genre text matches suggestion, setting selectedGenre ---', matchingGenre);
+        setSelectedGenre(matchingGenre);
+      }
     } else {
+      console.log('--- USER LOCATION: Clearing filtered genres ---');
       setFilteredGenres([]); // Clear suggestions if input is empty
+      setSelectedGenre(null);
     }
   };
 
@@ -114,27 +141,39 @@ const UserLocation = () => {
     console.log('--- USER LOCATION: Text changed ---', text);
     setLocationText(text);
     
+    // Clear selected location when user starts typing
+    if (text.trim() === '') {
+      setSelectedLocation(null);
+      setShowPlaceSuggestions(false);
+      setPlacePredictions([]);
+      return;
+    }
+    
     // Debug: Log if suggestions should appear
     if (text.length > 2) {
-      const apiKey = Config.GOOGLE_PLACES_API_KEY || Config.MAP_API_KEY;
       console.log('--- USER LOCATION: Text length > 2, Places API should be queried ---');
-      console.log('--- USER LOCATION: API Key being used ---', apiKey ? apiKey.substring(0, 20) + '...' : 'MISSING');
+      console.log('--- USER LOCATION: API Key being used ---', Config.MAP_API_KEY ? Config.MAP_API_KEY.substring(0, 20) + '...' : 'MISSING');
       fetchPlacePredictions(text);
     } else {
       setPlacePredictions([]);
       setShowPlaceSuggestions(false);
     }
+    
+    // Check if current text matches any existing suggestion (for button activation)
+    const matchingSuggestion = placePredictions.find(prediction => 
+      prediction.description.toLowerCase().includes(text.toLowerCase()) ||
+      prediction.structured_formatting.main_text.toLowerCase().includes(text.toLowerCase())
+    );
+    
+    if (matchingSuggestion && !selectedLocation) {
+      console.log('--- USER LOCATION: Text matches suggestion, setting selectedLocation ---', matchingSuggestion);
+      setSelectedLocation(matchingSuggestion);
+    }
   };
 
-  // Custom Google Places autocomplete function using our service
+  // Custom Google Places autocomplete function - Using LEGACY Places API (better for cities)
   const fetchPlacePredictions = async (input) => {
-    const apiKey = Config.GOOGLE_PLACES_API_KEY || Config.MAP_API_KEY;
-    console.log('--- CUSTOM PLACES: Starting fetch for input ---', input);
-    console.log('--- CUSTOM PLACES: API Key available ---', !!apiKey);
-    console.log('--- CUSTOM PLACES: Input length ---', input.length);
-    
-    if (!apiKey || input.length < 3) {
-      console.log('--- CUSTOM PLACES: Skipping fetch - no API key or input too short ---');
+    if (!Config.MAP_API_KEY || input.length < 3) {
       setPlacePredictions([]);
       setShowPlaceSuggestions(false);
       return;
@@ -144,31 +183,26 @@ const UserLocation = () => {
     console.log('--- CUSTOM PLACES: Fetching predictions for ---', input);
 
     try {
-      // Use our new Google Places service
-      const suggestions = await searchCities(input);
-      console.log('--- CUSTOM PLACES: Service response ---', suggestions);
+      // Use LEGACY Places API (better for cities and states)
+      const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&types=(cities)&components=country:us&language=en-US&key=${Config.MAP_API_KEY}`;
+      console.log('--- CUSTOM PLACES: API URL ---', url.replace(Config.MAP_API_KEY, 'API_KEY_HIDDEN'));
       
-      if (suggestions && suggestions.length > 0) {
-        // Transform to match expected format
-        const transformedPredictions = suggestions.map(suggestion => ({
-          place_id: suggestion.placeId,
-          description: suggestion.displayText,
-          structured_formatting: {
-            main_text: suggestion.mainText,
-            secondary_text: suggestion.secondaryText
-          }
-        }));
-        
-        console.log('--- CUSTOM PLACES: Transformed predictions ---', transformedPredictions.length);
-        setPlacePredictions(transformedPredictions);
-        setShowPlaceSuggestions(transformedPredictions.length > 0);
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      console.log('--- CUSTOM PLACES: API Response ---', JSON.stringify(data, null, 2));
+      
+      if (data.status === 'OK' && data.predictions && data.predictions.length > 0) {
+        console.log('--- CUSTOM PLACES: All predictions ---', data.predictions.length);
+        setPlacePredictions(data.predictions);
+        setShowPlaceSuggestions(data.predictions.length > 0);
       } else {
-        console.log('--- CUSTOM PLACES: No predictions found ---');
+        console.log('--- CUSTOM PLACES: No predictions or error ---', data.error_message || data.status);
         setPlacePredictions([]);
         setShowPlaceSuggestions(false);
       }
     } catch (error) {
-      console.log('--- CUSTOM PLACES: Service error ---', error);
+      console.log('--- CUSTOM PLACES: Fetch error ---', error);
       setPlacePredictions([]);
       setShowPlaceSuggestions(false);
     } finally {
@@ -182,23 +216,40 @@ const UserLocation = () => {
     setLocationText(prediction.description);
     setShowPlaceSuggestions(false);
     
-    // Get place details for coordinates using our service
+    // Get place details for coordinates using LEGACY Places API
     try {
+      const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${prediction.place_id}&fields=geometry,address_components,formatted_address&key=${Config.MAP_API_KEY}`;
       console.log('--- CUSTOM PLACES: Fetching place details ---');
-      const placeDetails = await getLocationDetails(prediction.place_id);
       
-      if (placeDetails) {
-        console.log('--- CUSTOM PLACES: Place details ---', JSON.stringify(placeDetails, null, 2));
-        // Transform to match expected format
-        const transformedResult = {
-          geometry: placeDetails.geometry,
-          address_components: placeDetails.addressComponents,
-          formatted_address: placeDetails.formattedAddress
+      const response = await fetch(detailsUrl);
+      const data = await response.json();
+      
+      if (data.status === 'OK' && data.result) {
+        console.log('--- CUSTOM PLACES: Place details ---', JSON.stringify(data.result, null, 2));
+        setSelectedLocation(data.result);
+      } else {
+        console.log('--- CUSTOM PLACES: No place details found ---', data.error_message || data.status);
+        // Fallback: create basic location data from prediction
+        const fallbackLocation = {
+          formatted_address: prediction.description,
+          address_components: [],
+          geometry: {
+            location: { lat: null, lng: null }
+          }
         };
-        setSelectedLocation(transformedResult);
+        setSelectedLocation(fallbackLocation);
       }
     } catch (error) {
       console.log('--- CUSTOM PLACES: Error fetching place details ---', error);
+      // Fallback: create basic location data from prediction
+      const fallbackLocation = {
+        formatted_address: prediction.description,
+        address_components: [],
+        geometry: {
+          location: { lat: null, lng: null }
+        }
+      };
+      setSelectedLocation(fallbackLocation);
     }
   };
 
@@ -294,7 +345,11 @@ const UserLocation = () => {
                   renderItem={({ item }) => (
                     <TouchableOpacity
                       style={styles.placeItem}
-                      onPress={() => handlePlaceSelect(item)}
+                      onPress={() => {
+                        console.log('--- CUSTOM PLACES: TouchableOpacity pressed ---', item);
+                        handlePlaceSelect(item);
+                      }}
+                      activeOpacity={0.7}
                     >
                       <Text style={styles.placeMainText}>{item.structured_formatting.main_text}</Text>
                       <Text style={styles.placeSecondaryText}>{item.structured_formatting.secondary_text}</Text>
@@ -310,19 +365,6 @@ const UserLocation = () => {
                 <Text style={styles.loadingText}>Searching locations...</Text>
               </View>
             )}
-            
-            {/* Debug indicator - shows when API key is available */}
-            <View style={styles.debugContainer}>
-              <Text style={styles.debugText}>
-                API Key: {(Config.GOOGLE_PLACES_API_KEY || Config.MAP_API_KEY) ? '✅ Available' : '❌ Missing'}
-              </Text>
-              <Text style={styles.debugText}>
-                Predictions: {placePredictions.length} found
-              </Text>
-              <Text style={styles.debugText}>
-                Show Suggestions: {showPlaceSuggestions ? 'Yes' : 'No'}
-              </Text>
-            </View>
           </View>
 
           {/* Genre Input */}
@@ -346,7 +388,11 @@ const UserLocation = () => {
                   <TouchableOpacity
                     key={item.id.toString()}
                     style={styles.suggestionItem}
-                    onPress={() => handleGenreSelect(item)}
+                    onPress={() => {
+                      console.log('--- USER LOCATION: Genre TouchableOpacity pressed ---', item);
+                      handleGenreSelect(item);
+                    }}
+                    activeOpacity={0.7}
                   >
                     <Text style={styles.suggestionText}>{item.name}</Text>
                   </TouchableOpacity>
@@ -366,6 +412,16 @@ const UserLocation = () => {
             disabledStyle={styles.disabledButton}
             disabledTextStyle={styles.disabledButtonText}
           />
+          {/* Debug Info */}
+          <Text style={{color: 'white', fontSize: 12, marginTop: 10}}>
+            Debug: Genre={!!selectedGenre}, Location={!!selectedLocation}, Text={!!locationText.trim()}
+          </Text>
+          <Text style={{color: 'white', fontSize: 10, marginTop: 5}}>
+            Values: Genre={selectedGenre?.name || 'null'}, Location={selectedLocation?.description || 'null'}, Text="{locationText}"
+          </Text>
+          <Text style={{color: 'white', fontSize: 10, marginTop: 5}}>
+            Button Disabled: {(!selectedGenre || (!selectedLocation && !locationText.trim())).toString()}
+          </Text>
         </View>
       </KeyboardAwareScrollView>
     </URContainer>
@@ -439,20 +495,20 @@ const styles = StyleSheet.create({
   },
   placesList: {
     position: 'absolute',
-    top: 50, // Position it directly below the 50px-high input
+    top: 60, // Position list correctly below the input
     left: 0,
     right: 0,
-    backgroundColor: '#2c2c2c', // A dark, visible background
-    borderColor: 'red',        // A bright red border for easy spotting
-    borderWidth: 2,
-    zIndex: 9999,              // A very high zIndex to ensure it appears on top
+    backgroundColor: '#2c2c2c',
     borderRadius: 8,
+    zIndex: 1000,
     elevation: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
     maxHeight: 200,
+    borderWidth: 1,
+    borderColor: '#444',
   },
   suggestionsList: {
     position: 'absolute',
@@ -542,17 +598,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   debugContainer: {
-    marginTop: 10,
+    marginTop: 20,
     padding: 10,
     backgroundColor: '#333',
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: 'yellow',
+    marginBottom: 20,
   },
   debugText: {
     color: Colors.White,
-    fontSize: 12,
-    marginBottom: 3,
+    fontSize: 14,
+    marginBottom: 5,
   },
 });
 

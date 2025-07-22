@@ -29,23 +29,61 @@ const Event = props => {
   const EventData = useSelector(getHomeEvents);
   const [EventList, setEventList] = useState(EventData);
   const showLoading = useSelector(state => state.homeEvents.isWaiting);
+  
+  console.log('--- EVENTS COMPONENT: Component rendered ---');
+  console.log('--- EVENTS COMPONENT: EventData from Redux ---', EventData);
+  console.log('--- EVENTS COMPONENT: EventData length ---', EventData?.length || 0);
+  console.log('--- EVENTS COMPONENT: EventData type ---', typeof EventData);
+  console.log('--- EVENTS COMPONENT: EventData is array ---', Array.isArray(EventData));
+  console.log('--- EVENTS COMPONENT: showLoading ---', showLoading);
+  console.log('--- EVENTS COMPONENT: EventList state ---', EventList);
+  console.log('--- EVENTS COMPONENT: EventList length ---', EventList?.length || 0);
+  
+  // Log Redux state details
+  const fullReduxState = useSelector(state => state.homeEvents);
+  console.log('--- EVENTS COMPONENT: Full Redux state ---', fullReduxState);
+  console.log('--- EVENTS COMPONENT: Redux state isWaiting ---', fullReduxState?.isWaiting);
+  console.log('--- EVENTS COMPONENT: Redux state error ---', fullReduxState?.error);
+  console.log('--- EVENTS COMPONENT: Redux state data ---', fullReduxState?.data);
+  
   useEffect(() => {
+    console.log('--- EVENTS COMPONENT: useEffect triggered - dispatching homeEventsSagaAction ---');
+    console.log('--- EVENTS COMPONENT: About to dispatch homeEventsSagaAction ---');
     dispatch(homeEventsSagaAction());
+    console.log('--- EVENTS COMPONENT: homeEventsSagaAction dispatched ---');
   }, []);
+  
   useEffect(() => {
+    console.log('--- EVENTS COMPONENT: EventData changed, updating EventList ---');
+    console.log('--- EVENTS COMPONENT: Previous EventList ---', EventList);
+    console.log('--- EVENTS COMPONENT: New EventData ---', EventData);
+    console.log('--- EVENTS COMPONENT: EventData changed from ---', EventList?.length || 0, 'to', EventData?.length || 0);
     setEventList(EventData);
+    console.log('--- EVENTS COMPONENT: EventList updated ---');
   }, [EventData]);
-  const ListEmptyComponent = () => (
-    <View style={ { alignItems: 'center' } }>
-      <Text style={ styles.emptyTxt }>
-        { strings('Event.emptyEvent') }
-      </Text>
-      <Image
-        style={ styles.illustrationStyle }
-        source={ require('../../../assets/images/Events_illustration.png') }
-      />
-    </View>
-  );
+  
+  const ListEmptyComponent = () => {
+    console.log('--- EVENTS COMPONENT: Rendering ListEmptyComponent ---');
+    return (
+      <View style={ { alignItems: 'center' } }>
+        <Text style={ styles.emptyTxt }>
+          { strings('Event.emptyEvent') }
+        </Text>
+        <Image
+          style={ styles.illustrationStyle }
+          source={ require('../../../assets/images/Events_illustration.png') }
+        />
+      </View>
+    );
+  };
+  
+  console.log('--- EVENTS COMPONENT: Rendering component ---');
+  console.log('--- EVENTS COMPONENT: EventData.length === 0 ---', EventData.length === 0);
+  console.log('--- EVENTS COMPONENT: !showLoading ---', !showLoading);
+  console.log('--- EVENTS COMPONENT: Will show empty component ---', EventData.length === 0 && !showLoading);
+  console.log('--- EVENTS COMPONENT: Will show loading ---', showLoading);
+  console.log('--- EVENTS COMPONENT: Will show FlatList ---', EventData.length > 0 && !showLoading);
+  
   return (
     <ScrollView>
       { showLoading

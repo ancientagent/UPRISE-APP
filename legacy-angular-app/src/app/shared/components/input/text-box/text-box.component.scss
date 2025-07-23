@@ -1,0 +1,51 @@
+@import '/src/colors.scss';
+.p-error-invalid {
+  color: red;
+}
+.textBoxMargininput {
+  .p-inputtext:enabled:focus {
+    box-shadow: none;
+    border: $inputBorder;
+  }
+  .p-inputtext:hover {
+    box-shadow: none;
+    border: $inputBorder;
+  }
+}
+::ng-deep {
+  .p-inputtext.ng-dirty.ng-invalid {
+    border: $inputBorder;
+  }
+  input.ng-invalid.ng-touched {
+    border: $inputBorder;
+  }
+  input.ng-invalid.ng-touched {
+    border: $inputBorder;
+  }
+  .p-inputtext:enabled:hover {
+    border: $inputBorder;
+  }
+  .p-inputtext:enabled:focus {
+    box-shadow: none;
+  }
+  .p-inputtext:enabled:focus {
+    box-shadow: none;
+    border: $inputBorder;
+  }
+  .p-input-filled .p-inputtext {
+    background-color: #0f0f0f;
+  }
+  .p-input-filled .p-inputtext:enabled:hover {
+    background: #0f0f0f;
+  }
+  .p-input-filled .p-inputtext {
+    background: #0f0f0f;
+  }
+  .p-input-filled .p-inputtext:enabled:focus {
+    background: #0f0f0f;
+  }
+  .p-inputtext {
+    margin: 0;
+    color: #ffffff;
+  }
+}

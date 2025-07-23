@@ -1,0 +1,332 @@
+<div class="ads-container">
+  <div>
+    <div class="grid">
+      <div class="col-12 text-right flex justify-content-end">
+        <div class="p-input-icon-right">
+          <input
+            type="text"
+            [(ngModel)]="searchtable"
+            class="search_box"
+            placeholder="Search ads..."
+            (keyup)="searchads($event)"
+          />
+          <i *ngIf="searchSong?.length > 0" class="pi pi-times" style="padding-right: 7px;color: white;" (click)="clearsearch()"></i>
+        </div>
+        <!-- <button class="upload-ads-btn" (click)="Addevent()">
+          <i class="pi pi-plus-circle icon_position pr-2"></i> Create Ads
+        </button> -->
+        <div class="ads-band">
+          <p-multiSelect
+            [options]="bands"
+            [(ngModel)]="selectedbands"
+            defaultLabel="Select bands"
+            optionLabel="title"
+            [filter]="false"
+            (click)="bandsSelect(selectedbands)"
+            display="chip"
+          >
+          <ng-template let-data pTemplate="item">
+              <div class="ad-item">
+                <div class="data-item flex align-items-center justify-content-center">
+                  <div class="flex">
+                    <img
+                      [src]="
+                        data.logo
+                          ? data.logo
+                          : 'assets/images/userprofilepic.png'
+                      "
+                      style="object-fit: cover"
+                      height="20"
+                      width="20"
+                      alt=""
+                      class="border-circle"
+                    />
+                    &nbsp; 
+                    <div class="user-email">
+                      <div>{{ data.title }}</div> 
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </ng-template>
+          </p-multiSelect>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p-table [value]="adsData" [(selection)]="selected">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th>Banner</th>
+            <th>Title</th>
+            <th>City</th>
+            <th>Description</th>
+            <th>Ad link</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-ad>
+          <tr>
+            <!-- <p-tableCheckbox
+              [value]="ad"
+              class="check_box"
+            ></p-tableCheckbox> -->
+            <td style="position: relative;width:50px;" [ngStyle]="{'opacity': ad.blocked ? '0.5' : '1' }">
+              <img
+                *ngIf="ad?.banner?.split('.')?.pop()!=='mp4'" 
+                [src]="ad.banner?ad.banner:'../../../../assets/images/defaultAddLogo.png'"
+                height="50"
+                width="50"
+                [ngStyle]="{'object-fit': ad.banner ? 'cover' : 'fill' }"
+              />
+              <video 
+                *ngIf="ad?.banner?.split('.')?.pop()=='mp4'" 
+                height="50" 
+                width="50"
+                style="object-fit: cover"
+                class="band_gallery_preview">
+                <source                   
+                [src]="ad.banner"
+                type="video/mp4">
+                Your browser does not support the video.
+              </video>
+              <i class="fas fa-play" style="position: absolute;left: 35px;top:35px;color: #DCF763;" *ngIf="ad?.banner?.split('.')?.pop()=='mp4'" ></i>
+              <!-- <img 
+                *ngIf="ad?.banner?.split('.')?.pop()=='mp4'"
+                style="position: absolute;left: 24px;top:24px;height: 35px;width: 35px;"
+                src="../../../../assets/images/Video.png"
+              /> -->
+            </td>
+            <td [ngStyle]="{'opacity': ad.blocked ? '0.5' : '1' }">{{ ad.title }}</td>
+            <td [ngStyle]="{'opacity': ad.blocked ? '0.5' : '1' }">{{ ad.city }}</td>
+            <td style="max-width: 15vw;width: 15vw;"
+                [ngStyle]="{'opacity': ad.blocked ? '0.5' : '1' }"
+                pTooltip="{{ ad.description }}"
+                tooltipPosition="bottom"><div style="overflow: hidden;
+                                                      text-overflow: ellipsis;
+                                                      white-space: nowrap;"> {{ ad.description }}</div></td>
+            <td   style="max-width: 20vw;width: 20vw;" [ngStyle]="{'opacity': ad.blocked ? '0.5' : '1' }">
+              <!-- <div class="link" (click)='copy(ad.link)' (mouseleave)="mouseleave()" style="text-align: left; 
+                          width: 100%;
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                          white-space: nowrap;
+                          text-decoration: underline;
+                          cursor: pointer;">
+                  {{ ad.link }}
+                  <span class="tooltiptext">{{tooltip}}</span>
+              </div> -->
+              <div style="text-align: left;
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                          white-space: nowrap;
+                          text-decoration: underline;"> 
+                <a class="text-white"  [href]="ad.link">{{ ad.link }}</a>
+              </div>
+            </td>
+            <td>
+              <div class="switch">
+                <p-inputSwitch
+                  [(ngModel)]="ad.live"
+                  [disabled]="ad.blocked"
+                  (onChange)='adLive(ad.id, ad.live)'>
+                </p-inputSwitch>
+              </div>
+            </td>            
+            <td style="min-width: 100px;" [ngStyle]="{'opacity': ad.live ? '0.5' : '1' }">
+              <span (click)="(ad.live || ad.blocked)?'':deleteEvent(ad?.id)" [ngStyle]="{'opacity': ad.blocked ? '0.5' : '1' }">
+                <i class="pi pi-trash text-white" style="font-size: 18px; padding-right: 20px;"></i>
+              </span>
+              <span (click)="ad.live?'':blockad(ad?.id,!ad.blocked)">
+                <i class="fa fa-ban text-white" style="font-size: 18px;" pTooltip="{{ ad.blocked?'unblock':'block' }}" tooltipPosition="bottom"></i>
+              </span>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8" class="textC">
+              <span>No records found</span>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div *ngIf="this?.adsData?.length > 0">
+        <p-paginator
+          [rows]="this.adspage?.perPage"
+          [styleClass]="'paginator'"
+          #dt
+          [totalRecords]="this.totalrecords"
+          [rowsPerPageOptions]="[10, 50, 100]"
+          (onPageChange)="paginateads($event)"
+        ></p-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  header="Title"
+  [modal]="true"
+  [(visible)]="adsModal"
+  [style]="{ width: '900px' }"
+  [draggable]="false"
+  styleClass="active"
+  [contentStyle]="{
+    'overflow-y': 'visible',
+    'overflow-x': 'visible',
+    border: '0.6px solid rgba(240, 240, 240, 0.2)'
+  }"
+>
+  <p-header>{{ header }} </p-header>
+  <div>
+    <div class="model_card_body">
+      <div></div>
+      <div>
+        <div class="grid mt-1">
+          <div class="col-12 text-center">
+            <span class="flex justify-content-center">
+              <input
+                class="upload-img hidden"
+                accept="image/png , image/jpeg"
+                id="file-upload-img"
+                type="file"
+                (change)="onFileImageupload($event)"
+              />
+              <app-upload-button [for]="'file-upload-img'" [name]="'Upload banner'"></app-upload-button>
+            </span>
+            <br />
+            <p class="info-msgs">
+              <i class="pi pi-info-circle"></i> &nbsp;
+              <span class="relative" style="top: -3px">
+                Upload only .jpeg's , .png's and .gif's images </span
+              >
+            </p>
+          </div>
+
+          <div class="col-12 p-0 m-0">
+            <div *ngIf="viewImgages">
+              <div class="images_View">
+                <div class="ads_poster_body">
+                  <img
+                    [src]="imageSrc"
+                    height="160"
+                    width="160"
+                    class="ads_poster"
+                    style="object-fit: cover"
+                  />
+                  <p (click)="removeImg()" class="cursor ads_poster_delete">
+                    <i
+                      class="pi pi-times-circle text-white"
+                      style="font-size: 16px"
+                    ></i>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="hr_class" />
+        <br />
+        <div class="grid">
+          <div class="col-6 py-0">
+            <app-text-box
+              [className]="'input_box'"
+              name="title"
+              [label]="'Title'"
+              [formGroup]="adsForm"
+              [placeholder]="'Enter title'"
+              [type]="'text'"
+              [error]="
+                inputValidationsErrors(adsForm, 'title')
+                  ? 'Title is required.'
+                  : errorList['title']
+              "
+            ></app-text-box>
+          </div>
+          <div class="col-6 py-0">
+            <app-text-box
+              [className]="'input_box'"
+              name="link"
+              [label]="'Link'"
+              [formGroup]="adsForm"
+              [placeholder]="'Enter link'"
+              [type]="'text'"
+              [error]="
+                inputValidationsErrors(adsForm, 'link')
+                  ? 'Link is required.'
+                  : ''
+              "
+            ></app-text-box>
+          </div>
+          <div class="col-6 py-0">
+            <div>
+              <app-autocomplete
+                name="city"
+                [formGroup]="adsForm"
+                [options]="{types: ['(cities)'],componentRestrictions: { country: 'US' }}"
+                (searchEvent)="AddressChange($event)"
+                (selectEvent)="address($event)"
+                [placeholder]="'Enter city'"
+                [label]="'City'"
+                [error]="
+                  inputValidationsErrors(adsForm, 'city')
+                    ? 'city is required.'
+                    :checkvalidlocation(adsForm, 'city')
+                    ? 'Location must be valid.'
+                    : errorList['city']
+                "
+              ></app-autocomplete>
+            </div>
+          </div>
+          <div class="col-6 py-0">
+            <app-text-box
+              [className]="'input_box'"
+              name="description"
+              [label]="'Description'"
+              [formGroup]="adsForm"
+              [placeholder]="'Enter description'"
+              [type]="'text'"
+              [maxlength]="100"
+            ></app-text-box>
+          </div>
+          <br />
+          <div class="col-8"></div>
+          <div class="col-2 text-center">
+            <div class="cancel_btns" (click)="adsModalClose()">Cancel</div>
+          </div>
+          <div class="col-2">
+            <div style="max-width: 100px">
+              <app-submit-component2
+                [type]="'button'"
+                [class]="'submit-btn'"
+                [label]="'Save'"
+                [showIcon]="false"
+                [loading]="isLoading"
+                [disabled]="!adsForm.valid || isLoading"
+                (submitForm)="createAds()"
+                [ifHasError]="hasError"
+              ></app-submit-component2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<app-delete
+(close)="closeModal()"
+(delete)="ConfirmDelete()"
+[name]="'ad'"
+[deleteModal]="deleteEventModal"></app-delete>
+
+<app-block
+(close)="closeModal()"
+(delete)="confirmBlockad()"
+[name]="blockedstatus"
+[deleteModal]="blockEventModal"></app-block>
+
+<app-spinner></app-spinner>
+

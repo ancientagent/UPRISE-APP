@@ -1,0 +1,236 @@
+<div class="profile-container">
+  <div class="profile-contentent">
+    <div class="grid">
+      <div class="col-6">
+        <p class="profile-title">{{heading}}</p>
+      </div>
+      <div *ngIf="band?.bandRoleId == 4 || this.userData.role.name == 'admin'" class="col-6 flex justify-content-end">
+        <i pTooltip="Edit" *ngIf="!this.editDisable" class="pi pi-pencil cursor" style="font-size: 20px" (click)="edit()"></i>
+      </div>
+      <div *ngIf="band?.bandRoleId == 6" class="col-6 flex justify-content-end"></div>
+      <div class="col-2 text-left" style="display: flex; justify-content: center;">
+        <div>
+        <p class="text-center">Avatar</p>
+
+        <div class="text-center default-profile">
+          <span
+            ><img
+              [src]="activeImage ?activeImage : 'assets/images/profilepic2.png'"
+              alt=""
+              class="uploaded-profile-pic"
+          /></span>
+
+          <span (click)="profileUpload()" *ngIf="this.editDisable" class="d-flex upload_icon_profile cursor">
+            <!-- <input
+              class="upload-img hidden"
+              accept="image/png , image/jpeg"
+              id="file-upload-img"
+              type="file"
+              (change)="onFileImageupload($event)"
+            /> -->
+            <div  class="upload-btn-outer cursor">
+              <label
+                for="file-upload-img"
+                type="button"
+                class="Upload-btn btn-sm cursor"
+              >
+                <i class="pi pi-pencil cursor profilepic-edit-icon" style="font-size: 10px"></i>
+              </label>
+            </div>
+          </span>
+          <br />
+        </div>
+        <!-- <p class="pt-2 text-center username" pTooltip="{{ this?.userData?.userName | titlecase }}" tooltipPosition="bottom"
+        >
+          {{ this?.userData?.userName | titlecase }}
+        </p> -->
+      </div>
+      </div>
+      <div class="col-10">
+        <p class="sub-title">Account Information</p>
+        <br />
+        <br />
+
+        <div class="grid">
+          <div class="col-6 input-item">
+            <div class="relative">
+              <div>
+                <app-input-box-login
+                  [className]="'input_box'"
+                  name="userName"
+                  [spaces]=0
+                  [icon]="'pi pi-user'"
+                  [formGroup]="profileForm"
+                  [type]="'text'"
+                  [maxlength]="30"
+                  [label]="'Username'"
+                  [readonly]="!this.editDisable"
+                  [placeholder]="'Enter your username'"
+                  [error]="
+                    inputValidationsErrors(profileForm, 'userName')
+                      ? 'Username is required.'
+                      : inputPatternValidationsErrors(profileForm, 'userName')
+                      ? 'Username must contain atleast one alphabet'
+                      : errorList['userName']
+                  "
+                ></app-input-box-login>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 input-item">
+            <div class="relative">
+              <app-input-box-login
+                [className]="'input_box'"
+                name="email"
+                [spaces]=0
+                [icon]="'pi pi-envelope'"
+                [label]="'Email ID'"
+                [placeholder]="'Enter your email id'"
+                [formGroup]="profileForm"
+                [type]="'email'"
+                [maxlength]="60"
+                [readonly]="true"
+                [error]="
+                  inputValidationsErrors(profileForm, 'email')
+                    ? 'Email is required.'
+                    : inputPatternValidationsErrors(profileForm, 'email')
+                    ? 'Enter an valid email id .'
+                    : errorList['email']
+                "
+              ></app-input-box-login>
+            </div>
+          </div>
+          <div class="col-6 input-item">
+            <div class="relative">
+              <div>
+                <app-input-box-login
+                  [className]="'input_box'"
+                  name="mobileno"
+                  [icon]="'pi pi-phone'"
+                  [formGroup]="profileForm"
+                  [label]="'Mobile number'"
+                  [placeholder]="'Enter your mobile number'"
+                  [minlength]="10"
+                  [maxlength]="10"
+                  [readonly]="!this.editDisable"
+                  [type]="'text'"
+                  (keypress)="numberOnly($event)"
+                  [spaces]=0
+                ></app-input-box-login>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 input-item">
+            <div class="relative">
+              <div>
+                <app-input-box-login
+                  [className]="'input_box'"
+                  name="facebook"
+                  [spaces]=0
+                  [icon]="'pi pi-user'"
+                  [formGroup]="profileForm"
+                  [type]="'text'"
+                  [maxlength]="30"
+                  [label]="'Facebook'"
+                  [readonly]="!this.editDisable"
+                  [placeholder]="'Facebook'"
+                ></app-input-box-login>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 input-item">
+            <div class="relative">
+              <div>
+                <app-input-box-login
+                  [className]="'input_box'"
+                  name="twitter"
+                  [spaces]=0
+                  [icon]="'pi pi-user'"
+                  [formGroup]="profileForm"
+                  [type]="'text'"
+                  [maxlength]="30"
+                  [label]="'Twitter'"
+                  [readonly]="!this.editDisable"
+                  [placeholder]="'Twitter'"
+                ></app-input-box-login>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 input-item">
+            <div class="relative">
+              <div>
+                <app-input-box-login
+                  [className]="'input_box'"
+                  name="instagram"
+                  [spaces]=0
+                  [icon]="'pi pi-user'"
+                  [formGroup]="profileForm"
+                  [type]="'text'"
+                  [maxlength]="30"
+                  [label]="'Instagram'"
+                  [readonly]="!this.editDisable"
+                  [placeholder]="'Instagram'"
+                ></app-input-box-login>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-9"></div>
+          <div *ngIf="this.editDisable"  class="col-3 flex">
+            <div class="cancel_btns" (click)="cancel()">
+              Cancel
+            </div>
+            &nbsp;&nbsp;&nbsp;
+            <div class="button_save">
+              <app-submit-component2
+                [type]="'button'"
+                [class]="'submit-btn'"
+                [label]="'Save'"
+                [showIcon]="false"
+                [loading]="isLoading"
+                (submitForm)="UpdateUser()"
+                [disabled]="!profileForm.valid || isLoading"
+                [ifHasError]="hasError"
+              ></app-submit-component2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--avatar upload-->
+<div  class="profile_pic_model">
+  <p-dialog
+    header="Title"
+    [modal]="true"
+    [(visible)]="profilePic"
+    [style]="{ width: '800px' }"
+    [draggable]="false"
+    styleClass="active"
+    [contentStyle]="{
+      'overflow-y': 'auto',
+      'overflow-x': 'hidden',
+      'max-height': '80vh',
+      border: '0.6px solid rgba(240, 240, 240, 0.2)'
+    }"
+  >
+  <app-avatar 
+    [avatarId]="this.activeIndex?this.activeIndex:null"
+    [avatar]="this.activeImage?this.activeImage:null"
+    [clickedImage]="this.clickedImage?this.clickedImage:null"
+    [clickedIndex]="this.clickedIndex?this.clickedIndex:null"
+    (saveModel)="saveModel($event)"
+    (clickModel)="clickModel($event)"
+    (cancelModel)="cancelModel($event)"
+    (removeModel)="removeavatar($event)"></app-avatar>
+</p-dialog>
+</div>
+
+
+<app-spinner></app-spinner>
+

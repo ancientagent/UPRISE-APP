@@ -1,0 +1,941 @@
+<div class="songs-container">
+  <!-- [ngClass]="{
+  blur:
+    this.songsUploadModal == true ||
+    this.deleteModal == true ||
+    this.albumsUploadModal == true
+}" -->
+  <div *ngIf="this.currentURL == '/admin/content-management/songs'">
+    <div class="grid">
+      <div class="col-4" style="display: flex">
+        <p class="songs_title">All Songs</p>
+        &nbsp; &nbsp;
+        <!-- <p class="songs_Albums" (click)="albumsNavigation()">Albums</p> -->
+      </div>
+
+      <div class="col-8 text-right flex justify-content-end align-items-center">
+        <div class="p-input-icon-right" style="height: fit-content">
+          <input
+            type="text"
+            [(ngModel)]="searchsongtable"
+            class="search_box"
+            placeholder="Search songs..."
+            (keyup)="searchSongs($event)"
+          />
+          <i
+            *ngIf="searchSong?.length > 0"
+            class="pi pi-times"
+            style="padding-right: 7px; color: white"
+            (click)="clearsongsearch()"
+          ></i>
+        </div>
+        &nbsp; &nbsp;
+        <button class="upload-songs-btn" (click)="uploadSongs()">
+          <i class="pi pi-cloud-upload pr-2"></i> Upload Song
+        </button>
+      </div>
+    </div>
+    <div>
+      <p-table
+        [columns]="cols"
+        [value]="songsListData"
+        [(selection)]="selected"
+      >
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <!-- <th>
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th> -->
+            <th *ngFor="let col of columns">
+              {{ col.header }}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr>
+            <!-- <p-tableCheckbox [value]="song" class="check_box"></p-tableCheckbox> -->
+            <td>
+              <img
+                *ngIf="rowData.thumbnail"
+                [src]="rowData.thumbnail"
+                height="60"
+                width="60"
+                style="object-fit: cover"
+              />
+              <img
+                *ngIf="!rowData.thumbnail"
+                src="../../../../assets/images/audio.png"
+                height="40px"
+                width="40px"
+                style="object-fit: cover"
+              />
+            </td>
+
+            <td>{{ rowData.title }}</td>
+            <!-- <td>{{ rowData?.album?.title }}</td> -->
+            <td>{{ rowData.duration | duration }}</td>
+            <td>
+              <span class="pr-1 comma" *ngFor="let item of rowData.genres"
+                >{{ item.genre_name }}
+              </span>
+            </td>
+            <td>{{ rowData.cityName }}, {{ rowData.stateName }} {{( rowData.country ?(',' + rowData.country): "") }}</td>
+            <td>{{ rowData.createdAt | date : "MM/dd/YY" }}</td>
+            <td>
+              <!-- <app-toggle-switch
+                [value]="rowData.live"
+                (live)="songLive(rowData.id, $event)"
+              ></app-toggle-switch> -->
+              <div class="switch">
+                <p-inputSwitch
+                  [(ngModel)]="rowData.live"
+                  (onChange)="songLive(rowData.id, rowData.live)"
+                >
+                </p-inputSwitch>
+              </div>
+            </td>
+            <td
+              style="min-width: 100px"
+              [ngClass]="
+                rowData.live == true ? 'disableswitch' : 'enableswitch'
+              "
+            >
+              <span (click)="rowData.live == false ? updateSong(rowData) : null"
+                ><i class="pi pi-pencil pr-2" style="font-size: 18px"></i
+              ></span>
+              <span
+                (click)="rowData.live == false ? deleteSong(rowData.id) : null"
+              >
+                <i
+                  class="pi pi-trash"
+                  style="color: #fff; font-size: 18px; padding-left: 10px"
+                ></i
+              ></span>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8" class="textC">
+              <span>No Records Found</span>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div *ngIf="this?.songsListData?.length > 0">
+        <p-paginator
+          [rows]="this.pageData?.perPage"
+          [styleClass]="'paginator'"
+          #pgsong
+          [totalRecords]="this.totalrecords"
+          [rowsPerPageOptions]="[10, 50, 100]"
+          (onPageChange)="paginate($event)"
+        ></p-paginator>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="this.currentURL == '/admin/content-management/albums'">
+    <div class="grid">
+      <div class="col-4" style="display: flex">
+        <p class="songs_Albums" (click)="songsNavigation()">All Songs</p>
+        &nbsp; &nbsp;
+        <p class="albums_title">Albums</p>
+      </div>
+
+      <div class="col-8 text-right flex justify-content">
+        <div class="p-input-icon-right" style="height: fit-content">
+          <input
+            type="text"
+            [(ngModel)]="searchalbumtable"
+            class="search_box"
+            placeholder="Search albums..."
+            (keyup)="searchAlbums($event)"
+          />
+          <i
+            *ngIf="searchAlbum?.length > 0"
+            class="pi pi-times"
+            style="padding-right: 7px; color: white"
+            (click)="clearAlbumsearch()"
+          ></i>
+        </div>
+        &nbsp; &nbsp;
+        <button class="upload-songs-btn" (click)="uploadAlbums()">
+          <i class="pi pi-plus-circle pr-2"></i>Create Album
+        </button>
+      </div>
+    </div>
+    <div>
+      <p-table
+        [columns]="albumcols"
+        [value]="albumsListData"
+        [(selection)]="selected"
+      >
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <!-- <th>
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th> -->
+            <th style="width: 300px !important" *ngFor="let col of columns">
+              {{ col.header }}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr style="cursor: pointer">
+            <!-- <p-tableCheckbox [value]="song" class="check_box"></p-tableCheckbox> -->
+            <td (click)="albumsSongsNavigation(rowData)">
+              <img
+                *ngIf="rowData.thumbnail"
+                [src]="rowData.thumbnail"
+                height="60px"
+                width="60px"
+                alt="album"
+                style="object-fit: cover"
+              />
+              <img
+                *ngIf="!rowData.thumbnail"
+                src="../../../../assets/images/album.png"
+                height="60px"
+                width="60px"
+                alt="album"
+                style="object-fit: cover"
+              />
+            </td>
+
+            <td (click)="albumsSongsNavigation(rowData)">
+              {{ rowData.title }}
+            </td>
+            <td (click)="albumsSongsNavigation(rowData)">
+              {{ rowData.band.title }}
+            </td>
+
+            <td (click)="albumsSongsNavigation(rowData)">
+              <div
+                style="
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                  max-width: 250px;
+                "
+                class="albumgenre"
+              >
+                <span class="pr-1 comma" *ngFor="let item of rowData.genres"
+                  >{{ item.genre_name }}
+                </span>
+              </div>
+
+              <div class="albumgenrehover">
+                <span class="pr-1 comma" *ngFor="let item of rowData.genres"
+                  >{{ item.genre_name }}
+                </span>
+              </div>
+            </td>
+            <!-- <td>{{ rowData.geners }}</td> -->
+            <td (click)="albumsSongsNavigation(rowData)">
+              {{ rowData.createdAt | date : "MM/dd/YY" }}
+            </td>
+            <td>
+              <!-- <app-toggle-switch
+                [disabled]="!rowData.genres" 
+                [value]="rowData.live"
+                (live)="albumsLive(rowData.albumId, rowData.live = $event)"
+              ></app-toggle-switch> -->
+              <div class="switch">
+                <p-inputSwitch
+                  [disabled]="!rowData.genres"
+                  [(ngModel)]="rowData.live"
+                  (onChange)="albumsLive(rowData.albumId, rowData.live)"
+                >
+                </p-inputSwitch>
+              </div>
+            </td>
+            <td
+              style="min-width: 100px"
+              [ngClass]="
+                rowData.live == true ? 'disableswitch' : 'enableswitch'
+              "
+            >
+              <span
+                (click)="rowData.live == false ? updateAlbum(rowData) : null"
+                ><i class="pi pi-pencil pr-2" style="font-size: 18px"></i
+              ></span>
+              <span
+                (click)="
+                  rowData.live == false ? deleteAlbums(rowData.albumId) : null
+                "
+              >
+                <i
+                  class="pi pi-trash"
+                  style="color: #fff; font-size: 18px; padding-left: 10px"
+                ></i
+              ></span>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7" class="textC">
+              <span>No Records Found</span>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <div *ngIf="this?.albumsListData?.length > 0">
+        <p-paginator
+          [rows]="this.albumpageData?.perPage"
+          [styleClass]="'paginator'"
+          #pgalbum
+          [totalRecords]="this.albumsTotalcount"
+          [rowsPerPageOptions]="[10, 50, 100]"
+          (onPageChange)="paginateAlbums($event)"
+        ></p-paginator>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="this.currentURL == '/admin/content-management/albums/songs'">
+    <div class="grid">
+      <div class="col-6" style="display: flex">
+        <p>
+          <a
+            routerLink="/admin/content-management/songs"
+            class="album_songs_songsmanagement text-white"
+            style="text-decoration: none"
+            >Songs Management</a
+          >
+          <i class="pi pi-angle-right angel-icon-position"></i
+          ><a
+            class="album_songs_songsmanagement text-white"
+            style="text-decoration: none; cursor: pointer"
+            (click)="songsalbumnavigation()"
+            >Albums</a
+          >
+          <i class="pi pi-angle-right angel-icon-position"></i>
+          <span>{{ this.indivisualAlbumData?.albumTitle }} </span>
+        </p>
+      </div>
+      <div class="col-6 text-right flex justify-content">
+        <div class="p-input-icon-right" style="height: fit-content">
+          <input
+            type="text"
+            [(ngModel)]="searchalbumsongstable"
+            class="search_box"
+            placeholder="Search songs..."
+            (keyup)="searchAlbumSongs($event)"
+          />
+          <i
+            *ngIf="searchAlbumSong?.length > 0"
+            class="pi pi-times"
+            style="padding-right: 7px; color: white"
+            (click)="clearAlbumSongssearch()"
+          ></i>
+        </div>
+        &nbsp; &nbsp;
+        <button class="upload-songs-btn" (click)="uploadSongs()">
+          <i class="pi pi-cloud-upload pr-2"></i> Upload Song
+        </button>
+      </div>
+    </div>
+    <div>
+      <p-table
+        [columns]="songalbumcols"
+        [value]="albumSongsList"
+        [(selection)]="selected"
+      >
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns">
+              {{ col.header }}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item let-columns="columns">
+          <tr>
+            <td>
+              <img
+                *ngIf="item.thumbnail"
+                [src]="item.thumbnail"
+                style="object-fit: cover"
+                height="40"
+                width="40"
+                alt="album"
+              />
+              <img
+                *ngIf="!item.thumbnail"
+                src="../../../../assets/images/audio.png"
+                style="object-fit: cover"
+                height="60"
+                width="60"
+                alt="album"
+              />
+            </td>
+
+            <td>{{ item.title }}</td>
+            <td>{{ item.duration | duration }}</td>
+            <td>
+              <span class="pr-1 comma" *ngFor="let items of item.genres"
+                >{{ items.genre_name }}
+              </span>
+            </td>
+            <td>{{ item.stateName }}</td>
+            <td>{{ item.createdAt | date : "MM/dd/YY" }}</td>
+            <td>
+              <!-- <app-toggle-switch
+                [value]="item.live"
+                (live)="songLive(item.id, $event)"
+              ></app-toggle-switch> -->
+              <div class="switch">
+                <p-inputSwitch
+                  [(ngModel)]="item.live"
+                  (onChange)="songLive(item.id, item.live)"
+                >
+                </p-inputSwitch>
+              </div>
+            </td>
+            <td
+              style="min-width: 100px"
+              [ngClass]="item.live == true ? 'disableswitch' : 'enableswitch'"
+            >
+              <span (click)="item.live == false ? updateSong(item) : null"
+                ><i class="pi pi-pencil pr-2" style="font-size: 18px"></i
+              ></span>
+              <span (click)="item.live == false ? deleteSong(item.id) : null">
+                <i
+                  class="pi pi-trash"
+                  style="color: #fff; font-size: 18px; padding-left: 10px"
+                ></i
+              ></span>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8" class="textC">
+              <span>No Records Found</span>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div *ngIf="this?.albumSongsList?.length > 0">
+        <p-paginator
+          [rows]="this.albumsongspage?.perPage"
+          [styleClass]="'paginator'"
+          #pgalbumsong
+          [totalRecords]="this.totalcountAlbumSongs"
+          [rowsPerPageOptions]="[10, 50, 100]"
+          (onPageChange)="paginateAlbumsSongs($event)"
+        ></p-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-delete
+  (close)="closeModal()"
+  (delete)="Delete()"
+  [name]="'song'"
+  [deleteModal]="deleteModal"
+></app-delete>
+
+<app-delete
+  (close)="closeDeleteModal()"
+  (delete)="deleteAlbum()"
+  [name]="'album'"
+  [deleteModal]="deleteAlbummodal"
+></app-delete>
+
+<!-- upload songs-->
+<p-dialog
+  header="Title"
+  [modal]="true"
+  [(visible)]="songsUploadModal"
+  [style]="{ width: '900px' }"
+  [draggable]="false"
+  styleClass="active"
+  [contentStyle]="{
+    'overflow-y': 'visible',
+    'overflow-x': 'visible',
+
+    border: '0.6px solid rgba(240, 240, 240, 0.2)'
+  }"
+>
+  <p-header>{{ header }} </p-header>
+  <div>
+    <div class="model_card_body">
+      <div></div>
+      <div>
+        <div class="grid">
+          <div [formGroup]="songsForm" class="col-6 py-0 text-center">
+            <span class="d-flex" style="display: flex; justify-content: center">
+              <input
+                formControlName="thumbnail"
+                class="upload-img"
+                accept="image/png , image/jpeg , image/gif"
+                id="file-upload-img"
+                type="file"
+                #songThumbnailElement
+                (change)="onFileImageupload($event)"
+                style="display: none"
+              />
+              <app-upload-button [for]="'file-upload-img'" [name]="'Upload poster'"></app-upload-button>
+            </span>
+            <br />
+            <p class="info-msgs">
+              <i class="pi pi-info-circle"></i> &nbsp;
+              <span style="position: relative; top: -3px">
+                Upload only .jpeg's , .png's and .gif's images
+              </span>
+            </p>
+          </div>
+          <div class="col-6 py-0 text-center">
+            <div
+              [formGroup]="songsForm"
+              class="d-flex"
+              style="display: flex; justify-content: center"
+            >
+              <input
+                formControlName="song"
+                type="file"
+                accept="audio/aac , audio/mpeg , audio/mpeg-4"
+                id="file-upload"
+                #songAudioElement
+                (change)="uploadAudio($event)"
+                style="display: none"
+              />
+              <app-upload-button [for]="'file-upload'" [name]="'Upload song'"></app-upload-button>
+            </div>
+            <br />
+            <p class="info-msgs">
+              <i class="pi pi-info-circle"></i> &nbsp;
+              <span style="position: relative; top: -3px">
+                Upload only .mp3 and .wav songs.
+              </span>
+            </p>
+          </div>
+
+          <div class="col-6 p-0 m-0">
+            <div *ngIf="viewImgages">
+              <div class="images_View">
+                <div class="song_poster_body">
+                  <img
+                    [src]="imageSrc"
+                    height="160"
+                    width="160"
+                    class="event_poster"
+                  />
+                  <p (click)="removeImg()" class="cursor song_poster_delete">
+                    <i
+                      class="pi pi-times-circle"
+                      style="color: #fff; font-size: 16px"
+                    ></i>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 py-0">
+            <div *ngIf="showAudiodata" class="text-center">
+              <div class="flex justify-content-center">
+                <div class="col-12 py-0 audio_poster_body">
+                  <img
+                    src="assets/images/audio.png"
+                    height="160"
+                    width="160"
+                    style="background: rgba(220, 247, 99, 0.18); padding: 20px"
+                  />
+                  <p (click)="removeAudio()" class="cursor audio_poster_delete">
+                    <i
+                      class="pi pi-times-circle"
+                      style="color: #fff; font-size: 16px"
+                    ></i>
+                  </p>
+                </div>
+              </div>
+              <!-- <p *ngIf="minsongduration" class="err-msgs m-0 p-0">
+                <i class="pi pi-info-circle"></i> &nbsp;
+                <span style="position: relative; top: -5px">
+                  song duration must be more than 60 seconds.
+                </span>
+              </p> -->
+            </div>
+          </div>
+        </div>
+        <hr class="hr_class" />
+        <br />
+        <div class="grid">
+          <div class="col-6 py-0">
+            <app-text-box
+              [className]="'input_box'"
+              name="title"
+              [maxlength]="30"
+              [label]="'Title'"
+              [formGroup]="songsForm"
+              [placeholder]="'Enter title '"
+              [type]="'text'"
+              [error]="
+                inputValidationsErrors(songsForm, 'title')
+                  ? 'Title is required.'
+                  : inputPatternValidationsErrors(songsForm, 'title')
+                  ? 'Title must contain atleast one alphabet'
+                  : errorList['title']
+              "
+            ></app-text-box>
+          </div>
+          <div class="col-6 py-0">
+            <div>
+              <app-autocomplete
+                name="cityName"
+                [formGroup]="songsForm"
+                [options]="{
+                  types: ['(cities)'],
+                  componentRestrictions: { country: 'US' }
+                }"
+                (searchEvent)="AddressChange($event)"
+                (selectEvent)="address($event)"
+                [placeholder]="'Enter city'"
+                [label]="'City'"
+                [error]="
+                  inputValidationsErrors(songsForm, 'cityName')
+                    ? 'City is required.'
+                    : checkvalidlocation(songsForm, 'cityName')
+                    ? 'City must be valid.'
+                    : '&nbsp;'
+                "
+              ></app-autocomplete>
+            </div>
+          </div>
+          <div class="col-6 py-0" style="position: relative; top: -10px">
+            <label>Genre</label>
+            <div class="pt-2"></div>
+            <div [formGroup]="songsForm">
+              <p-multiSelect
+                formControlName="genre"
+                [options]="genersOptions"
+                [(ngModel)]="selectedGeners"
+                defaultLabel="Select genres"
+                optionLabel="name"
+                [filter]="false"
+                (click)="genersSelect(selectedGeners)"
+                display="chip"
+              ></p-multiSelect>
+              <div [ngClass]="'input_box'">
+                <small
+                  class="p-error-invalid"
+                  [innerHTML]="
+                    inputValidationsErrors(songsForm, 'genre')
+                      ? 'Genre is required'
+                      : checkvalidgenres(songsForm, 'genre')
+                      ? 'Maximum selection 3 genres'
+                      : '&nbsp;'
+                  "
+                ></small>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div [formGroup]="songsForm"  class="col-6 py-0" style="position: relative; top: -10px">
+            <div class="pb-2">Band name</div>
+            <i *ngIf="clearband &&this.action !== 'update'&& (this.songsForm.get('band').value?.length>0 || this.songsForm.get('band').value?.title?.length>0)" class="pi pi-times" style="padding-right: 7px;color: rgb(255, 255, 255);position: absolute;z-index: 1;top: calc(50% - 5px);right: 50px;" (click)="clearbandsearch('band')"></i>
+            <p-autoComplete
+              formControlName="band"
+              (completeMethod)="bandUsersSelect($event)"
+              field="title"
+              (onSelect)="onSelect($event)"
+              class="band_autocomplete"
+              [suggestions]="bandUsersList"
+              [dropdown]="false"
+              placeholder="Enter band name"
+              [disabled]="this.action == 'update' || this.currentURL == '/admin/content-management/albums/songs'"
+              [dropdown]="this.action !== 'update'"
+            >
+            <ng-template let-data pTemplate="item">
+              <div class="data-item flex align-items-center">
+                <div class="flex">
+                  <img
+                    [src]="
+                      data.logo
+                        ? data.logo
+                        : 'assets/images/userprofilepic.png'
+                    "
+                    style="object-fit: cover"
+                    height="42"
+                    width="42"
+                    alt=""
+                    class="border-circle"
+                  />
+                  &nbsp; 
+                  <div class="user-email">
+                    <div>{{ data.title }}</div> 
+                  <div>{{ data.user.userName }}</div>
+                </div>
+                </div>
+              </div>
+            </ng-template>
+            </p-autoComplete>
+            <div [ngClass]="'input_box'">
+              <small
+                class="p-error-invalid"
+                [innerHTML]="inputValidationsErrors(songsForm, 'band')
+                              ? 'Band name is required.'
+                              :checkvalidband(songsForm, 'band')
+                              ? 'Band name must be valid.'
+                              : '&nbsp;'
+                              "
+              ></small>
+            </div>
+          </div> -->
+          <div class="col-6 py-0 relative" style="top: -2px">
+            <app-band-admin
+              [formGroup]="songsForm"
+              [clearband]="clearband"
+              [action]="action"
+              (onSelect)="onSelect($event)"
+              (completeMethod)="bandUsersSelect($event)"
+              [bandUsersList]="bandUsersList"
+              [error]="
+                inputValidationsErrors(songsForm, 'band')
+                  ? 'Band name is required.'
+                  : checkvalidband(songsForm, 'band')
+                  ? 'Band name must be valid.'
+                  : '&nbsp;'
+              "
+            >
+            </app-band-admin>
+          </div>
+          <!-- <div class="col-6">
+            <div style="position: relative; top: -20px">
+              <span *ngIf="this.currentURL == '/admin/content-management/songs'">
+                <app-dropdown
+                  [showClear]="true"
+                  [className]="'dropdown-width'"
+                  [options]="this.selectedalbumoptions"
+                  [disable]="disable"
+                  name="albumName"
+                  [filter]="false"
+                  [emptyFilterMessage]="'emptyFilterMessage'"
+                  [filterBy]="this.selectedalbumoptions?.name"
+                  [placeholder]="'Select album'"
+                  [formGroup]="songsForm"
+                  [label]="'Album'"
+                ></app-dropdown>
+              </span>
+            </div>
+          </div> -->
+
+          <div class="col-8 py-0"></div>
+          <div class="col-2 text-center mt-5 py-0">
+            <div class="cancel_btns" (click)="songsModalClose()">Cancel</div>
+          </div>
+          <div class="col-2 mt-5 py-0">
+            <div style="max-width: 100px">
+              <app-submit-component2
+                [type]="'submit'"
+                [class]="'submit-btn'"
+                [label]="'Save'"
+                [loading]="isLoading"
+                [showIcon]="false"
+                [disabled]="
+                  !songsForm.valid ||
+                  !fileAudio ||
+                  genremax ||
+                  disablelocationSubmit ||
+                  disablebandSubmit
+                "
+                (submitForm)="uploadSong()"
+                [ifHasError]="hasError"
+              ></app-submit-component2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<!---upload albums-->
+<p-dialog
+  header="Title"
+  [modal]="true"
+  [(visible)]="albumsUploadModal"
+  [style]="{ width: '600px' }"
+  [draggable]="false"
+  styleClass="active"
+  [contentStyle]="{
+    'overflow-y': 'visible',
+    'overflow-x': 'visible',
+    border: '0.6px solid rgba(240, 240, 240, 0.2)'
+  }"
+>
+  <p-header>{{ header }} </p-header>
+  <div>
+    <div class="model_card_body">
+      <div></div>
+      <div>
+        <div class="grid">
+          <div class="col-12 text-center py-0">
+            <span class="d-flex" style="display: flex; justify-content: center">
+              <input
+                class="upload-img"
+                accept="image/png , image/jpeg , image/gif"
+                id="file-upload-album-img"
+                type="file"
+                (change)="onFileAlbumImageupload($event)"
+                style="display: none"
+              />
+              <app-upload-button [for]="'file-upload-album-img'" [name]="'Upload poster'"></app-upload-button>
+            </span>
+            <br />
+            <p class="info-msgs mb-0">
+              <i class="pi pi-info-circle"></i> &nbsp;
+              <span style="position: relative; top: -3px">
+                Upload only .jpeg's , .png's and .gif's images
+              </span>
+            </p>
+          </div>
+          <div
+            class="col-12 text-center py-0"
+            style="display: flex; justify-content: center"
+          >
+            <div *ngIf="AlbumviewImgages">
+              <div class="images_View">
+                <div class="song_poster_body">
+                  <img
+                    [src]="albumimageSrc"
+                    height="160"
+                    width="160"
+                    class="event_poster"
+                  />
+                  <p
+                    (click)="removealbumImg()"
+                    class="cursor song_poster_delete"
+                  >
+                    <i
+                      class="pi pi-times-circle"
+                      style="color: #fff; font-size: 16px"
+                    ></i>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 py-0">
+            <app-text-box
+              [className]="'input_box'"
+              name="albumtitle"
+              [label]="'Title'"
+              [maxlength]="25"
+              [formGroup]="albumsForm"
+              [placeholder]="'Enter title'"
+              [type]="'text'"
+              [error]="
+                inputValidationsErrors(albumsForm, 'albumtitle')
+                  ? 'Title is required.'
+                  : inputPatternValidationsErrors(albumsForm, 'albumtitle')
+                  ? 'Title must contain atleast one alphabet'
+                  : errorList['albumtitle']
+              "
+            ></app-text-box>
+          </div>
+
+          <!-- <div [formGroup]="albumsForm" class="col-12 py-0">
+            <div class="pb-2">Band name</div>
+            <i *ngIf="clearband &&this.action !== 'update'&& (this.songsForm.get('band').value?.length>0 || this.songsForm.get('band').value?.title?.length>0)" class="pi pi-times" style="padding-right: 7px;color: rgb(255, 255, 255);position: absolute;z-index: 1;top: calc(50% - 5px);right: 50px;" (click)="clearbandsearch('band')"></i>
+            <p-autoComplete
+            formControlName="band"
+            (completeMethod)="bandUsersSelect($event)"
+            (onSelect)="onSelect($event)"
+            field="title"
+            class="band_autocomplete"
+            [suggestions]="bandUsersList"
+            [dropdown]="false"
+            placeholder="Enter band name"
+            [disabled]="this.action == 'update'"
+            [dropdown]="this.action !== 'update'"
+            >
+
+            <ng-template let-data pTemplate="item">
+              <div class="data-item flex align-items-center">
+                <div class="flex">
+                  <img
+                    [src]="
+                      data.logo
+                        ? data.logo
+                        : 'assets/images/userprofilepic.png'
+                    "
+                    style="object-fit: cover"
+                    height="42"
+                    width="42"
+                    alt=""
+                    class="border-circle"
+                  />
+                  &nbsp; 
+                  <div class="user-email">
+                    <div>{{ data.title }}</div> 
+                  <div>{{ data.user.userName }}</div>
+                </div>
+                </div>
+              </div>
+            </ng-template>
+            </p-autoComplete>
+            <div [ngClass]="'input_box'">
+              <small
+                class="p-error-invalid"
+                [innerHTML]="inputValidationsErrors(albumsForm, 'band')
+                              ? 'Band name is required.'
+                              :checkvalidband(albumsForm, 'band')
+                              ? 'Band name must be valid.'
+                              : '&nbsp;'
+                              "
+              ></small>
+            </div>
+          </div> -->
+          <div class="col-12 py-0">
+            <app-band-admin
+              [formGroup]="albumsForm"
+              [clearband]="clearband"
+              [action]="action"
+              (onSelect)="onSelect($event)"
+              (completeMethod)="bandUsersSelect($event)"
+              [bandUsersList]="bandUsersList"
+              [error]="
+                inputValidationsErrors(albumsForm, 'band')
+                  ? 'Band name is required.'
+                  : checkvalidband(albumsForm, 'band')
+                  ? 'Band name must be valid.'
+                  : '&nbsp;'
+              "
+            >
+            </app-band-admin>
+          </div>
+          <br />
+          <br />
+
+          <div class="col-6"></div>
+          <div class="col-3 text-center">
+            <div class="cancel_btns" (click)="albumsModalClose()">Cancel</div>
+          </div>
+          <div class="col-3">
+            <div style="max-width: 100px">
+              <app-submit-component2
+                [type]="'button'"
+                [class]="'submit-btn'"
+                [label]="'Save'"
+                [loading]="isLoading"
+                [showIcon]="false"
+                [disabled]="!albumsForm.valid || disablebandSubmit"
+                (submitForm)="createAlbum()"
+                [ifHasError]="hasError"
+              ></app-submit-component2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<app-spinner></app-spinner>

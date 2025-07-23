@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap");
+@import '/src/colors.scss';
+.login-message-layout {
+  background: url("../../../../assets/images/bg-img.png");
+  background-size: cover;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.login-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 660px;
+  height: 440px;
+  background: rgba(51, 51, 51, 0.3);
+  border: $contentBorder;
+  border-radius: 2px;
+  padding: 60px 38px;
+}
+.success-logo-img {
+  height: 100px;
+}
+.thank {
+  margin-bottom: 0px;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 30px;
+  line-height: 33px;
+  text-align: center;
+  color: $primary;
+}
+.sub-heading {
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 33px;
+  text-align: center;
+  margin-top: 16px;
+}
+::ng-deep {
+  .login-message-layout {
+    .p-button {
+      background: $primary;
+      box-shadow: none;
+      border-radius: 30px;
+      height: 42px;
+      width: 124px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: none;
+      color: black;
+      font-weight: 600;
+    }
+    .p-button-label {
+      flex: none;
+    }
+    .p-button:enabled:hover {
+      background: $primary;
+      color: black;
+    }
+  }
+}

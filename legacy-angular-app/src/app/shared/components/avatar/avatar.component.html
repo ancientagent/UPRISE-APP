@@ -1,0 +1,48 @@
+<div class="avatar" style="padding: 0px 50px;">
+<!-- <div class="welcome_line">Hey!! Welcome</div><br> -->
+  <div class="preview_image" >
+    <img
+    [src]="clickedImage?clickedImage:'../../../../assets/images/defaultavatar.png'"
+    [ngClass]="clickedImage?'img_avatar':'default_img_avatar'"
+    alt="Image"
+    height="100"
+  />
+  <i *ngIf="(this?.clickedIndex!==null)" 
+      class="pi pi-times-circle remove_member"
+      (click)="removeprofilepic()">
+  </i>
+  </div>
+<div class="welcome_line">Choose your avatar that suits you best </div>
+<div class="grid" style="margin-top: 30px;max-height: 250px;overflow: auto;">
+  <div class="col-2" *ngFor="let img of avatars">
+    <img
+      [src]="img.url"
+      alt="Image"
+      height="80"
+      [ngClass]="img.id == (clickedIndex) ? 'img_avatar_active' : 'img_avatars'"
+      (click)="imageClick(img,index)"
+    />
+  </div>
+</div>
+<div style="display: flex;flex-direction: row;width: 100%;justify-content: end;">
+  <!-- <button 
+      pButton 
+      [disabled]="((this?.activeIndex?this?.activeIndex:this?.avatarId)==null) && !profilePic"
+      label="Remove" 
+      (click)="removeprofilepic()" 
+      class="continue_btn">
+    </button> -->
+  <div class="continue">
+    <button
+         pButton
+         [disabled]=""
+        (click)="saveprofilepic()" 
+        label="Continue"
+        class="continue_btn">
+    </button>
+  </div>
+  <div class="cancel">
+    <button pButton label="Cancel" (click)="cancelprofilepic()" class="cancel_btn"></button>
+  </div>
+</div>
+</div>

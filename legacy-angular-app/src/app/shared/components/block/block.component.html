@@ -1,0 +1,39 @@
+<div class="block_model">
+    <p-dialog
+      header="Title"
+      [modal]="true"
+      [(visible)]="deleteModal"
+      [style]="{ width: '500px' }"
+      [draggable]="false"
+      styleClass="active"
+      [contentStyle]="{
+        'overflow-y': 'hidden',
+        'overflow-x': 'hidden',
+        'max-height': '80vh',
+        'min-height': '250px',
+        'background': '#282828',
+        'color': '#ffffff',
+        'border': '0.6px solid rgba(240, 240, 240, 0.2)'
+      }"
+    >
+      <div class="text-center">
+        <i class="pi pi-info-circle info_icon"></i>
+    
+        <p class="warning_message">Are you sure you want to {{name?'block':'unblock'}} this ad?</p>
+        <!-- <p class="warning_sub_message">
+          Once, deleted. You’ll be not able to recover it
+        </p> -->
+        <div class="grid">
+          <div class="col-2"></div>
+          <div class="col-4">
+            <div class="cancel_btn" (click)="closeModal()">Cancel</div>
+          </div>
+          <div class="col-6 text-center">
+            <div class="confirm_delete_btn" (click)="ConfirmDelete()">Yes, {{name?'block':'unblock'}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-dialog>
+    </div>
+    

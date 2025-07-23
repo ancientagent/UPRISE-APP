@@ -1,0 +1,36 @@
+<div
+  class="p-input-filled"
+  [formGroup]="formGroup"
+  autocomplete="off"
+  [class]="class"
+>
+  <div class="grid">
+    <div class="col-12 labelNames formFields px-2 py-0">
+      <label>{{ label }} &nbsp;</label>
+    </div>
+    <div class="col-12 inputField formFields">
+      <p-calendar
+        [showIcon]="true"
+        [showTime]="showTime"
+        [placeholder]="placeholder"
+        inputId="icon"
+        [hourFormat]="hourFormat"
+        [hideOnDateTimeSelect]  = "false"
+        [timeOnly]="timeOnly"
+        [minDate]="minDate"
+        [maxDate]="maxDate"
+        styleClass="calender_class"
+        [placeholder]="placeholder"
+        [formControlName]="name"
+        [readonlyInput]="true"
+        [class]="error ? 'p-invalid' : ''"
+      ></p-calendar>
+      <div [ngClass]="className" style="position: relative;">
+        <small
+          class="p-error-invalid"
+          [innerHTML]="error !== undefined ? error : '&nbsp;'"
+        ></small>
+      </div>
+    </div>
+  </div>
+</div>

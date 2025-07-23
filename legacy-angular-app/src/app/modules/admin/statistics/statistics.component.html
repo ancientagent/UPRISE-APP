@@ -1,0 +1,109 @@
+<div class="statistics-container">
+  <div class="grid m-0">
+    <div class="col-12 text-right flex justify-content-end bandSelection">
+      <div style="position: relative">
+        <i
+          *ngIf="clearband && bandenter"
+          class="pi pi-times clearband"
+          (click)="clearbandsearch()"
+        ></i>
+        <p-autoComplete
+          (completeMethod)="bandUsersSelect($event)"
+          [suggestions]="bandUsersList"
+          field="title"
+          [dropdown]="true"
+          placeholder="Enter band name"
+          [showEmptyMessage]="true"
+          [(ngModel)]="bandenter"
+          (onSelect)="onselect($event)"
+        >
+          <ng-template let-data pTemplate="item">
+            <div class="data-item flex align-items-center">
+              <div class="flex">
+                <img
+                  [src]="
+                    data.logo ? data.logo : 'assets/images/userprofilepic.png'
+                  "
+                  style="object-fit: cover"
+                  height="42"
+                  width="42"
+                  alt=""
+                  class="border-circle"
+                />
+                &nbsp;
+                <div class="user-email">
+                  <div>{{ data.title }}</div>
+                  <div>{{ data.user.userName }}</div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-autoComplete>
+      </div>
+    </div>
+    <div class="table">
+      <p-table 
+        [value]="statastics" 
+        (sortFunction)="customSort($event)" 
+        [customSort]="true" 
+        [defaultSortOrder]="-1" 
+        sortField="upvotes" 
+        [sortOrder]="-1"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th >poster</th>
+            <th>song</th>
+            <th pSortableColumn="upvotes">upvotes<p-sortIcon  field="upvotes"></p-sortIcon></th>
+            <th pSortableColumn="downvotes">downvotes<p-sortIcon  field="downvotes"></p-sortIcon></th>
+            <th pSortableColumn="blasts">blasts<p-sortIcon  field="blasts"></p-sortIcon></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-statastics>
+          <tr>
+            <td>
+              <img
+                *ngIf="statastics.thumbnail"
+                [src]="statastics.thumbnail"
+                height="60"
+                width="60"
+                style="object-fit: cover"
+              />
+              <div *ngIf="!statastics.thumbnail" style="height: 60px;display: flex;align-items: center;justify-content: center;">
+                <img
+                  src="../../../../assets/images/audio.png"
+                  height="40px"
+                  width="40px"
+                  style="object-fit: cover"
+                />
+              </div>
+            </td>
+            <td style="width:30vw ;">{{ statastics.title }}</td>
+            <td>{{ statastics.upvotes }}</td>
+            <td>{{ statastics.downvotes }}</td>
+            <td>{{ statastics.blasts }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8" class="textC">
+              <span>No Songs found</span>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div *ngIf="this?.statastics?.length > 0">
+        <p-paginator
+          [rows]="this.pageData?.perPage"
+          [styleClass]="'paginator'"
+          #statasticsPaginator
+          [totalRecords]="this.totalrecords"
+          [rowsPerPageOptions]="[10, 50, 100]"
+          (onPageChange)="paginate($event)"
+        ></p-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+<app-spinner></app-spinner>
+

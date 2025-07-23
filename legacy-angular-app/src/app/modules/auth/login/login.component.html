@@ -1,0 +1,96 @@
+<div class="login-container p-0 m-0">
+  <div class="container-inner">
+    <div class="login-content" (keyup.enter)="loginForm.valid?login():''">
+      <div class="login-card">
+        <div>
+          <div class="logo-body mb-4">
+            <img
+              src="assets/images/upriselogo.png"
+              class="logo-img"
+              alt="logo"
+            />
+          </div>
+          <!-- <h3 class="logo-title">
+            UP<span class="logo-subtitle">RISE</span>
+          </h3> -->
+          <!-- <p class="login-title">LOGIN</p> -->
+
+          <div class="input-login-email">
+            <app-input-box-login
+              [className]="'input_box'"
+              [spaces]=0
+              name="email"
+              [icon]="'pi pi-envelope'"
+              [type]="'email'"
+              [label]="'Email or username'"
+              [placeholder]="'Enter your email or username'"
+              [formGroup]="loginForm"
+              [maxlength]="60"
+              [error]="
+                inputValidationsErrors(loginForm, 'email')
+                  ? 'Email or username is required.'
+                  : errorList['email']
+              "
+            ></app-input-box-login>
+          </div>
+          <div class="input-login-password">
+            <div>
+              <app-text-password
+                [className]="'input_box'"
+                name="password"
+                [formGroup]="loginForm"
+                [placeholder]="'Enter your password'"
+                [label]="'Password'"
+                [minlength]="8"
+                [maxlength]="20"
+                [error]="
+                  inputValidationsErrors(loginForm, 'password')
+                    ? 'Password is required.'
+                    : errorList['password']
+                "
+              ></app-text-password>
+            </div>
+
+
+            <div class="grid footer">
+              <div class="col-6">
+                <p-checkbox
+                  [(ngModel)]="checked"
+                  [binary]="true"
+                  inputId="binary"
+                  label="Remember me"
+                ></p-checkbox>
+              </div>
+            <div class="col-6 text-right">
+              <a class="anchor_class" routerLink="/forgot"
+                >Forgot password?</a
+              >
+            </div>
+          </div>
+          <div class="submit-btn-outer">
+            <app-submit-component2
+              [type]="'button'"
+              [class]="'submit-btn'"
+              [label]="'LOGIN'"
+              [showIcon]="false"
+              [loading]="isLoading"
+              (submitForm)="login()"
+              [disabled]="!loginForm.valid || isLoading"
+              [ifHasError]="hasError"
+            ></app-submit-component2>
+          </div>
+          <br/>
+            <div class="grid pt-2">
+              <div class="col-12 text-center">
+                Don’t have an account?&nbsp;
+                <a routerLink="/signUp" class="login-signup">
+                  Signup as an artist?</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

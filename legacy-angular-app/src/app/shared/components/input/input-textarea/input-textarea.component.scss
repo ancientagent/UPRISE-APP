@@ -1,0 +1,10 @@
+@import '/src/colors.scss';
+.textBoxMargin {
+  .p-inputtext:enabled:focus {
+    box-shadow: none;
+    border: $inputBorder;
+  }
+  .labelNames {
+    padding: 0px 5px;
+  }
+}

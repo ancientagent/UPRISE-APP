@@ -1,0 +1,688 @@
+<div
+  class="band-container"
+>
+<!-- [ngClass]="{
+  blur:
+    this.inviteBandmemberModal == true ||
+    this.creategalleryModal == true ||
+    this.editPosterModal == true ||
+    this.editbanddescription == true ||
+    this.deleteGalleryImageModal == true
+}" -->
+  <div>
+    <div class="grid">
+      <div class="col-12 band_title">Band Profile</div>
+      <br />
+
+      <div class="col-3 p-0 m-0">
+        <div class="band_poster_editicon" *ngIf="this.bandPoster">
+          <img
+            [src]="this?.bandDetailsData?.logo"
+            class="band_poster"
+            height="220"
+            alt="band poster"
+          />
+          <span *ngIf="band?.bandRoleId == 4" class="edit_icon" (click)="bandPosterEdit()">
+            <i class="pi pi-pencil"></i>
+          </span>
+        </div>
+        <div class="default_band_poster_editicon" *ngIf="!this.bandPoster">
+          <img
+            src="assets/images/band-pic.png"
+            class="default_band_poster"
+            height="120"
+            alt="band poster"
+          />
+          <span *ngIf="band?.bandRoleId == 4" class="edit_icon" (click)="bandPosterEdit()">
+            <i class="pi pi-pencil"></i>
+          </span>
+        </div>
+      </div>
+      <div class="col-9 p-0 m-0">
+        <div class="band_card">
+          <div class="grid">
+            <div class="col-10 band_card_title">
+              {{ this?.bandDetailsData?.title }}
+            </div>
+            <div *ngIf="band?.bandRoleId == 4" class="col-2 text-right">
+              <i class="pi pi-pencil" (click)="banddescriptionEdit()"></i>
+            </div>
+            <div class="col-12 band-description">
+              <span>Joined </span>&nbsp;{{
+                this?.bandDetailsData?.createdAt | date: "MM/dd/YY"
+              }}
+              <br />
+              <div>About</div>
+              <div  class="about"
+                    style="white-space: pre-wrap;
+                          margin-left: 10px;
+                          height: 106px;
+                          max-height: 106px;
+                          overflow-y: auto;">{{this?.bandDetailsData?.description}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <br />
+    <div class="grid">
+      <div class="col-md-5 col-4 band-members-title">Band Members</div>
+      <div  class="col-md-7 col-8 text-right">
+        <button *ngIf="band.bandRoleId == 4" class="upload-invite-btn" (click)="invitebandMember()">
+          <i class="pi pi-plus-circle icon_position-plus pr-2"></i> Add Band Member
+        </button>
+      </div>
+      <br />
+      &nbsp;&nbsp;&nbsp;
+      <div style="position: relative; display: flex;flex-direction: row;top: -20px;"> 
+      <span *ngFor="let item of bandMemberData" class="p-2" [ngClass]="item.bandRoleId == 4?'':'img_all'">
+        <i *ngIf="item.bandRoleId !== 4 && band.bandRoleId == 4 ; else templateName" class="pi pi-times-circle remove_member" (click)="removemember(item)">
+        </i>
+        <ng-template #templateName>
+          <div>&nbsp;</div>
+        </ng-template>
+        <div
+          class="col-2 text-center"
+          *ngIf="item?.avatar === null"
+          class="avatar-img"
+        >
+          <p-avatar
+            pTooltip="{{ item?.userName | titlecase }}"
+            tooltipPosition="bottom"
+            label="{{ item.userName.charAt(0) | titlecase }}"
+            shape="circle"
+            size="xlarge"
+          ></p-avatar>
+          <p
+            class="text-center white-space-nowrap text-overflow-ellipsis overflow-hidden"
+            style="width: 70px"
+          >
+            {{ item?.userName | titlecase }}
+          </p>
+        </div>
+        <div
+          class="text-center flex flex-column align-items-center profile_img"
+          *ngIf="item?.avatar?.length > 0"
+        >
+          <img
+            [src]="item.avatar"
+            alt=""
+            class="border-circle relative"
+            height="64"
+            width="64"
+            style="object-fit: cover;background-color: #3f3f3f;"
+            pTooltip="{{ item?.userName | titlecase }}"
+            tooltipPosition="bottom"
+          />
+          <p
+            class="text-center mb-0 white-space-nowrap text-overflow-ellipsis overflow-hidden"
+            style="width: 70px"
+          >
+            {{ item?.userName | titlecase }}
+          </p>
+        </div>
+      </span>
+    </div>
+    </div>
+
+    <div style="height: 70px;display: flex;justify-content:space-between;align-items: center;">
+    <div style="font-weight: 500;font-size: 18px;line-height: 24px;">
+      Gallery
+    </div>
+
+    <div *ngIf="deleteGalleryImages?.length > 0" 
+    class="flex justify-content-end align-items-center" style="position: relative;right: 10px;">
+      <div (click)="selectallbutton()" class="button_select_all" >
+        <input
+          type="checkbox"
+          value="id"
+          class="selectAll_checkbox"
+          [(ngModel)] = 'select_all'
+          (change)="selectAll($event)"
+          style="display: none;"
+        />
+        <span class="selectAll_text">{{selectalllable}}</span>
+      </div>
+
+      <button
+        class="cancel_btns"
+        pTooltip="Delete selected items"
+        tooltipPosition="bottom"
+        (click)="deleteGalleryImagesModalMulti()"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+    <p-galleria [(value)]="bandGalleryData" [(visible)]="displayCustom" [(activeIndex)]="activeIndex" [containerStyle]="{'width': '850px'}" [numVisible]="7"
+      [circular]="true" [fullScreen]="true" [showItemNavigators]="true" [showThumbnails]="false" [baseZIndex]="100000">
+      <ng-template pTemplate="item" let-item>
+          <img *ngIf="item.mediaType == 'Photo'" [src]="item.mediaURL" style="width: 100%; display: block; max-height: 90vh;"/>
+          <video *ngIf="item.mediaType == 'Video'" style="display: block; max-height: 90vh;height: 90vh;" height="150" controls>
+            <source [src]="item.mediaURL" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+      </ng-template>
+    </p-galleria>
+    <!-- <p-tabView> -->
+      <!-- <p-tabPanel header="Gallery"> -->
+        <div class="grid">
+          <br />
+          <div *ngIf="band.bandRoleId == 4" class="col-2">
+            <div  class="upload-gallery-card" (click)="uploadGalleryImages()">
+              <span> <i class="pi pi-plus-circle icon_position"></i></span>
+            </div>
+          </div>
+
+          <div class="col-2" *ngFor="let img of bandGalleryData; let index = index;">
+            <div class="edit_delete_icons">
+              <p-image
+              *ngIf="img.mediaType == 'Photo'"
+                [src]="img.mediaURL"
+                alt="Image"
+                height="150"
+                [imageStyle]="{
+                  objectFit: 'cover',
+                  width:'100%',
+                  cursor:'pointer'
+                }"
+                (click)="imageClick(index)"
+              ></p-image>
+              <video 
+                (click)="imageClick(index)"
+                *ngIf="img.mediaType == 'Video'" style="width: 100%;height: 150px;object-fit: cover;" height="150" autoplay loop muted>
+                <source [src]="img.mediaURL" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <!-- <span class="" (click)="deleteGalleryImagesModal(img.id)">
+                <i class="pi pi-trash delete_icon1"></i
+              ></span> -->
+              <div
+              *ngIf="band?.bandRoleId == 4"
+                class="{{ checkbox }}"
+                [ngClass]="{
+                  check_box_on: deleteGalleryImages.length > 0,
+                  check_box: deleteGalleryImages.length == 0
+                }"
+              >
+                <input
+                  value="{{ img.id }}"
+                  type="checkbox"
+                  class="check_box_select"
+                  (click)="multipleDeleteGalleryImages($event, img.id)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      <!-- </p-tabPanel> -->
+      <!-- <p-tabPanel header="Albums"> </p-tabPanel>
+      <p-tabPanel header="Events"> </p-tabPanel> -->
+    <!-- </p-tabView> -->
+  </div>
+</div>
+
+<!---invite Band member Modal-->
+<p-dialog
+  header="Title"
+  [(visible)]="inviteBandmemberModal"
+  [style]="{ width: '500px' }"
+  [draggable]="false"
+  styleClass="active"
+  [modal]="true"
+  [contentStyle]="{
+    'overflow-y': 'visible',
+    'overflow-x': 'visible',
+    'max-height': '80vh',
+    'min-height': '200px'
+  }"
+>
+  <p-header class="band-invite-header"> Band Invite </p-header>
+  <div>
+    <div class="model_card_body">
+      <br />
+      <form [formGroup]="bandForm">
+        <br />
+
+        <div class="grid">
+          <div class="col-12 p-0">
+            <div>
+              <p-autoComplete
+                formControlName="inviteListnerEmail"
+                [suggestions]="bandUsersList"
+                (completeMethod)="bandUsersSelect($event)"
+                field="email"
+                [dropdown]="false"
+                [minLength]="1"
+                [required]="true"
+                placeholder="Search for band member"
+                class="band-member-search"
+                [ngClass]="{
+                  'is-invalid':
+                    l.inviteListnerEmail.touched && l.inviteListnerEmail.errors
+                }"
+              >
+                <ng-template let-data pTemplate="item">
+                  <div class="data-item flex align-items-center">
+                    <div class="flex">
+                      <img
+                        [src]="
+                          data.avatar
+                            ? data.avatar
+                            : 'assets/images/userprofilepic.png'
+                        "
+                        style="object-fit: cover;background-color: #3f3f3f;"
+                        height="42"
+                        width="42"
+                        alt=""
+                        class="border-circle"
+                      />
+                      &nbsp; 
+                      <div class="user-email">
+                        <div>{{ data.userName }}</div> 
+                      <div>{{ data.email }}</div>
+                    </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-autoComplete>
+
+              <div
+                *ngIf="
+                  l.inviteListnerEmail.touched && l.inviteListnerEmail.errors
+                "
+                class="text-danger"
+              >
+                <div *ngIf="l.inviteListnerEmail.errors.required">
+                  Email is required*
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 content_center" style="margin-top: 25px">
+            <div class="cancel_btns" (click)="closeInviteMemberModal()">
+              Cancel
+            </div>
+            &nbsp;&nbsp;&nbsp;
+            <div>
+              <app-submit-component2
+                [type]="'submit'"
+                [class]="'invite_button'"
+                [label]="'Invite'"
+                [showIcon]="false"
+                (submitForm)="inviteMember()"
+                [disabled]="!bandForm.valid || isLoading"
+                [icon]="isLoading ? 'pi pi-spin pi-spinner' : 'none'"
+                [ifHasError]="hasError"
+              ></app-submit-component2>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- create gallery -->
+<p-dialog
+  header="Title"
+  [modal]="true"
+  [(visible)]="creategalleryModal"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  styleClass="active"
+  [contentStyle]="{
+    'overflow-y': 'auto',
+    'overflow-x': 'hidden',
+    'max-height': '80vh',
+    'min-height': '250px'
+  }"
+>
+  <p-header> {{ headerGalleryTitle }}</p-header>
+  <div>
+    <div class="model_card_body">
+      <br />
+      <div class="grid">
+        <div class="col-12">
+          <span class="d-flex flex justify-content-center">
+            <input
+              class="upload-img hidden"
+              accept="image/png , image/jpeg"
+              multiple
+              id="file-upload-imggallery"
+              #galleryElement
+              type="file"
+              (change)="onGalleryImageupload($event)"
+            />
+            <app-upload-button [for]="'file-upload-imggallery'" [name]="'Upload gallery image'"></app-upload-button>
+          </span>
+          <br />
+          <p class="info-msgs">
+            <i class="pi pi-info-circle"></i> &nbsp;
+            <span style="position: relative; top: -3px; text-align: center">
+              Upload only .jpeg's and .png's images</span
+            >
+          </p>
+          <P class="galleryerrormsg">{{ this?.imageserrormessage }}</P>
+        </div>
+
+        <div class="col-12">
+          <div style="display: contents">
+            <div class="grid flex justify-content-center">
+              <div
+                class="col-2"
+                style="display: contents"
+                class="gallery-Images-body"
+                style="margin: 5px"
+                *ngFor="let url of urls; let i = index"
+              >
+                <img *ngIf="url.slice(5,10)=='image'"
+                  [src]="url"
+                  height="150"
+                  width="150px"
+                  class="band_gallery_preview"
+                />
+                <video 
+                  *ngIf="url.slice(5,10)=='video'" 
+                  height="150"
+                  width="150px" class="band_gallery_preview" 
+                  (loadedmetadata)="getDuration($event)"
+                  autoplay loop muted>
+                  <source [src]="url" type="video/mp4">
+                  Your browser does not support the video.
+                </video>
+                <span>
+                  <i
+                    (click)="removeimage(i)"
+                    class="pi pi-times-circle remove-gallery-image"
+                    title="remove image"
+                  ></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br />
+
+        <div class="col-12 content_end">
+          <div class="cancel_btns" (click)="bandgalleryModalClose()">
+            Cancel
+          </div>
+          &nbsp;&nbsp;
+          <div style="width: 130px">
+            <app-submit-component2
+              [type]="'button'"
+              [class]="'submit-btn'"
+              [label]="'Upload'"
+              [showIcon]="false"
+              (submitForm)="uploadGallery()"
+              [disabled]="isLoading || !urls.length || urls.length > 10"
+              [icon]="isLoading ? 'pi pi-spin pi-spinner' : 'none'"
+              [ifHasError]="hasError"
+            ></app-submit-component2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- edit poster modal -->
+<p-dialog
+  header="Title"
+  [(visible)]="editPosterModal"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [modal]="true"
+  styleClass="active"
+  [contentStyle]="{
+    'overflow-y': 'hidden',
+    'overflow-x': 'hidden',
+    'max-height': '80vh',
+    'min-height': '250px'
+  }"
+>
+  <p-header>Edit Poster</p-header>
+  <div>
+    <div class="model_card_body">
+      <br />
+      <div class="grid">
+        <div class="col-12 p-0 m-0 text-center">
+          <div *ngIf="bandPosterView" class="band_poster_edit">
+            <img
+              [src]="posterSrc"
+              height="200"
+              width="250"
+              class="band_poster_preview"
+            />
+            <span>
+              <i
+                (click)="removePoster()"
+                class="pi pi-times-circle remove-poster"
+              ></i>
+            </span>
+          </div>
+        </div>
+        <div class="col-12">
+          <span class="flex justify-content-center">
+            <input
+              class="upload-img hidden"
+              accept="image/png , image/jpeg"
+              #bandPosterElement
+              id="file-upload-bandposter"
+              type="file"
+              (change)="bandPosterUpload($event)"
+            />
+            <app-upload-button [for]="'file-upload-bandposter'" [name]="'Upload poster'"></app-upload-button>
+          </span>
+          <br />
+          <p class="info-msgs">
+            <i class="pi pi-info-circle"></i> &nbsp;
+            <span style="position: relative; top: -3px; text-align: center">
+              Upload only .jpeg's and .png's images </span
+            >
+          </p>
+        </div>
+        <br />
+
+        <div class="col-12 content_end">
+          <div class="cancel_btns" (click)="bandposterModalClose()">Cancel</div>
+          &nbsp;&nbsp;
+          <div style="width: 130px">
+            <app-submit-component2
+              [type]="'button'"
+              [class]="'submit-btn'"
+              [label]="'Save'"
+              [showIcon]="false"
+              (submitForm)="editPoster()"
+              [disabled]="isLoading"
+              [icon]="isLoading ? 'pi pi-spin pi-spinner' : 'none'"
+              [ifHasError]="hasError"
+            ></app-submit-component2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- edit description modal -->
+
+<p-dialog
+  header="Title"
+  [(visible)]="editbanddescription"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [modal]="true"
+  styleClass="active"
+  [contentStyle]="{
+    'overflow-y': 'hidden',
+    'overflow-x': 'hidden',
+    'max-height': '80vh',
+    'min-height': '250px'
+  }"
+>
+  <p-header>About</p-header>
+  <div>
+    <div class="model_card_body">
+      <br />
+      <div class="grid">
+        <div class="col-12">
+          <app-input-textarea
+            name="band_description"
+            [rows]="5"
+            [cols]="30"
+            [maxLength]="250"
+            [placeholder]="'Enter Description'"
+            [formGroup]="bandeditForm"
+            [error]="
+                  inputPatternValidations(bandeditForm, 'band_description')
+                  ? ''
+                  : errorList['title']
+              "
+          ></app-input-textarea>
+        </div>
+        <p class="info-msgs pl-3" style="position: relative; top: -25px">
+          <i class="pi pi-info-circle"></i> &nbsp;
+          <span style="position: relative; top: -2px; text-align: center">
+            left {{remainingText}} characters</span
+          >
+        </p>
+        <br />
+
+        <div class="col-12 content_end">
+          <div class="cancel_btns" (click)="banddescriptionModalClose()">
+            Cancel
+          </div>
+          &nbsp;&nbsp;
+          <div style="width: 115px">
+            <app-submit-component2
+              [type]="'button'"
+              [class]="'submit-btn'"
+              [loading]="isLoading"
+              [label]="'Update'"
+              [showIcon]="false"
+              [disabled]="isLoading"
+              (submitForm)="editDescription()"
+              [ifHasError]="hasError"
+            ></app-submit-component2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<!---delete gallery modal-->
+<div  class="delete_model">
+<p-dialog
+  header="Title"
+  [(visible)]="deleteGalleryImageModal"
+  [style]="{ width: '500px' }"
+  [draggable]="false"
+  [modal]="true"
+  styleClass="active"
+  [contentStyle]="{
+    'overflow-y': 'hidden',
+    'overflow-x': 'hidden',
+    'max-height': '80vh',
+    'min-height': '250px',
+    border: '0.6px solid rgba(240, 240, 240, 0.2)'
+  }"
+>
+  <p-header>Delete </p-header>
+  <div class="text-center">
+    <i class="pi pi-info-circle info_icon"></i>
+
+    <p class="warning_message">Are you sure you want to delete this images? </p>
+    <!-- <p class="warning_sub_message">
+      Once, deleted. You’ll be not able to recover it
+    </p> -->
+    <div class="grid">
+      <div class="col-2"></div>
+      <div class="col-4">
+        <div class="cancel_btn" (click)="deleteGalleryImagesModalClose()">
+          Cancel
+        </div>
+      </div>
+
+      <div class="col-6 text-center">
+        <div style="width: 160px">
+          <app-submit-component2
+            [type]="'button'"
+            [class]="'confirm_delete_btn'"
+            [label]="'Yes, delete'"
+            [showIcon]="false"
+            [disabled]="!this.deleteGalleryImages.length"
+            (submitForm)="ConfirmDelete()"
+          ></app-submit-component2>
+        </div>
+
+        <!-- <div class="confirm_delete_btn" (click)="ConfirmDelete()">
+          &nbsp;&nbsp; Yes, delete
+        </div> -->
+      </div>
+    </div>
+  </div>
+</p-dialog>
+</div>
+
+<!---remove band member modal-->
+<div  class="delete_model">
+<p-dialog
+  header="Title"
+  [(visible)]="removeBandMemberModal"
+  [style]="{ width: '500px' }"
+  [draggable]="false"
+  [modal]="true"
+  styleClass="active"
+  [contentStyle]="{
+    'overflow-y': 'hidden',
+    'overflow-x': 'hidden',
+    'max-height': '80vh',
+    'min-height': '250px',
+    border: '0.6px solid rgba(240, 240, 240, 0.2)'
+  }"
+>
+  <p-header>Remove Band Member</p-header>
+  <div class="text-center">
+    <i class="pi pi-info-circle info_icon"></i>
+
+    <p class="warning_message">Are you sure, you want to remove {{removebandmember}} from your Band</p>
+    <!-- <p class="warning_sub_message">
+      Once, Removed. {{removebandmember}} won't be in your band.
+    </p> -->
+    <div class="grid">
+      <div class="col-2"></div>
+      <div class="col-4">
+        <div class="cancel_btn" (click)="deleteBandMemberModalClose()">
+          Cancel
+        </div>
+      </div>
+
+      <div class="col-6 text-center">
+        <div style="width: 160px">
+          <app-submit-component2
+            [type]="'button'"
+            [class]="'confirm_delete_btn'"
+            [label]="'Yes, Remove'"
+            [showIcon]="false"
+            (submitForm)="ConfirmRemove()"
+          ></app-submit-component2>
+        </div>
+
+        <!-- <div class="confirm_delete_btn" (click)="ConfirmDelete()">
+          &nbsp;&nbsp; Yes, delete
+        </div> -->
+      </div>
+    </div>
+  </div>
+</p-dialog>
+</div>
+<video #vid controls width="500px" id="vid" style="display:none"></video>
+
+<app-spinner></app-spinner>
+

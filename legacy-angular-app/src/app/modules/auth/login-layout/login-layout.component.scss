@@ -1,0 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap");
+@import '/src/colors.scss';
+.empty-band-layout {
+  background: url("../../../../assets/images/bg-img.png");
+  background-size: cover;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.header-logo-img {
+  height: 77px;
+  margin-bottom: 22px;
+}
+.sub-heading {
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 44px;
+  text-align: center;
+  width: 60%;
+}
+.logout {
+  margin-top: 30px;
+}
+::ng-deep {
+  .empty-band-layout {
+    .p-button {
+      background: $primary;
+      color: black;
+      box-shadow: none;
+      border-radius: 30px;
+      height: 42px;
+      width: 124px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: none;
+    }
+    .p-button-label {
+      flex: none;
+    }
+    .p-button:enabled:hover {
+      background: $primary;
+      color: black;
+    }
+  }
+}

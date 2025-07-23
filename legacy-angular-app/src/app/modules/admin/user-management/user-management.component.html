@@ -1,0 +1,404 @@
+<div class="user-container">
+  <div>
+    <div class="grid">
+      <div class="col-6 user_title"></div>
+      <div class="col-6 text-right">
+        <!-- <button class="upload-user-btn hidden">
+          <i class="pi pi-plus-circle pr-2"></i> Create new User
+        </button> -->
+        <div class="p-input-icon-right">
+          <input
+            type="text"
+            [(ngModel)]="searchtable"
+            class="search_box"
+            placeholder="Search users..."
+            (keyup)="searchUsers($event)"
+          />
+          <i *ngIf="searchdata?.length > 0" class="pi pi-times" style="padding-right: 7px;color: white;" (click)="clearsearch()"></i>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p-table [columns]="cols" [value]="usersList" [(selection)]="selected">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <!-- <th>
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th> -->
+            <th *ngFor="let col of columns">
+              {{ col.header }}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user>
+          <tr>
+            <!-- <p-tableCheckbox
+                [value]="user"
+                class="check_box"
+              ></p-tableCheckbox> -->
+            <td>
+              <img
+                *ngIf="user?.avatar !== null"
+                [src]="user.avatar"
+                class="border-circle"
+                height="64"
+                width="64"
+                style="object-fit: cover;background-color:#3F3F3F;"
+              />
+              <p-avatar
+                *ngIf="user?.avatar === null"
+                [style]="{ 'background-color': '#000000' }"
+                pTooltip="{{ user?.userName | titlecase }}"
+                tooltipPosition="bottom"
+                label="{{ user.userName.charAt(0) | titlecase }}"
+                shape="circle"
+                size="xlarge"
+              >
+              </p-avatar>
+            </td>
+            <td>{{ user.userName }}</td>
+
+            <td>{{ user.email }}</td>
+            <td>{{ user.mobile }}</td>
+
+            <td>{{ user.role.name }}</td>
+            <!-- <td>{{ user.gender }}</td> -->
+            <td>
+              <!-- <p-inputSwitch
+                [disabled]="user.role.name == 'listener'">
+              </p-inputSwitch>  -->
+              <app-toggle-switch
+                [value]="user.band?user.band.promosEnabled:false"
+                [disabled]="user.role.name == 'listener'"
+                (live)="promos(user.id,$event)">
+              </app-toggle-switch>
+            </td>
+            <td>{{ user.status }}</td>
+
+            <td style="min-width: 100px;">
+              <button
+                [ngClass]="{ btnDisabled: user.deletedAt !== null }"
+                [disabled]="user.deletedAt !== null"
+                (click)="editUser(user)"
+                class="icon_button"
+              >
+                <i class="pi pi-pencil pr-2" style="font-size: 18px"></i>
+              </button>
+
+              <button
+                [ngClass]="{ btnDisabled: user.deletedAt !== null }"
+                (click)="deleteuser(user.id)"
+                [disabled]="user.deletedAt !== null"
+                class="icon_button"
+              >
+                <i class="pi pi-trash" style="font-size: 18px;"></i>
+              </button>
+              <button
+                *ngIf="user.deletedAt !== null"
+                (click)="activateUser(user.id)"
+                class="icon_button"
+              >
+                <i class="pi pi-undo" style="font-size: 18px;"></i>
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8" class="textC">
+              <span>No records found</span>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div *ngIf="usersList?.length > 0">
+        <p-paginator
+          [rows]="this.userpageData?.perPage"
+          #userpaginator
+          [styleClass]="'paginator'"
+          [totalRecords]="this.totalrecords"
+          [rowsPerPageOptions]="[10, 50, 100]"
+          (onPageChange)="paginate($event)"
+        ></p-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  header="Title"
+  [modal]="true"
+  [(visible)]="editUserModal"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  styleClass="active"
+  [contentStyle]="{
+    'overflow-y': 'auto',
+    'overflow-x': 'hidden',
+    'max-height': '85vh',
+    'min-height': '250px'
+  }"
+>
+  <p-header> Update User </p-header>
+
+  <div class="model_card_body">
+    <br />
+    <div class="grid">
+      <div *ngIf="viewImgages"  class="col-12 uploaded_profile">
+        <div *ngIf="viewImgages" class="images_View">
+          <img [src]="activeImage?activeImage:null" class="profile_image border-circle" />
+
+          <!-- <p (click)="removeImg()" class="cursor remove_profile">
+            <i class="pi pi-times-circle pt-1 pr-2"></i>
+          </p> -->
+        </div>
+        <span (click)="profileUpload()" class="d-flex upload_icon_profile">
+          <!-- <input
+            class="upload-img hidden"
+            accept="image/png , image/jpeg"
+            id="file-upload-img"
+            type="file"
+            (change)="onFileImageupload($event)"
+          /> -->
+          <div class="upload-btn-outer">
+            <label
+              for="file-upload-img"
+              type="button"
+              class="Upload-button btn-sm cursor"
+            >
+              <i class="pi pi-pencil cursor" style="font-size: 10px"></i>
+            </label>
+          </div>
+        </span>
+      </div>
+
+      <div *ngIf="!viewImgages" class="col-12 upload_profile_btn">
+        <span class="d-flex">
+          <!-- <input
+            class="upload-img hidden"
+            accept="image/png , image/jpeg"
+            id="file-upload-img"
+            type="file"
+            (change)="onFileImageupload($event)"
+          /> -->
+          <!-- <div (click)="profileUpload()" class="upload-btn-outer">
+            <label
+              for="file-upload-img"
+              type="button"
+              class="Upload-btn btn-sm cursor"
+            >
+              <i class="pi pi-cloud-upload pr-2 cursor"></i>
+              Upload photo
+            </label>
+          </div> -->
+          <app-upload-button 
+            style="position: relative;top:25px" 
+            (click)="profileUpload()" 
+            [for]="'file-upload-img'" 
+            [name]="'Upload photo'"
+          ></app-upload-button>
+        </span>
+      </div>
+
+      <div class="col-6">
+        <div class="relative">
+          <div>
+            <app-input-box-login
+              [className]="'input_box'"
+              [placeholder]="'Enter username'"
+              [spaces]=0
+              [maxlength]="30"
+              [icon]="'pi pi-user'"
+              name="userName"
+              [formGroup]="usermanagementForm"
+              [type]="'text'"
+              [label]="'Username'"
+              [error]="
+                inputValidationsErrors(usermanagementForm, 'userName')
+                  ? 'Username is required.'
+                  : inputPatternValidationsErrors(usermanagementForm, 'userName')
+                  ? 'Username must contain atleast one alphabet'
+                  : errorList['userName']
+              "
+            ></app-input-box-login>
+            <!-- <span
+              ><i class="pi pi-user password-icon" aria-hidden="true"></i
+            ></span> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="relative">
+          <app-input-box-login
+            [className]="'input_box'"
+            [spaces]=0
+            [placeholder]="'Enter email id'"
+            name="email"
+            [icon]="'pi pi-envelope'"
+            [label]="'Email ID'"
+            [formGroup]="usermanagementForm"
+            [type]="'email'"
+            [error]="
+              inputValidationsErrors(usermanagementForm, 'email')
+                ? 'Email is required.'
+                : inputPatternValidationsErrors(usermanagementForm, 'email')
+                ? 'Enter an valid email id .'
+                : errorList['email']
+            "
+          ></app-input-box-login>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="relative" style="top: -35px">
+          <div>
+            <app-input-box-login
+              [className]="'input_box'"
+              [spaces]=0
+              [placeholder]="'Enter mobile number'"
+              name="mobileno"
+              [icon]="'pi pi-phone'"
+              [formGroup]="usermanagementForm"
+              [label]="'Mobile number'"
+              [maxlength]="10"
+              [type]="'text'"
+              (keypress)="numberOnly($event)"
+            ></app-input-box-login>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="relative" style="top: -35px">
+          <div>
+            <app-input-box-login
+              [className]="'input_box'"
+              name="role"
+              [icon]="'pi pi-user'"
+              [formGroup]="usermanagementForm"
+              [type]="'text'"
+              [label]="'Role'"
+              [readonly]="true"
+              [error]="
+                inputValidationsErrors(usermanagementForm, 'role')
+                  ? 'Role is required.'
+                  : errorList['role']
+              "
+            ></app-input-box-login>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="relative" style="top: -65px">
+          <div>
+            <app-text-password
+              [className]="'input_box'"
+              [placeholder]="'Enter password'"
+              name="password"
+              [formGroup]="usermanagementForm"
+              [label]="'Password'"
+              [minlength]="8"
+              [error]="
+                    inputValidationsErrors(usermanagementForm, 'password')
+                  ? 'Password is required.'
+                  : inputPatternValidationsErrors(usermanagementForm,'password')
+                  ? 'Password must have atleast 8 characters consists of a lowercase, uppercase, number and a special character.'
+                  : errorList['password']
+              "
+            ></app-text-password>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="relative" style="top: -65px">
+          <div>
+            <app-text-password
+              [className]="'input_box'"
+              [placeholder]="'Enter confirm password'"
+              name="confirmpassword"
+              [formGroup]="usermanagementForm"
+              [minlength]="8"
+              [label]="'Confirm password'"
+              [error]="
+                inputValidationsErrors(usermanagementForm, 'confirmpassword')
+                  ? 'Confirm password is required'
+                  : checkPasswordErrors(usermanagementForm,'confirmpassword','password')
+                  ? 'Passwords do not match.'
+                  : errorList['confirmpassword']
+              "
+            ></app-text-password>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="relative" style="top: -95px">
+          <span>
+            <app-dropdown
+              [className]="'status'"
+              [options]="status"
+              name="status"
+              [placeholder]="'Select Status'"
+              [formGroup]="usermanagementForm"
+              [label]="'Status'"
+            ></app-dropdown>
+          </span>
+        </div>
+      </div>
+      <div class="col-2  py-0"></div>
+      <div class="col-2 text-center mt-5  py-0">
+        <div class="cancel_btns_user" (click)="usersModalClose()">Cancel</div>
+      </div>
+      <div class="col-2 mt-5 py-0">
+        <div style="max-width: 100px">
+          <app-submit-component2
+            [type]="'button'"
+            [class]="'submit-btn'"
+            [label]="'Save'"
+            [showIcon]="false"
+            [disabled]="!usermanagementForm.valid"
+            (submitForm)="UpdateUsers()"
+            [loading]="isLoading"
+            [ifHasError]="hasError"
+          ></app-submit-component2>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<app-delete
+(close)="closeModal()"
+(delete)="ConfirmDelete()"
+[name]="'user'"
+[deleteModal]="deleteuserModal"></app-delete>
+
+<!--avatar upload-->
+<div  class="profile_pic_model">
+  <p-dialog
+    header="Title"
+    [modal]="true"
+    [(visible)]="profilePic"
+    [style]="{ width: '1000px' }"
+    [draggable]="false"
+    styleClass="active"
+    [contentStyle]="{
+      'overflow-y': 'auto',
+      'overflow-x': 'hidden',
+      'max-height': '80vh',
+      border: '0.6px solid rgba(240, 240, 240, 0.2)'
+    }"
+  >
+  <app-avatar 
+    [avatarId]="this.activeIndex?this.activeIndex:null"
+    [avatar]="this.activeImage?this.activeImage:null"
+    [clickedImage]="this.clickedImage?this.clickedImage:null"
+    [clickedIndex]="this.clickedIndex?this.clickedIndex:null"
+    (saveModel)="saveModel($event)"
+    (clickModel)="clickModel($event)"
+    (cancelModel)="cancelModel($event)"
+    (removeModel)="removeavatar($event)"></app-avatar>
+  </p-dialog>
+</div>
+
+<app-spinner></app-spinner>
+

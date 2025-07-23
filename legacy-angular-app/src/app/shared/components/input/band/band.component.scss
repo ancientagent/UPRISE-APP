@@ -1,0 +1,62 @@
+@import '/src/colors.scss';
+
+::ng-deep {
+  .band_autocomplete {
+    .p-autocomplete {
+      width: 100%;
+      border: #141414;
+    }
+    .p-inputtext {
+      font-size: 1rem;
+      width: 100%;
+      padding: 0.5rem 0.5rem;
+      border: $inputBorder;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+        box-shadow 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 3px;
+      background: $inputBg;
+      color: #ffffff;
+    }
+    .p-button {
+      color: #ffffff;
+      background: $inputBg;
+      border: $inputBorder;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 3px;
+    }
+    .p-button:focus {
+      outline: 0 none;
+      outline-offset: 0;
+      box-shadow: none;
+    }
+    .p-inputtext:enabled:focus {
+      box-shadow: none;
+      border: $inputBorder;
+    }
+    .p-autocomplete-panel {
+      max-height: 300px !important;
+      background: $inputBg;
+      color: #ffffff;
+    }
+    .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item {
+      border: 0 none;
+      color: #ffffff;
+      background: transparent;
+    }
+    .p-autocomplete-panel
+      .p-autocomplete-items
+      .p-autocomplete-item.p-highlight {
+      color: #d1d1d1;
+      background: #000000;
+    }
+    .p-inputtext:enabled:hover {
+      border: $inputBorder;
+    }
+  }
+  p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
+    border: $inputBorder;
+  }
+}

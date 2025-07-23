@@ -258,8 +258,10 @@ LOGIN_URL=/auth/login
 ```powershell
 # Copy environment template
 Copy-Item webapp-ui/.env.example webapp-ui/.env
-# Edit webapp-ui/.env with actual values
-notepad webapp-ui/.env
+# The .env file should contain:
+# VITE_API_BASE_URL=http://10.0.2.2:3000
+# VITE_CLIENT_ID=437920819fa89d19abe380073d28839c
+# VITE_CLIENT_SECRET=28649120bdf32812f433f428b15ab1a1
 ```
 
 ### **11. Home Feed Shows Global Content Instead of Local** 🚨 **CRITICAL**
@@ -316,6 +318,7 @@ netstat -ano | findstr ":3000\|:8081"
 | Backend Config | `Webapp_API-Develop/src/config/index.js` |
 | Backend Entry | `Webapp_API-Develop/src/index.js` |
 | Webapp-UI Environment | `webapp-ui/.env.example` |
+| Legacy Angular App | `legacy-angular-app/` (archived) |
 | Webapp-UI Config | `webapp-ui/src/config.ts` |
 
 ---

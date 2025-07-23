@@ -1,0 +1,71 @@
+@import '/src/colors.scss';
+::ng-deep {
+  .p-input-filled {
+    .p-inputtext:enabled:focus {
+      border: $inputBorder;
+      box-shadow: none;
+    }
+    .labelNames {
+      padding: 0px 5px;
+    }
+  }
+  .p-inputtext {
+    font-size: 1rem;
+    width: 100%;
+    padding: 0.5rem 0.5rem;
+    border: $inputBorder;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+      box-shadow 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 3px;
+    background: $inputBg;
+    color: #ffffff;
+  }
+  .pac-container {
+    background-color: #141414;
+    border: $inputBorder;
+  }
+  .pac-item-query {
+    color: white;
+    font-family: "Oswald";
+    font-size: 1rem;
+    font-weight: 400;
+  }
+  .pac-matched {
+    color: $primary;
+    font-family: "Oswald";
+    font-size: 1rem;
+    font-weight: 400;
+  }
+  .pac-item:hover {
+    background-color: #141414;
+    cursor: pointer;
+  }
+  .pac-item-selected {
+    background-color: #141414;
+    cursor: pointer;
+  }
+  .pac-item {
+    border: none;
+    font-family: "Oswald";
+    font-size: 1rem;
+    color: #aaaaaa;
+    font-weight: 400;
+  }
+  .p-inputtext:enabled:focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: none;
+    border: $inputBorder;
+  }
+  .p-inputtext:enabled:hover {
+    border: $inputBorder;
+  }
+  .p-inputtext.ng-dirty.ng-invalid {
+    border: $inputBorder;
+  }
+}
+.google-map {
+  padding-right: 36px;
+}

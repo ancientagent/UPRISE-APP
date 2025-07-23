@@ -1,3 +1,4 @@
+import Config from 'react-native-config';
 import { request } from '../request/request.service';
 import { getRequestURL } from '../../utilities/utilities';
 import * as HttpMethods from '../constants/Constants';
@@ -7,7 +8,7 @@ import * as HttpMethods from '../constants/Constants';
  * @returns {Promise<any>}
  */
 export const getSuperGenres = () => {
-    const url = getRequestURL('/onboarding/super-genres');
+    const url = getRequestURL(Config.ONBOARDING_SUPER_GENRES);
     return request({
         method: HttpMethods.GET,
         url,
@@ -20,7 +21,7 @@ export const getSuperGenres = () => {
  * @returns {Promise<any>}
  */
 export const validateCommunity = (data) => {
-    const url = getRequestURL('/onboarding/validate-community');
+    const url = getRequestURL(Config.ONBOARDING_VALIDATE_COMMUNITY);
     return request({
         method: HttpMethods.POST,
         url,
@@ -39,7 +40,7 @@ export const getCitySuggestions = (query) => {
     // code I just wrote, I am putting it here and assuming it might need auth.
     // The spec does not require auth for this.
     // If auth is not needed, this should be moved or the backend routing changed.
-    const url = getRequestURL(`/communities/cities-autocomplete?q=${query}`);
+    const url = getRequestURL(`${Config.COMMUNITIES_CITIES_AUTOCOMPLETE}?q=${query}`);
     return request({
         method: HttpMethods.GET,
         url,

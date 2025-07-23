@@ -1,0 +1,47 @@
+<div [formGroup]="formGroup" style="position: relative; top: -8px;width: 100%;">
+    <div class="pb-2">Band name</div>
+    <i *ngIf="clearband && this.action !== 'update'&& (this.formGroup.get('band').value?.length>0 || this.formGroup.get('band').value?.title?.length>0)" class="pi pi-times" style="padding-right: 7px;color: rgb(255, 255, 255);position: absolute;z-index: 1;top: calc(50% - 5px);right: 50px;" (click)="clearbandsearch('band')"></i>
+    <p-autoComplete
+      formControlName="band"
+      (completeMethod)="bandUsersSelect($event)"
+      field="title"
+      (onSelect)="onselect($event)"
+      class="band_autocomplete"
+      [suggestions]="bandUsersList"
+      [dropdown]="false"
+      placeholder="Enter band name"
+      [disabled]="this.action == 'update' || this.currentURL == '/admin/content-management/albums/songs'"
+      [dropdown]="this.action !== 'update'"
+      [showEmptyMessage]="true"
+    >
+    <ng-template let-data pTemplate="item">
+      <div class="data-item flex align-items-center">
+        <div class="flex">
+          <img
+            [src]="
+              data.logo
+                ? data.logo
+                : 'assets/images/userprofilepic.png'
+            "
+            style="object-fit: cover"
+            height="42"
+            width="42"
+            alt=""
+            class="border-circle"
+          />
+          &nbsp; 
+          <div class="user-email">
+            <div>{{ data.title }}</div> 
+          <div>{{ data.user.userName }}</div>
+        </div>
+        </div>
+      </div>
+    </ng-template>
+    </p-autoComplete>
+    <div [ngClass]="'input_box'" *ngIf="this.action !== 'update'">
+      <small
+        class="p-error-invalid"
+        [innerHTML]="error !== undefined ? error : '&nbsp;'"
+      ></small>
+    </div>
+  </div>

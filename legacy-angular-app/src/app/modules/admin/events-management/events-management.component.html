@@ -1,0 +1,360 @@
+<div class="events-container">
+  <div>
+    <div class="grid">
+      <!-- <div class="col-6 events_title">Your Events</div> -->
+      <div class="col-12 text-right">
+        <div class="p-input-icon-right">
+          <input
+            type="text"
+            [(ngModel)]="searchtable"
+            class="search_box"
+            placeholder="Search events..."
+            (keyup)="searchEvents($event)"
+          />
+          <i
+            *ngIf="searchSong?.length > 0"
+            class="pi pi-times"
+            style="padding-right: 7px; color: white"
+            (click)="clearsearch()"
+          ></i>
+        </div>
+        <button class="upload-events-btn" (click)="Addevent()">
+          <i class="pi pi-plus-circle icon_position pr-2"></i> Create Event
+        </button>
+      </div>
+    </div>
+    <div>
+      <p-table [columns]="cols" [value]="eventsData" [(selection)]="selected">
+        <!-- [loading]='customeloading' -->
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <!-- <th>
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th> -->
+            <th *ngFor="let col of columns">
+              {{ col.header }}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-event>
+          <tr>
+            <!-- <p-tableCheckbox
+              [value]="event"
+              class="check_box"
+            ></p-tableCheckbox> -->
+
+            <td>
+              <img
+                *ngIf="event.thumbnail"
+                [src]="event.thumbnail"
+                height="50"
+                width="50"
+                alt="event poster"
+                style="object-fit: cover"
+              />
+              <img
+                *ngIf="!event.thumbnail"
+                src="../../../../assets/images/band-pic.png"
+                height="50"
+                width="50"
+                alt="event poster"
+                style="object-fit: cover"
+              />
+            </td>
+
+            <td style="max-width: 12vw;" >
+              <div style="width:100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" pTooltip={{event.eventName}} tooltipPosition="bottom">{{ event.eventName }}
+              </div>
+            </td>
+            <td
+              style="
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                max-width: 200px;
+                text-align: center;
+              "
+            >
+              {{ event?.band?.title }}
+            </td>
+            <td style="max-width: 17vw">
+              <div
+                style="
+                  width: 100%;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                "
+                pTooltip="{{ event.location }}"
+                tooltipPosition="bottom"
+              >
+                {{ event.location }}
+              </div>
+            </td>
+            <td>
+              {{ event.startTime | date : "MM/dd/YY" }} -
+              {{ event.endTime | date : "MM/dd/YY" }}
+            </td>
+            <td>{{ event.startTime | date : "h:mm a" }}</td>
+            <!-- <td><p-inputSwitch></p-inputSwitch></td> -->
+
+            <td
+              style="min-width: 100px"
+              [ngClass]="today <= event.startTime ? '' : 'disable'"
+            >
+              <span (click)="today <= event.startTime ? editEvents(event) : ''">
+                <i class="pi pi-pencil pr-2" style="font-size: 18px"></i
+              ></span>
+
+              <span
+                (click)="
+                  today <= event.startTime
+                    ? deleteEvent(event.id, event?.band.id)
+                    : ''
+                "
+              >
+                <i
+                  class="pi pi-trash text-white"
+                  style="font-size: 18px; padding-left: 10px"
+                ></i>
+              </span>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8" class="textC">
+              <span>No records found</span>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div *ngIf="this?.eventsData?.length > 0">
+        <p-paginator
+          [rows]="this.eventspage?.perPage"
+          [styleClass]="'paginator'"
+          #dt
+          [totalRecords]="this.totalrecords"
+          [rowsPerPageOptions]="[10, 50, 100]"
+          (onPageChange)="paginateEvents($event)"
+        ></p-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  header="Title"
+  [modal]="true"
+  [(visible)]="eventsModal"
+  [style]="{ width: '900px' }"
+  [draggable]="false"
+  styleClass="active"
+  [contentStyle]="{
+    'overflow-y': 'visible',
+    'overflow-x': 'visible',
+    border: '0.6px solid rgba(240, 240, 240, 0.2)'
+  }"
+>
+  <p-header>{{ header }} </p-header>
+  <div>
+    <div class="model_card_body">
+      <div></div>
+      <div>
+        <div class="grid mt-1">
+          <div class="col-12 text-center" [formGroup]="eventsForm">
+            <span class="flex justify-content-center">
+              <input
+                formControlName="poster"
+                class="upload-img hidden"
+                accept="image/png , image/jpeg , image/gif"
+                id="file-upload-img"
+                type="file"
+                (change)="onFileImageupload($event)"
+              />
+              <app-upload-button
+                [for]="'file-upload-img'"
+                [name]="'Upload event poster'"
+              ></app-upload-button>
+            </span>
+            <br />
+            <p class="info-msgs">
+              <i class="pi pi-info-circle"></i> &nbsp;
+              <span class="relative" style="top: -3px">
+                Upload only .jpeg's , .png's and .gif's images
+              </span>
+            </p>
+          </div>
+
+          <div class="col-4 p-0 m-0"></div>
+          <div class="col-4 p-0 m-0">
+            <div *ngIf="viewImgages">
+              <div class="images_View">
+                <div class="event_poster_body">
+                  <img
+                    [src]="imageSrc"
+                    height="160"
+                    width="160"
+                    class="event_poster"
+                    style="object-fit: cover"
+                  />
+                  <p (click)="removeImg()" class="cursor event_poster_delete">
+                    <i
+                      class="pi pi-times-circle text-white"
+                      style="font-size: 16px"
+                    ></i>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4"></div>
+        </div>
+        <hr class="hr_class" />
+        <br />
+        <div class="grid">
+          <div class="col-6 py-0">
+            <app-text-box
+              [className]="'input_box'"
+              name="eventName"
+              [label]="'Name'"
+              [formGroup]="eventsForm"
+              [placeholder]="'Enter name'"
+              [type]="'text'"
+              [error]="
+                inputValidationsErrors(eventsForm, 'eventName')
+                  ? 'Name is required.'
+                  : inputPatternValidationsErrors(eventsForm, 'eventName')
+                  ? 'Name must contain atleast one alphabet'
+                  : errorList['eventName']
+              "
+            ></app-text-box>
+          </div>
+          <div class="col-6 py-0">
+            <div>
+              <app-autocomplete
+                name="eventLocation"
+                [formGroup]="eventsForm"
+                [options]="{
+                  types: ['establishment'],
+                  componentRestrictions: { country: 'US' }
+                }"
+                (searchEvent)="AddressChange($event)"
+                (selectEvent)="address($event)"
+                [placeholder]="'Enter venue'"
+                [label]="'Venue'"
+                [error]="
+                  inputValidationsErrors(eventsForm, 'eventLocation')
+                    ? 'Event Location is required.'
+                    : checkvalidlocation(eventsForm, 'eventLocation')
+                    ? 'Location must be valid.'
+                    : errorList['eventLocation']
+                "
+              ></app-autocomplete>
+            </div>
+          </div>
+          <div class="col-6 py-0">
+            <app-calender
+              [placeholder]="'Select start date and time'"
+              [formGroup]="eventsForm"
+              name="startTime"
+              [showTime]="true"
+              [hourFormat]="12"
+              [minDate]="currentDate"
+              [maxDate]="maxDate"
+              [label]="'Start date and time'"
+              [error]="
+                inputValidationsErrors(eventsForm, 'startTime')
+                  ? 'Start date & time is required.'
+                  : errorList['startTime']
+              "
+            ></app-calender>
+          </div>
+          <div class="col-6 py-0">
+            <app-calender
+              [placeholder]="'Select end date and time'"
+              [formGroup]="eventsForm"
+              name="endTime"
+              [showTime]="true"
+              [hourFormat]="12"
+              [minDate]="currentDate"
+              [maxDate]="maxDate"
+              [label]="'End date and time'"
+              [error]="
+                inputValidationsErrors(eventsForm, 'endTime')
+                  ? 'End date & time is required.'
+                  : checkstartTimeErrors(eventsForm, 'startTime', 'endTime')
+                  ? 'Event must be atleast 45 minutes.'
+                  : errorList['endTime']
+              "
+            ></app-calender>
+          </div>
+
+          <div class="col-6 py-0 relative">
+            <app-band-admin
+              [formGroup]="eventsForm"
+              [clearband]="clearband"
+              [action]="action"
+              (onSelect)="onSelect($event)"
+              (completeMethod)="bandUsersSelect($event)"
+              [bandUsersList]="bandUsersList"
+              [error]="
+                inputValidationsErrors(eventsForm, 'band')
+                  ? 'Band name is required.'
+                  : checkvalidband(eventsForm, 'band')
+                  ? 'Band name must be valid.'
+                  : '&nbsp;'
+              "
+            >
+            </app-band-admin>
+          </div>
+          <div class="col-6 py-0">
+            <app-text-box
+              [className]="'input_box'"
+              name="description"
+              [label]="'Description'"
+              [formGroup]="eventsForm"
+              [placeholder]="'Enter description'"
+              [type]="'text'"
+              [maxlength]="100"
+            ></app-text-box>
+          </div>
+          <br />
+          <div class="col-8"></div>
+          <div class="col-2 text-center">
+            <div class="cancel_btns" (click)="eventsModalClose()">Cancel</div>
+          </div>
+          <div class="col-2">
+            <div style="max-width: 100px">
+              <app-submit-component2
+                [type]="'button'"
+                [class]="'submit-btn'"
+                [label]="'Save'"
+                [showIcon]="false"
+                [loading]="isLoading"
+                [disabled]="
+                  !eventsForm.valid ||
+                  isLoading ||
+                  disablelocationSubmit ||
+                  disableSubmit ||
+                  disablebandSubmit
+                "
+                (submitForm)="createEvent()"
+                [ifHasError]="hasError"
+              ></app-submit-component2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<app-delete
+  (close)="closeModal()"
+  (delete)="ConfirmDelete()"
+  [name]="'event'"
+  [deleteModal]="deleteEventModal"
+></app-delete>
+
+<app-spinner></app-spinner>

@@ -1,0 +1,67 @@
+@import '/src/colors.scss';
+.cancel_btn {
+  border: 1px solid $primary;
+  box-sizing: border-box;
+  margin: 0 auto;
+  border-radius: 30px;
+  color: $primary;
+  background: transparent;
+  width: 130px;
+  padding: 10px;
+  cursor: pointer;
+}
+.confirm_delete_btn {
+  display: flex;
+  justify-content: center;
+  border: 1px solid $primary;
+  text-align: center;
+  border-radius: 30px;
+  color: #000;
+  background: $primary;
+  width: 130px;
+  padding: 10px;
+  cursor: pointer;
+}
+.info_icon {
+  color: $primary;
+  font-size: 50px;
+  text-align: center;
+  padding-top: 20px;
+}
+.warning_message {
+  font-weight: 500;
+  font-size: 26px;
+  line-height: 36px;
+
+  text-align: center;
+  letter-spacing: 0.01em;
+  padding-bottom: 0px;
+  color: #ffffff;
+}
+.warning_sub_message {
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+  position: relative;
+  top: -20px;
+}
+.cancel_btns {
+  text-align: center;
+  border: 1px solid $primary;
+  box-sizing: border-box;
+  filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.24));
+  border-radius: 30px;
+  width: 110px;
+  padding: 5px;
+  line-height: 28px;
+  color: $primary;
+  cursor: pointer;
+}
+::ng-deep {
+  .delete_model , .block_model  {
+    .p-dialog .p-dialog-header {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,198 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap");
+@import '/src/colors.scss';
+@import '/src/common.scss';
+
+.header-container {
+  background-color: #000000;
+  box-shadow: inset 0px -1px 0px rgba(240, 240, 240, 0.2);
+}
+.header-logo-img {
+  height: 32px;
+  margin-left: 9px;
+  margin-right: 5px;
+  // width: 40px;
+}
+.header-logo-content {
+  display: flex;
+  padding-left: 14px;
+  align-items: center;
+}
+.header-logo-title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 35px;
+  text-align: center;
+  color: #ffffff;
+  padding-top: 5px;
+  font-family: "oswald";
+}
+.logo-subtitle {
+  color: $primary;
+}
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #434343;
+  border-color: #434343;
+}
+.search_box {
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 38px;
+  font-size: 14px;
+  background-color: transparent;
+  box-shadow: none;
+  width: 38px;
+  height: 38px;
+  background: url("../../../../assets/icons/search.png");
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  outline: none;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+  color: #ffffff;
+}
+.search_box:focus {
+  width: 100%;
+  padding-left: 30px;
+}
+.header-profice-pic {
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  background-color: #3f3f3f;
+}
+.header-profile-name {
+  font-weight: 500;
+  color: #ffffff;
+  position: relative;
+  top: -5px;
+  cursor: pointer;
+}
+
+.profile_pic {
+  border-radius: 50%;
+  position: relative;
+  top: 0px;
+  height: 40px;
+  width: 40px;
+  background-color: #3f3f3f;
+}
+.logoutIcon {
+  position: relative;
+  top: -14px;
+  padding-right: 10px;
+}
+
+.dropdown-nav {
+  cursor: pointer;
+}
+::ng-deep {
+  .p-overlaypanel .p-overlaypanel-content {
+    padding: 0px 10px;
+    background: #141414;
+    color: white;
+  }
+  .p-overlaypanel {
+    background: #141414;
+    color: #495057;
+    border: 0 none;
+    border-radius: 3px;
+    width: 200px;
+    position: absolute !important;
+    right: 0px !important;
+    left: calc(100% - 210px) !important;
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+  }
+  input:-webkit-autofill {
+    -webkit-text-fill-color: white !important;
+  }
+}
+
+.navOptions {
+  cursor: pointer;
+}
+.memberEdit {
+  cursor: pointer;
+}
+.cancel_btns {
+  text-align: center;
+  border: 1px solid $primary;
+  box-sizing: border-box;
+  filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.24));
+  border-radius: 30px;
+  width: 110px;
+  padding: 5px;
+  line-height: 28px;
+  color: $primary;
+  cursor: pointer;
+}
+
+::ng-deep {
+  .header-container {
+    .p-dropdown {
+      text-align: left !important;
+      background: #181818 !important;
+      border: 0.6px solid rgba(240, 240, 240, 0.3);
+      width: 100%;
+      color: #ffffff;
+      box-sizing: border-box;
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+    }
+    .p-dialog .p-dialog-content {
+      background: #181818 !important;
+      color: #495057;
+      padding: 0 1.5rem 2rem 1.5rem;
+    }
+    .p-dropdown-items {
+      background-color: #181818 !important;
+    }
+    .p-dropdown-panel .p-dropdown-header {
+      background-color: #181818 !important;
+    }
+    .p-dropdown-panel
+      .p-dropdown-items
+      .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
+      color: $primary;
+      background: #181818 !important;
+    }
+    .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+      color: $primary !important;
+    }
+    .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+      background: #141414 !important;
+      color: white;
+    }
+    .p-dropdown-label {
+      width: 200px;
+    }
+  }
+  // .p-dialog .p-dialog-header {
+  //   border-bottom: 0 none;
+  //   padding: 10px;
+  //   color: $primary;
+  //   background: #282828;
+  //   border: 0.6px solid rgba(240, 240, 240, 0.2);
+  //   box-sizing: border-box;
+  // }
+  // .p-dialog .p-dialog-header .p-dialog-title {
+  //   font-weight: 600;
+  //   font-size: 18px;
+  // }
+  // .p-dialog .p-dialog-content {
+  //   background: #282828;
+  //   border: 0px solid rgba(240, 240, 240, 0.2);
+  //   box-sizing: border-box;
+  //   color: #ffffff;
+  // }
+}
+.down_arrow {
+  position: relative;
+  top: 2px;
+}

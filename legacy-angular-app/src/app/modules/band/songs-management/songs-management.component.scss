@@ -1,0 +1,193 @@
+@import '/src/colors.scss';
+@import '/src/common.scss';
+.songs-container {
+  background-color: $background;
+  height: calc(100vh - 70px);
+  padding: 20px;
+  color: #ffffff;
+  overflow-y: auto;
+}
+.songs_title,
+.albums_title {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  color: $primary;
+  padding-bottom: 7px;
+  border-bottom: 3px solid $primary;
+  cursor: pointer;
+  margin: 3px;
+}
+.err-msgs {
+  font-size: small;
+  color: red;
+}
+.songs_title {
+  width: fit-content;
+  margin-right: 20px;
+}
+.albums_title {
+  width: 57px;
+  margin-left: 21px;
+}
+.songs_Albums {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  color: #fff;
+  cursor: pointer;
+}
+.songs_Albums:hover {
+  text-decoration: underline !important;
+}
+.album_songs_songsmanagement:hover {
+  color: $primary !important;
+  text-decoration: underline !important;
+}
+.upload-songs-btn {
+  padding: 8px 16px;
+  background: $primary;
+  border: 0.6px solid $primary;
+  box-sizing: border-box;
+  color: #000000;
+  box-shadow: none;
+  border-radius: 30px;
+  height: 40px;
+  min-width: 140px;
+  cursor: pointer;
+  font-family: oswald;
+  font-weight: 500;
+}
+.cancel_btns {
+  text-align: center;
+  border: 1px solid $primary;
+  box-sizing: border-box;
+  filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.24));
+  border-radius: 30px;
+  width: 110px;
+  padding: 5px;
+  line-height: 28px;
+  color: $primary;
+  cursor: pointer;
+}
+.delte_song {
+  text-align: center;
+  border: #141414;
+  cursor: pointer;
+}
+.comma:not(:last-child):after {
+  content: ", ";
+}
+.comma:last-child:after {
+  content: "";
+}
+.info-msgs {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: $infocolor;
+}
+.fa {
+  cursor: pointer;
+}
+
+.hr_class {
+  border: 0.6px solid rgba(240, 240, 240, 0.4);
+}
+
+.images_View {
+  padding: 0px;
+  display: flex;
+  justify-content: center;
+}
+
+.blur {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  -webkit-filter: blur(4px);
+  -moz-filter: blur(4px);
+  -ms-filter: blur(4px);
+  -o-filter: blur(4px);
+  filter: blur(4px);
+}
+
+.song_poster_body {
+  // width: 160px;
+  position: relative;
+}
+.audio_poster_body {
+  width: 160px;
+  position: relative;
+  padding: 0px;
+}
+
+.song_poster_delete {
+  position: absolute;
+  top: -16px;
+  right: 0px;
+  visibility: hidden;
+}
+.audio_poster_delete {
+  position: absolute;
+  top: -16px;
+  right: 0px;
+  visibility: hidden;
+}
+.song_poster_body:hover .song_poster_delete {
+  visibility: visible;
+}
+.audio_poster_body:hover .audio_poster_delete {
+  visibility: visible;
+}
+
+.song_poster_body:hover .event_poster {
+  opacity: 0.2;
+}
+.albumgenre:hover + .albumgenrehover {
+  visibility: visible;
+}
+.albumgenrehover {
+  visibility: hidden;
+  width: 200px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  margin-top: 10px;
+  margin-left: 20px;
+  position: absolute;
+  z-index: 1;
+}
+.angel-icon-position {
+  position: relative;
+  top: 3px;
+}
+.search_box {
+  border: 2px solid #ccc;
+  border-radius: 38px;
+  background-color: transparent;
+  box-shadow: none;
+  width: 220px;
+  height: 38px;
+  padding-left: 38px;
+  padding-right: 33px;
+  background: url("../../../../assets/icons/search.png");
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  outline: none;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+  color: #ffffff;
+  font-family: "Oswald";
+}
+
+.disableswitch {
+  opacity: 0.5;
+  color: #141414;
+}
+.switch {
+  margin-top: 18px;
+  margin-left: 20px;
+}

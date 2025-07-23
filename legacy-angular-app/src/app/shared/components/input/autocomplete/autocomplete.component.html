@@ -1,0 +1,89 @@
+<div
+  [formGroup]="formGroup"
+  style="position: relative; top: -8px; padding: 0px"
+>
+  <i
+    *ngIf="this.formGroup.get(name).value?.length > 0"
+    (click)="clearbandsearch()"
+    class="pi pi-times"
+    style="
+      padding-right: 7px;
+      color: rgb(255, 255, 255);
+      position: absolute;
+      z-index: 1;
+      top: calc(50% - 8px);
+      right: 8px;
+      background-color: #0f0f0f;
+      padding: 5px;
+    "
+  ></i>
+  <i
+    *ngIf="icon"
+    class="pi pi-map-marker"
+    style="
+      padding-right: 7px;
+      color: #dcf763;
+      position: absolute;
+      z-index: 1;
+      top: calc(50% - 8px);
+      left: 2px;
+      background-color: #0f0f0f;
+      padding: 5px;
+    "
+  ></i>
+  <p class="mt-0 mb-2">{{ label }}</p>
+  <input
+    class="google-map"
+    [placeholder]="placeholder"
+    pInputText
+    [class]="error ? 'p-invalid' : ''"
+    [formControlName]="name"
+    ngx-google-places-autocomplete
+    #placesRef="ngx-places"
+    [(options)]="options"
+    (onAddressChange)="AddressChange($event)"
+    (ngModelChange)="address($event)"
+    [ngStyle]="{'padding-left': icon? '30px' :'8px'}"
+  />
+  <div [ngClass]="'input_box'">
+    <small
+      class="p-error-invalid"
+      [innerHTML]="error !== undefined ? error : '&nbsp;'"
+    ></small>
+  </div>
+</div>
+
+<!-- <div class="p-input-filled" [formGroup]="formGroup">
+  <div class="col-12 labelNames formFields">
+    <label>{{ label }} &nbsp;</label>
+  </div>
+  <div class="col-12 inputField formFields">
+    <p-autoComplete
+      [formControlName]="name"
+      [class]="error ? 'p-invalid' : ''"
+      [forceSelection]="forceSelection"
+      [field]="displayField"
+      [suggestions]="results"
+      (completeMethod)="search($event)"
+      (onSelect)="onSelect($event)"
+      appendTo="body"
+      [placeholder]="placeholder"
+      [minLength]="minLength"
+      [dropdown]="false"
+      [minLength]="minLength"
+      [style]="{
+        width: '100%',
+        border: ' 0.6px solid rgba(240, 240, 240, 0.3)',
+        background: '#0f0f0f',
+        color: '#ffffff'
+      }"
+    >
+    </p-autoComplete>
+  </div>
+  <div>
+    <small
+      class="p-error-invalid"
+      [innerHTML]="error !== undefined ? error : '&nbsp;'"
+    ></small>
+  </div>
+</div> -->

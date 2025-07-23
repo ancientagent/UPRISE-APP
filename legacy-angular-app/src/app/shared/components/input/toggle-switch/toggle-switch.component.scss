@@ -1,0 +1,43 @@
+// promo switch
+@import '/src/colors.scss';
+::ng-deep {
+  .switch {
+    // default ball
+    .p-inputswitch .p-inputswitch-slider:before {
+      background: #f0f0f0;
+      left: -5px;
+      width: 1rem;
+      height: 1rem;
+      margin-top: -8px;
+      border-radius: 50%;
+      transition-duration: 0.2s;
+      box-shadow: none;
+    }
+    // checked ball
+    .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider:before {
+      background: $primary;
+      left: -10px;
+    }
+    // default track
+    .p-inputswitch .p-inputswitch-slider {
+      box-shadow: none;
+      border-radius: 30px;
+      background: transparent !important;
+      height: 12px;
+      width: 25px;
+      border: 2px solid #ffffff;
+    }
+    // checked track
+    .p-inputswitch-checked .p-inputswitch-slider {
+      border: 2px solid $primary;
+    }
+    // onperforming action
+    .p-inputswitch.p-focus .p-inputswitch-slider {
+      box-shadow: none;
+    }
+  }
+}
+.switch {
+  margin-top: 18px;
+  margin-left: 20px;
+}

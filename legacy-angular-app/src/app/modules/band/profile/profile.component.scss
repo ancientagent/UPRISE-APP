@@ -1,0 +1,118 @@
+@import '/src/colors.scss';
+.profile-container {
+  background-color: $background;
+  height: 90vh;
+  padding: 40px;
+  color: #ffffff;
+  overflow-y: auto;
+}
+.username {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.input-item {
+  height: 100px;
+}
+.profile-title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 18px;
+  color: #ffffff;
+}
+.profile-contentent {
+  background: #181818;
+  border: $contentBorder;
+  box-sizing: border-box;
+  box-shadow: none;
+  border-radius: 2px;
+  padding: 25px;
+}
+
+.default-profile {
+  border: 3px solid #ffff;
+  border-radius: 50%;
+  position: relative;
+  background: #f0f0f0;
+  width: 110px;
+  margin: 0 auto;
+  height: 110px;
+}
+.default-profile-pic {
+  font-size: 40px;
+  padding: 18px;
+  color: #202020;
+}
+.uploaded-profile-pic {
+  height: 115px;
+  border-radius: 50%;
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  background: #3f3f3f;
+}
+.upload_icon_profile {
+  position: absolute;
+  top: 80px;
+  background: $primary;
+  border-radius: 50%;
+  padding: 0px 8px 4px 8px;
+  right: 2px;
+}
+.profilepic-edit-icon{
+  color: black;
+}
+.sub-title {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 0px;
+  color: #ffffff;
+}
+.button_save {
+  // position: relative;
+  width: 100px;
+  // right: 10px;
+  // top: -25px;
+}
+.cancel_btns {
+  text-align: center;
+  border: 1px solid $primary;
+  box-sizing: border-box;
+  filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.24));
+  border-radius: 30px;
+  width: 100px;
+  padding: 5px;
+  line-height: 28px;
+  color: $primary;
+  cursor: pointer;
+  background-color: transparent;
+  margin-left: 20px;
+}
+::ng-deep {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+  }
+  input:-webkit-autofill {
+    -webkit-text-fill-color: white !important;
+  }
+  .profile_pic_model {
+    .p-dialog .p-dialog-header {
+      display: none;
+    }
+    .p-dialog .p-dialog-content {
+      background: #181818;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .p-button:focus {
+      box-shadow: none;
+    }
+  }
+}

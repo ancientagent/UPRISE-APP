@@ -8,7 +8,7 @@ import { getRequestURL } from '../../utilities/utilities';
 export default function getAllGenresRequest(payload) {
   // The endpoint URL for getting genres
   // Use the comprehensive genres list from onboarding instead of basic auth genres
-const url = '/onboarding/all-genres';
+const url = Config.GET_ALL_GENRES_URL;
 
   console.log(`--- DEBUG: Attempting to GET genres from ${url} ---`);
   console.log(`--- DEBUG: Full URL will be: ${getRequestURL(url)} ---`);

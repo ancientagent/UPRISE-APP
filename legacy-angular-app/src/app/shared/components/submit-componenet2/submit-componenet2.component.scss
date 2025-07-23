@@ -1,0 +1,21 @@
+@import '/src/colors.scss';
+::ng-deep {
+
+  .submit-button-component{
+    .p-button{
+      background: $primary;
+      border: none;
+      width: 100%;
+      color: #000000; 
+      border-radius:30px;
+      box-sizing: border-box;
+      box-shadow:none;
+      font-weight: 600
+    }
+    .p-button:enabled:hover {
+      background: $primary !important;
+      color: #000000;
+      border: none !important;
+    }
+  }
+}

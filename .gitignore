@@ -66,3 +66,6 @@ coverage/
 
 # Environment Variables
 /.env
+!.env.example
+!.env.backup
+!.env.dev

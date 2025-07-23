@@ -1,0 +1,52 @@
+@import '/src/colors.scss';
+.p-error-invalid {
+  color: red;
+}
+.p-float-label label {
+  position: absolute;
+  pointer-events: none;
+  top: 50%;
+  margin-top: -0.5rem;
+  transition-property: all;
+  transition-timing-function: ease;
+  line-height: 1;
+  left: 31px;
+}
+
+.textBoxMargin {
+  .p-inputtext:enabled:focus {
+    box-shadow: none;
+    border: $inputBorder;
+  }
+  .p-inputtext {
+    padding-left: 30px !important;
+    width: 100%;
+    background: #0f0f0f !important;
+    border: $inputBorder;
+    color: white;
+  }
+  .p-inputtext:enabled:hover {
+    border: $inputBorder;
+  }
+  p-inputmask.ng-dirty.ng-invalid > .p-inputtext {
+    border: $inputBorder;
+  }
+  .p-input-filled .p-inputtext {
+    background: #0f0f0f !important;
+    border: $inputBorder;
+  }
+  .labelNames {
+    margin-bottom: 8px;
+  }
+  .p-input-filled .p-inputtext:enabled:hover {
+    background-color: #0f0f0f;
+    width: 100%;
+    color: #ffffff;
+  }
+  .p-inputtext.ng-dirty.ng-invalid {
+    border: $inputBorder;
+  }
+}
+.input-icon {
+  color: $primary !important;
+}

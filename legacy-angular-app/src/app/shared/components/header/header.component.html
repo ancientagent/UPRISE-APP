@@ -1,0 +1,235 @@
+<div class="header-container">
+  <div class="header-container-inner">
+    <div class="header-content">
+      <div class="grid m-0">
+        <div class="col-6 flex" style="padding: 0px;align-items: center;">
+          <div class="header-logo-content" style="height: 70px;">
+            <img src="assets/images/upriselogo.png" class="header-logo-img" />
+
+            <h3 class="header-logo-title">
+              UPRISE<span class="logo-subtitle"></span>
+            </h3>
+          </div>
+        </div>
+        <div class="col-6">
+
+          <div class="grid text-right" style="position: relative; top: 10px">
+
+            <div class="col-12 text-right flex justify-content-end">
+
+              <div>
+              <p-dropdown 
+                *ngIf="selectedband?.bandRoleId == 6" 
+                [options]="bands" 
+                optionLabel="title" 
+                [(ngModel)]="selectedband" 
+                (onChange)="bandchange($event)">
+                <ng-template pTemplate="selectedItem">
+                  <div class="data-item flex align-items-center">
+                    <div class="flex align-items-center">
+                      <img
+                        [src]="
+                        selectedband.logo
+                            ? selectedband.logo
+                            : 'assets/images/userprofilepic.png'
+                        "
+                        style="object-fit: cover"
+                        height="30"
+                        width="30"
+                        alt=""
+                        class="border-circle"
+                      />
+                      &nbsp; 
+                      <div class="user-email">
+                        <div>{{ selectedband.title }}</div>
+                    </div>
+                    </div>
+                  </div>
+              </ng-template>
+
+
+                <ng-template let-data pTemplate="bands">
+                  <div class="data-item flex align-items-center">
+                    <div class="flex align-items-center">
+                      <img
+                        [src]="
+                          data.logo
+                            ? data.logo
+                            : 'assets/images/userprofilepic.png'
+                        "
+                        style="object-fit: cover"
+                        height="30"
+                        width="30"
+                        alt=""
+                        class="border-circle"
+                      />
+                      &nbsp; 
+                      <div class="user-email">
+                        <div>{{ data.title }}</div>
+                    </div>
+                    </div>
+                  </div>
+                </ng-template>
+
+
+              </p-dropdown>
+              </div>
+              
+              <div class="ml-4">
+              <img (click)="op.toggle($event)" [src]="avatar?avatar:'assets/images/profilepic2.png'" class="profile_pic" />
+
+              <span (click)="op.toggle($event)" class="logoutIcon pl-2 cursor">
+                {{ name?name:'user' }} <i class="pi pi-angle-down down_arrow"></i>
+                <p-overlayPanel
+                  class="optionsMenu"
+                  [styleClass]="'app-overlay-panel-logout'"
+                  #op
+                >
+                  <ng-template pTemplate>
+                    <div class="memberEdit">
+                      <p class="dropdown-nav" (click)="profile()" (click)="op.hide()">
+                        <i class="pi pi-user "></i>&nbsp;&nbsp;My Profile
+                      </p>
+
+                      <p                       
+                        *ngIf="selectedband?.bandRoleId == 4 || this.userData.role.name == 'admin'"
+                        class="dropdown-nav" 
+                        (click)="changepwdModalOpen()" 
+                        (click)="op.hide()">
+                        <i class="pi pi-unlock"></i>&nbsp;&nbsp;Change Password
+                      </p>
+
+                      <p class="dropdown-nav" (click)="logout()" (click)="op.hide()">
+                        <i class="pi pi-sign-out"></i>&nbsp;&nbsp;Logout
+                      </p>
+                    </div>
+                  </ng-template>
+                </p-overlayPanel></span
+              ></div>
+              &nbsp;&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  header="Title"
+  [modal]="true"
+  [(visible)]="changepwdModal"
+  [style]="{ width: '600px' }"
+  [draggable]="false"
+  styleClass="active"
+  [contentStyle]="{
+    'overflow-y': 'auto',
+    'overflow-x': 'hidden',
+    'max-height': '80vh',
+    'min-height': '250px',
+    border: '0.6px solid rgba(240, 240, 240, 0.2)'
+  }"
+>
+  <p-header> Change Password </p-header>
+  <div>
+    <div class="model_card_body">
+      <div></div>
+      <div>
+        <div class="grid mt-3">
+          <div class="col-12 relative" style="height: 115px;">
+            <app-text-password
+              [className]="'input_box'"
+              name="oldpwd"
+              [label]="'Current password'"
+              [maxlength]="30"
+              [formGroup]="changepwdform"
+              [placeholder]="'Enter old password '"
+              [type]="'text'"
+              [minlength]="8"
+              [maxlength]="20"
+              [error]="
+              inputValidationsErrors(changepwdform, 'oldpwd')
+                ? 'Password is required.'
+                : errorList['oldpwd']
+            "
+            ></app-text-password>
+          </div>
+          <div class="col-12 relative" style="height: 115px;">
+            <app-text-password
+              [className]="'input_box'"
+              name="newpwd"
+              [label]="'New password'"
+              [maxlength]="30"
+              [formGroup]="changepwdform"
+              [placeholder]="'Enter new password '"
+              [type]="'text'"
+              [minlength]="8"
+              [maxlength]="20"
+              [error]="
+              inputValidationsErrors(changepwdform, 'newpwd')
+                ? 'Password is required.'
+                : inputPatternValidationsErrors(
+                    changepwdform,
+                    'newpwd'
+                  )
+                ? 'Password must have atleast 8 characters consists of a lowercase, uppercase, number and a special character.'
+                : checkOldPasswordErrors(
+                        changepwdform,
+                        'oldpwd',
+                        'newpwd'
+                      )
+                ? 'New password must be different from current password.'
+                : errorList['newpwd']
+            "
+            ></app-text-password>
+          </div>
+          <div class="col-12 relative" style="height: 110px;">
+            <app-text-password
+              [className]="'input_box'"
+              name="cnewpwd"
+              [label]="'Confirm new password'"
+              [maxlength]="30"
+              [formGroup]="changepwdform"
+              [placeholder]="'Enter confirm new password'"
+              [type]="'text'"
+              [error]="
+                  inputValidationsErrors(
+                    changepwdform,
+                    'cnewpwd'
+                  )
+                    ? 'Confirm password is required.'
+                    : checkPasswordErrors(
+                        changepwdform,
+                        'cnewpwd',
+                        'newpwd'
+                      )
+                    ? 'Passwords do not match.'
+                    : errorList['cnewpwd']
+                "
+            ></app-text-password>
+          </div>
+
+          <div class="col-6"></div>
+          <div class="col-3 text-center">
+            <div class="cancel_btns" (click)="changepwdModalClose()">Cancel</div>
+          </div>
+          <div class="col-3">
+            <div style="max-width: 100px">
+              <app-submit-component2
+                [type]="'button'"
+                [class]="'submit-btn'"
+                [label]="'Save'"
+                [showIcon]="false"
+                [disabled]="!changepwdform.valid || disableSubmit || disableoldSubmit "
+                (submitForm)="changepwd()"
+                [ifHasError]="hasError"
+              ></app-submit-component2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</p-dialog>
+

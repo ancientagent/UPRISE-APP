@@ -83,6 +83,7 @@ import getRadioStationStatisticsReducer from './request/getRadioStationStatistic
 import getPopularArtistStatisticsReducer from './request/getPopularArtistStatistics/getPopularArtistStatistics.reducer';
 import getPopularArtistGenresStatisticsReducer from './request/getPopularArtistGenresStatistics/getPopularArtistGenresStatistics.reducer';
 import getSongAnalyticsReducer from './request/getSongAnalytics/getSongAnalytics.reducer';
+import { artistProfileReducer, updateArtistProfileReducer } from './request/artistProfile/artistProfile.reducer';
 import onboardingReducer from './onboarding';
 import logoutReducer from './logout/logout.reducer';
 
@@ -93,6 +94,8 @@ const appReducer = combineReducers({
   network,
   networkPopup,
   // nav: navReducer,
+  artistProfile: artistProfileReducer,
+  updateArtistProfile: updateArtistProfileReducer,
   getEventsStatistics: getEventsStatisticsReducer,
   getGenresPrefrenceStatistics: getGenresPrefrenceStatisticsReducer,
   getBandsStatistics: getBandsStatisticsReducer,

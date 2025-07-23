@@ -1,0 +1,26 @@
+@import '/src/colors.scss';
+.sidenav-container {
+  background-color: #000000;
+  color: #ffffff;
+  text-align: left;
+  height: 94vh;
+  overflow: hidden;
+}
+.sidenav-list {
+  list-style-type: none;
+  padding: 0px;
+}
+.sidenav-list-item {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 22px;
+  padding: 10px 20px;
+}
+a {
+  color: #ffffff;
+  text-decoration: none;
+}
+.active {
+  color: $primary;
+}

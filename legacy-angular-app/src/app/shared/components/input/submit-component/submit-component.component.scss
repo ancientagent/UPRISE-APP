@@ -1,0 +1,20 @@
+@import "/src/colors.scss";
+
+::ng-deep {
+  // .p-button {
+  //   color: #ffffff;
+  //   background: #906dd5 !important;
+  //   border: 1px solid #906dd5 !important;
+  //   padding: 0.5rem 1rem;
+  //   font-size: 1rem;
+  //   transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+  //     box-shadow 0.2s;
+  //   border-radius: 3px;
+  // }
+
+  .p-button:enabled:hover {
+    background: $primary !important;
+    color: #ffffff;
+    border-color: $primary !important;
+  }
+}

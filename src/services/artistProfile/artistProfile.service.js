@@ -10,7 +10,7 @@ import { getRequestURL } from '../../utilities/utilities';
 export default function getArtistProfileRequest(payload) {
   const requestOptions = {
     method: GET,
-    url: getRequestURL('/user/band'),
+    url: getRequestURL('/user/me'),
     headers: { Authorization: `Bearer ${payload.accessToken}` },
   };
   return request(requestOptions)

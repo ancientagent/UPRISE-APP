@@ -1,0 +1,32 @@
+<div
+  class="p-input-filled"
+  [formGroup]="formGroup"
+  autocomplete="off"
+  [class]="class"
+>
+  <div class="grid textBoxMargininput">
+    <div class="labelNames formFields" style="padding-left:8px;">
+      <label>{{ label }} &nbsp;</label>
+    </div>
+    <div class="col-12 inputField formFields">
+      <input
+        [type]="type"
+        pInputText
+        [maxlength]="maxlength"
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        (keypress)="isAlfa($event)"
+        autocomplete="off"
+        [formControlName]="name"
+        [class]="error ? 'p-invalid' : ''"
+        [style]="style"
+      />
+      <div [ngClass]="className">
+        <small
+          class="p-error-invalid"
+          [innerHTML]="error !== undefined ? error : '&nbsp;'"
+        ></small>
+      </div>
+    </div>
+  </div>
+</div>

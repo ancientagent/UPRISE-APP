@@ -1,0 +1,30 @@
+@import '/src/colors.scss';
+::ng-deep {
+  .p-dropdown {
+    background: $inputBg !important;
+    border: $inputBorder;
+    width: 100%;
+    color: #ffffff;
+    box-sizing: border-box;
+    border-radius: 2px;
+  }
+  .p-dropdown .p-dropdown-trigger {
+    background: $inputBg !important;
+    border: $inputBorder;
+    width: 100%;
+    color: #ffffff;
+    box-sizing: border-box;
+    border-radius: 2px;
+  }
+  .p-dialog .p-dialog-content {
+    background: $inputBg;
+    color: #495057;
+    padding: 0 1.5rem 2rem 1.5rem;
+  }
+  .p-dropdown-items {
+    background-color: $inputBg !important;
+  }
+  .p-dropdown-panel .p-dropdown-header {
+    background-color: $inputBg !important;
+  }
+}

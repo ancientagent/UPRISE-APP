@@ -1,0 +1,94 @@
+@import "../../../../colors.scss";
+.welcome_line {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 38px;
+  text-align: center;
+  color: #ffffff;
+}
+.avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.preview_image {
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+.continue_btn {
+  border: none;
+  border-radius: 30px;
+  color: #000;
+  background: $primary;
+  width: 130px;
+  padding: 10px;
+  margin-top: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 10px;
+}
+.cancel_btn{
+  border: 1px solid $primary;
+  border-radius: 30px;
+  color: #fff;
+  background: transparent;
+  width: 130px;
+  padding: 10px;
+  margin-top: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 10px;
+}
+.img_avatar {
+  border-radius: 50%;
+  background: #3f3f3f;
+  cursor: pointer;
+  border: 3px solid white;
+}
+.default_img_avatar {
+  border-radius: 50%;
+  background: #3f3f3f;
+  cursor: pointer;
+}
+.img_avatars {
+  border-radius: 50%;
+  background: #3f3f3f;
+  cursor: pointer;
+}
+.img_avatar_active {
+  border-radius: 50%;
+  background: #3f3f3f;
+  border: 3px solid $primary;
+}
+.remove_member {
+  position: absolute;
+  font-size: 20px;
+  top: 5px;
+  right: 8px;
+  background-color: black;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #ffffff;
+}
+::ng-deep {
+  .cancel{
+    .p-button:enabled:hover {
+      background: transparent;
+      color: #ffffff;
+      border-color: $primary;
+    }
+  }
+  .continue{
+    .p-button:enabled:hover {
+      background: $primary;
+      color: #000;
+      border: none;
+    }
+  }
+}
+

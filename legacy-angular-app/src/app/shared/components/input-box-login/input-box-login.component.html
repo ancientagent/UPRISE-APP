@@ -1,0 +1,58 @@
+<div
+  class="p-input-filled"
+  [formGroup]="formGroup"
+  autocomplete="off"
+  [class]="class"
+  style="margin-bottom: 21px"
+  autocomplete="off"
+>
+  <div class="textBoxMargin">
+   <div class="col-12 p-0 labelNames formFields">
+      <label>{{ label }} &nbsp;</label>
+    </div>
+    <span class="col-12 p-0 m-0 p-input-icon-left inputField formFields">
+      <input
+        [type]="type"
+        pInputText
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        [formControlName]="name"
+        class="inputbox"
+        [style]="style"
+        (keypress)="
+          spaces == 0 ? onKeydown($event) : spaces == 1 ? isAlfa($event) : null
+        "
+        [maxlength]="maxlength"
+        [minlength]="minlength"
+        [readonly]="readonly"
+        [autocomplete]="name"
+      />
+      <p-inputMask
+        *ngIf="name == 'mobileno' && false"
+        mask="+1(999) 999-9999"
+        [autoClear]="false"
+        [unmask]="true"
+        [placeholder]="placeholder"
+        [formControlName]="name"
+        [disabled]="disabled"
+        [class]="error ? 'p-invalid' : ''"
+        [style]="style"
+        (keypress)="
+          spaces == 0 ? onKeydown($event) : spaces == 1 ? isAlfa($event) : null
+        "
+        [readonly]="readonly"
+        [maxlength]="maxlength"
+        [minlength]="minlength"
+        [autocomplete]="name"
+      >
+      </p-inputMask>
+      <i [class]="icon" class="input-icon"></i>
+    </span>
+
+    <div [ngClass]="className" style="display: flex">
+      <small
+        class="p-error-invalid"
+      >{{error !== undefined ? error : '&nbsp;'}}</small>
+    </div>
+  </div>
+</div>

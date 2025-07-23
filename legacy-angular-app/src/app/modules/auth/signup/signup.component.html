@@ -1,0 +1,336 @@
+<div class="signup-container p-0 m-0">
+  <div class="containe-inner">
+    <div class="signup-content" (keyup.enter)="signUp()">
+      <div class="signup-card">
+        <div>
+          <div class="logo-body">
+            <img
+              src="assets/images/upriselogo.png"
+              class="logo-img"
+              alt="logo"
+            />
+          </div>
+
+          <!-- <h3 class="logo-title">
+            UPRISE RA<span class="logo-subtitle">DIY</span>O
+          </h3> -->
+          <!-- <p class="signup-title">SIGNUP</p> -->
+          <!-- <p class="text-center">Avatar</p> -->
+
+          <div class="text-center default-profile my-2">
+            <!-- <span *ngIf="showDefault == true">
+              <i class="default-profile-pic pi pi-user"></i>
+            </span> -->
+            <span
+              ><img [src]="activeImage?activeImage:'assets/images/profilepic2.png'" alt="" class="uploaded-profile-pic"
+            /></span>
+
+            <span class="d-flex upload_icon_signup">
+              <!-- <input
+                class="upload-img hidden"
+                accept="image/png , image/jpeg"
+                id="file-upload-img"
+                type="file"
+                (change)="onFileImageupload($event)"
+              /> -->
+              <div (click)="profileUpload()" class="upload-btn-outer">
+                <label
+                  for="file-upload-img"
+                  type="button"
+                  class="Upload-btn btn-sm cursor"
+                >
+                  <i class="pi pi-pencil cursor"                 
+                    style="font-size: 10px"
+                  ></i>
+                </label>
+              </div>
+            </span>
+          </div>
+          <div class="grid">
+            <div class="col-6"  style="height :90px">
+              <div class="relative">
+                <div>
+                  <app-input-box-login
+                    [className]="'input_box'"
+                    name="userName"
+                    [spaces]=0
+                    [icon]="'pi pi-user'"
+                    [formGroup]="signupForm"
+                    [type]="'text'"
+                    [maxlength]="30"
+                    [label]="'Username'"
+                    [placeholder]="'Enter your username'"
+                    [error]="
+                      inputValidationsErrors(signupForm, 'userName')
+                        ? 'Username is required.'
+                        : inputPatternValidationsErrors(signupForm, 'userName')
+                        ? 'Username must contain atleast one alphabet'
+                        : errorList['userName']
+                    "
+                  ></app-input-box-login>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6"  style="height :90px">
+              <div class="relative">
+                <app-input-box-login
+                  [className]="'input_box'"
+                  name="email"
+                  [spaces]=0
+                  [icon]="'pi pi-envelope'"
+                  [label]="'Email ID'"
+                  [placeholder]="'Enter your email id'"
+                  [formGroup]="signupForm"
+                  [type]="'email'"
+                  [maxlength]="60"
+                  [error]="
+                    inputValidationsErrors(signupForm, 'email')
+                      ? 'Email is required.'
+                      : inputPatternValidationsErrors(signupForm, 'email')
+                      ? 'Enter an valid email id .'
+                      : errorList['email']
+                  "
+                ></app-input-box-login>
+              </div>
+            </div>
+
+            <!-- Role selection -->
+            <div class="col-6" style="height:90px">
+              <div class="relative">
+                <label for="role" style="font-weight: 500; margin-bottom: 4px; display: block;">Role</label>
+                <select id="role" class="input_box" formControlName="role" style="width: 100%; height: 38px; border-radius: 4px; border: 1px solid #ccc;">
+                  <option value="artist">Artist</option>
+                  <option value="listener">Listener</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-6"  style="height :90px">
+              <div class="relative">
+                <div>
+                  <app-input-box-login
+                    [className]="'input_box'"
+                    name="mobileno"
+                    [spaces]=0
+                    [icon]="'pi pi-phone'"
+                    [formGroup]="signupForm"
+                    [label]="'  Mobile number'"
+                    [placeholder]="'Enter your mobile number'"
+                    [minlength]="10"
+                    [maxlength]="10"
+                    [type]="'text'"
+                    (keypress)="numberOnly($event)"
+                  ></app-input-box-login>
+                </div>
+                <!-- <p class="mt-0 mb-2">City Name: </p>
+                  <p-inputMask 
+                    mask="+1 (999) 999-9999" 
+                    formControlName="mobileno"
+                    placeholder="+1 (999) 999-9999">
+                  </p-inputMask>
+                  <i class="pi pi-phone input-icon"></i>
+                  <div [ngClass]="'input_box'"> 
+                    <small
+                      class="p-error-invalid"
+                      [innerHTML]="inputValidationsErrors(signupForm, 'mobileno')
+                                    ? 'mobile number  is required.'
+                                    : '&nbsp;'
+                                    "
+                    ></small>
+                  </div> -->
+              </div>
+            </div>
+            <div class="col-6"  style="height :90px">
+              <div class="relative">
+                <div>
+                  <app-input-box-login
+                    [className]="'input_box'"
+                    name="bandName"  
+                    [spaces]=1                  
+                    [icon]="'pi pi-users'"
+                    [formGroup]="signupForm"
+                    [type]="'text'"
+                    [maxlength]="30"
+                    [placeholder]="'Enter your band name'"
+                    [label]="'Band name'"
+                    [error]="
+                      inputValidationsErrors(signupForm, 'bandName')
+                        ? 'Band name is required.'
+                        : inputPatternValidationsErrors(signupForm, 'bandName')
+                        ? 'Band name must contain atleast one alphabet'
+                        : errorList['bandName']
+                    "
+                  ></app-input-box-login>
+                </div>
+              </div>
+            </div>
+            <div class="col-6"  style="height :95px;">
+              <div class="relative" style="top:8px">
+                <div >
+                  <app-autocomplete
+                  name="location"
+                  [formGroup]="signupForm"
+                  [options]="{types: ['premise'],componentRestrictions:{country: 'US'}}"
+                  (searchEvent)="AddressChange($event)"
+                  (selectEvent)="address($event)"
+                  [placeholder]="'Enter Location'"
+                  [label]="'Location'"
+                  [icon]="true"
+                  [error]="
+                          inputValidationsErrors(signupForm, 'location')
+                          ? 'Location is required.'
+                          :checkvalidlocation(signupForm, 'location')
+                          ? 'Location must be valid.'
+                          : '&nbsp;'
+                          "
+                ></app-autocomplete>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6"  style="height :90px">
+              <div class="relative">
+                <div>
+                  <app-text-password
+                    [className]="'input_box'"
+                    name="password"
+                    [formGroup]="signupForm"
+                    [placeholder]="'Enter your password'"
+                    [label]="'Password'"
+                    [minlength]="8"
+                    [maxlength]="20"
+                    [error]="
+                      inputValidationsErrors(signupForm, 'password')
+                        ? 'Password is required.'
+                        : inputPatternValidationsErrors(signupForm, 'password')
+                        ? 'Password must have atleast 8 characters consists of a lowercase, uppercase, number and a special character.'
+                        : errorList['password']
+                    "
+                  ></app-text-password>
+                </div>
+              </div>
+            </div>
+            <div class="col-6"  style="height :70px">
+              <div class="relative">
+                <div>
+                  <app-text-password
+                    [className]="'input_box'"
+                    name="confirmpassword"
+                    [placeholder]="'Enter your confirm password'"
+                    [formGroup]="signupForm"
+                    [minlength]="8"
+                    [maxlength]="20"
+                    [label]="'Confirm password'"
+                    [error]="
+                      inputValidationsErrors(signupForm, 'confirmpassword')
+                        ? 'Confirm password is required.'
+                        : checkPasswordErrors(
+                            signupForm,
+                            'confirmpassword',
+                            'password'
+                          )
+                        ? 'Passwords do not match.'
+                        : errorList['confirmpassword']
+                    "
+                  ></app-text-password>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br/>
+          <div class="mb-2 check_box_class">
+            <p-checkbox
+              [(ngModel)]="checked"
+              [binary]="true"
+              inputId="binary"
+            ></p-checkbox>
+            <p class="pl-1" style="font-size: 12px">
+              By creating an account, you agree to the
+              <a class="terms"
+                ><span>Terms and Conditions</span></a
+              >
+              and
+              <a class="terms"
+                ><span>Privacy Policy.</span>
+              </a>
+            </p>
+          </div>
+
+          <div class="button_class">
+            <app-submit-component2
+              [type]="'submit'"
+              [class]="'submit-btn'"
+              [label]="'REGISTER'"
+              [showIcon]="false"
+              (submitForm)="signUp()"
+              [disabled]="
+                !signupForm.valid || !checked || disableSubmit || isLoading || disablelocationSubmit
+              "
+              [loading]="isLoading"
+              [ifHasError]="hasError"
+            ></app-submit-component2>
+          </div>
+          <div class="footer_content">
+            <p class="my-1">
+              Already have an account?
+              <a routerLink="/" style="color: #d7fd2c"> Login</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--avatar upload-->
+<div  class="profile_pic_model">
+  <p-dialog
+    header="Title"
+    [modal]="true"
+    [(visible)]="profilePic"
+    [style]="{ width: '800px' }"
+    [draggable]="false"
+    styleClass="active"
+    [contentStyle]="{
+      'overflow-y': 'auto',
+      'overflow-x': 'hidden',
+      'max-height': '80vh',
+      border: '0.6px solid rgba(240, 240, 240, 0.2)'
+    }"
+  >
+  <!-- <div class="welcome_line">Hey!! Welcome</div><br>
+  <div class="welcome_line">Choose your avatar that suits you best </div>
+  <div class="grid" style="margin-top: 30px;max-height: 450px;overflow: auto;">
+    <div class="col-2" *ngFor="let img of avatars; let index = index;">
+      <img
+        [src]="img.url"
+        alt="Image"
+        height="130"
+        [ngClass]="img.id == activeIndex ? 'img_avatar_active' : 'img_avatar'"
+        (click)="imageClick(img,index)"
+      />
+    </div>
+  </div>
+  <div style="display: flex;flex-direction: row;width: 100%;justify-content: end;">
+    <button
+         pButton
+         [disabled]="this?.activeIndex==null"
+        (click)="closeprofilepic()" 
+        label="Continue"
+        class="continue_btn">
+    </button>
+    <button pButton label="Cancel" (click)="cancelprofilepic()" class="continue_btn"></button>
+  </div> -->
+  <app-avatar 
+    [avatarId]="this.activeIndex?this.activeIndex:null"
+    [avatar]="this.activeImage?this.activeImage:null"
+    [clickedImage]="this.clickedImage?this.clickedImage:null"
+    [clickedIndex]="this.clickedIndex?this.clickedIndex:null"
+    (saveModel)="saveModel($event)"
+    (clickModel)="clickModel($event)"
+    (cancelModel)="cancelModel($event)"
+    (removeModel)="removeavatar($event)"></app-avatar>
+  </p-dialog>
+  </div>
+  

@@ -1,0 +1,79 @@
+<div class="bandconfirm-container p-0 m-0">
+  <div class="container-inner">
+    <div class="bandconfirm-content">
+      <div class="bandconfirm-card">
+        <div>
+          <div class="logo-body">
+            <img
+              src="assets/images/upriselogo.png"
+              class="logo-img"
+              alt="logo"
+            />
+          </div>
+          <!-- <h3 class="logo-title">
+            UP<span class="logo-subtitle">RISE</span>
+          </h3> -->
+        </div>
+
+        <div *ngIf="this.currentURL == '/band-denied'">
+          <p class="bandform-text">We missed you. hope to see you.</p>
+          <br />
+          <!-- <div class="grid text-center">
+            <div class="col-12 band-btns">
+              <div style="width: 130px">
+                <app-submit-component2
+                  [type]="'button'"
+                  [class]="'submit-btn'"
+                  [label]="'Go back'"
+                  [showIcon]="false"
+                >
+                </app-submit-component2>
+              </div>
+            </div>
+          </div> -->
+        </div>
+        <div *ngIf="this.currentURL == '/band-accepted'">
+          <p class="bandform-text">
+            Welcome to {{ this?.userData?.title | titlecase }} Band! You have
+            been sucessfully added to our band.
+          </p>
+          <br />
+          <div class="grid text-center">
+            <div class="col-12 band-btns">
+              <div style="width: 130px">
+                <app-submit-component2
+                  [type]="'button'"
+                  [class]="'submit-btn'"
+                  [label]="'Login'"
+                  [showIcon]="false"
+                  (submitForm)="login()"
+                >
+                </app-submit-component2>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="this.currentURL == '/profilecreated'">
+          <p class="bandform-text">
+            You have been sucessfully created your profile.
+          </p>
+          <br />
+          <div class="grid text-center">
+            <div class="col-12 band-btns">
+              <div style="width: 130px">
+                <app-submit-component2
+                  [type]="'button'"
+                  [class]="'submit-btn'"
+                  [label]="'Login'"
+                  [showIcon]="false"
+                  (submitForm)="login()"
+                >
+                </app-submit-component2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

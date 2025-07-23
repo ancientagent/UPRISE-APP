@@ -1,0 +1,215 @@
+<div class="signup-container p-0 m-0">
+  <div class="containe-inner">
+    <div class="signup-content" (keyup.enter)="signUp()">
+      <div class="signup-card">
+        <div>
+          <div class="logo-body">
+            <img
+              src="assets/images/upriselogo.png"
+              class="logo-img mb-2"
+              alt="logo"
+            />
+          </div>    
+          <!-- <h3 class="logo-title">
+              UP<span class="logo-subtitle">RISE</span>
+            </h3> -->
+          <!-- <p class="signup-title">SIGNUP</p> -->
+          <!-- <p class="text-center">Avatar</p> -->
+
+          <div class="text-center default-profile">
+            <!-- <span *ngIf="showDefault == true">
+              <i class="default-profile-pic pi pi-user"></i>
+            </span> -->
+
+            <span
+            ><img [src]="activeImage?activeImage:'assets/images/profilepic2.png'" alt="" class="uploaded-profile-pic"
+            /></span>
+
+            <span class="d-flex upload_icon_signup">
+              <!-- <input
+                class="upload-img hidden"
+                accept="image/png , image/jpeg"
+                id="file-upload-img"
+                type="file"
+                (change)="onFileImageupload($event)"
+              /> -->
+              <div (click)="profileUpload()" class="upload-btn-outer">
+                <label
+                  for="file-upload-img"
+                  type="button"
+                  class="Upload-btn btn-sm cursor"
+                >
+                  <i class="pi pi-pencil cursor" style="font-size: 10px"></i>
+                </label>
+              </div>
+            </span>
+          </div>
+          <br />
+          <div class="grid">
+            <div class="col-6" style="height :90px">
+              <div class="relative">
+                <div>
+                  <app-input-box-login
+                    [className]="'input_box'"
+                    name="userName"
+                    [icon]="'pi pi-user'"
+                    [spaces]=0
+                    [formGroup]="listenerForm"
+                    [type]="'text'"
+                    [maxlength]="30"
+                    [label]="'Username'"
+                    [placeholder]="'Enter your username'"
+                    [error]="
+                      inputValidationsErrors(listenerForm, 'userName')
+                        ? 'Username is required.'
+                        : inputPatternValidationsErrors(listenerForm, 'userName')
+                        ? 'Username must contain atleast one alphabet'
+                        : errorList['userName']
+                    "
+                  ></app-input-box-login>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6" style="height :90px">
+              <div class="relative">
+                <app-input-box-login
+                  [className]="'input_box'"
+                  name="email"
+                  [spaces]=0
+                  [label]="'Email ID'"
+                  [icon]="'pi pi-envelope'"
+                  [placeholder]="'Enter your email id'"
+                  [formGroup]="listenerForm"
+                  [type]="'email'"
+                  [maxlength]="60"
+                  [readonly]="true"
+                  [error]="
+                    inputValidationsErrors(listenerForm, 'email')
+                      ? 'Email is required.'
+                      : inputPatternValidationsErrors(listenerForm, 'email')
+                      ? 'Enter an valid email id .'
+                      : errorList['email']
+                  "
+                ></app-input-box-login>
+              </div>
+            </div>
+
+            <div class="col-6" style="height :115px">
+              <div class="relative">
+                <div>
+                  <app-text-password
+                    [className]="'input_box'"
+                    name="password"
+                    [formGroup]="listenerForm"
+                    [placeholder]="'Enter password'"
+                    [type]="'password'"
+                    [label]="'Password'"
+                    [minlength]="8"
+                    [maxlength]="20"
+                    [error]="
+                      inputValidationsErrors(listenerForm, 'password')
+                        ? 'Password is required.'
+                        : inputPatternValidationsErrors(
+                            listenerForm,
+                            'password'
+                          )
+                        ? 'Password must have atleast 8 characters consists of a lowercase, uppercase, number and a special character.'
+                        : errorList['password']
+                    "
+                  ></app-text-password>
+                </div>
+              </div>
+            </div>
+            <div class="col-6" style="height :115px">
+              <div class="relative">
+                <div>
+                  <app-text-password
+                    [className]="'input_box'"
+                    name="confirmpassword"
+                    [placeholder]="'Enter confirm password'"
+                    [formGroup]="listenerForm"
+                    [type]="'password'"
+                    [minlength]="8"
+                    [maxlength]="20"
+                    [label]="'Confirm password'"
+                    [error]="
+                      inputValidationsErrors(listenerForm, 'confirmpassword')
+                        ? 'Confirm password is required.'
+                        : checkPasswordErrors(
+                            listenerForm,
+                            'confirmpassword',
+                            'password'
+                          )
+                        ? 'Passwords do not match.'
+                        : errorList['confirmpassword']
+                    "
+                  ></app-text-password>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-0 check_box_class">
+            <p-checkbox
+              [(ngModel)]="checked"
+              [binary]="true"
+              inputId="binary"
+            ></p-checkbox>
+            <p class="pl-1" style="font-size: 12px">
+              By creating an account, you agree to the
+              <a href="" class="terms"
+                ><span>Terms and Conditions</span></a
+              >
+              and
+              <a href="" class="terms"
+                ><span>Privacy Policy.</span>
+              </a>
+            </p>
+          </div>
+
+          <div class="button_class">
+            <app-submit-component2
+              [type]="'button'"
+              [class]="'submit-btn'"
+              [label]="'REGISTER'"
+              [showIcon]="false"
+              (submitForm)="signUp()"
+              [disabled]="
+                !listenerForm.valid || !checked || disableSubmit || isLoading
+              "
+              [loading]="isLoading"
+              [ifHasError]="hasError"
+            ></app-submit-component2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--avatar upload-->
+<div  class="profile_pic_model">
+  <p-dialog
+    header="Title"
+    [modal]="true"
+    [(visible)]="profilePic"
+    [style]="{ width: '800px' }"
+    [draggable]="false"
+    styleClass="active"
+    [contentStyle]="{
+      'overflow-y': 'auto',
+      'overflow-x': 'hidden',
+      'max-height': '80vh',
+      border: '0.6px solid rgba(240, 240, 240, 0.2)'
+    }"
+  >
+  <app-avatar 
+    [avatarId]="this.activeIndex?this.activeIndex:null"
+    [avatar]="this.activeImage?this.activeImage:null"
+    [clickedImage]="this.clickedImage?this.clickedImage:null"
+    [clickedIndex]="this.clickedIndex?this.clickedIndex:null"
+    (saveModel)="saveModel($event)"
+    (clickModel)="clickModel($event)"
+    (cancelModel)="cancelModel($event)"
+    (removeModel)="removeavatar($event)"></app-avatar>
+  </p-dialog>
+  </div>

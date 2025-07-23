@@ -1,0 +1,32 @@
+<div *ngIf="showIcon" class="errorMessage">
+  <i
+    [ngClass]="
+      ifHasError && message !== undefined
+        ? 'pi pi-times-circle errorIcon'
+        : '&nbsp;'
+    "
+  ></i>
+  <i
+    [ngClass]="
+      !ifHasError && message !== undefined
+        ? 'pi pi-check-circle didSucceed'
+        : '&nbsp;'
+    "
+  ></i>
+</div>
+<div [ngClass]="ifHasError ? 'loginError' : 'successMessage'">
+  {{ message !== undefined ? message : "&nbsp;" }}
+</div>
+<div>
+  <button
+    style="width: 100%"
+    pButton
+    [icon]="icon"
+    [class]="class"
+    [label]="label"
+    [style]="style"
+    [disabled]="disabled"
+    [loading]="loading"
+    (click)="onSubmit()"
+  ></button>
+</div>

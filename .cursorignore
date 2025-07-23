@@ -1,7 +1,11 @@
 # Ignore the local git repository to protect the project's version history.
 .git/
 
-# Ignore ONLY the specific .env file in the project root, which contains secrets.
-# The leading slash (/) anchors the pattern to the root directory, ensuring
-# that it does NOT incorrectly ignore other files like .env.example or .env.dev.
-/.env
+# Explicitly ignore ONLY the main .env file that contains secrets.
+# This allows .env.example, .env.backup, and .env.dev to be visible in Cursor.
+.env
+
+# Explicitly allow environment template and backup files
+!.env.example
+!.env.backup
+!.env.dev

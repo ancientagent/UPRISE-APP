@@ -17,10 +17,14 @@ export function* getUserGenresWorkerSaga(action) {
     const response = yield call(getAllGenresRequest, action.payload);
 
     // Check if the response and the data inside are valid
-    // Backend returns {data: genres} directly as response.data
-    if (response && response.data && Array.isArray(response.data)) {
-      console.log('--- getUserGenres SAGA: SUCCESS! Response Data ---', response.data);
+    // Backend returns {data: genres} as response.data.data
+    if (response && response.data && response.data.data && Array.isArray(response.data.data)) {
+      console.log('--- getUserGenres SAGA: SUCCESS! Response Data ---', response.data.data);
       // Dispatch the success action with the actual list of genres
+      yield put(getUserGenresActions.succeed(response.data.data));
+    } else if (response && response.data && Array.isArray(response.data)) {
+      // Fallback for direct array response
+      console.log('--- getUserGenres SAGA: SUCCESS! Direct Array Response ---', response.data);
       yield put(getUserGenresActions.succeed(response.data));
     } else {
       // Handle cases where the API returns a success status but no data

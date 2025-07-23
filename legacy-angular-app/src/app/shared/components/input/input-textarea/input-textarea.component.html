@@ -1,0 +1,33 @@
+<div
+  class="p-input-filled"
+  [formGroup]="formGroup"
+  autocomplete="off"
+  [class]="class"
+>
+  <div class="grid textBoxMargin">
+    <div class="col-12 labelNames formFields">
+      <label>{{ label }} &nbsp;</label>
+    </div>
+    <div class="col-12 inputField formFields">
+      <textarea
+        pInputTextarea
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        autocomplete="off"
+        [formControlName]="name"
+        [class]="error ? 'p-invalid' : ''"
+        [style]="style"
+        [rows]="rows"
+        [cols]="cols"
+        [maxLength]="maxLength"
+        autoResize="autoResize"
+      ></textarea>
+      <div [ngClass]="className" style="position: relative; top: 5px">
+        <small
+          class="p-error-invalid"
+          [innerHTML]="error !== undefined ? error : '&nbsp;'"
+        ></small>
+      </div>
+    </div>
+  </div>
+</div>

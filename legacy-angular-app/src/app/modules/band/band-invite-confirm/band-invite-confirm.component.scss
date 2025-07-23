@@ -1,0 +1,75 @@
+@import '/src/colors.scss';
+
+.bandconfirm-container {
+  background: url("../../../../assets/images/bg-img.png");
+  background-size: cover;
+  height: 100vh;
+  box-sizing: border-box;
+}
+.bandconfirm-content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.bandconfirm-card {
+  color: #fff;
+  background: rgba(51, 51, 51, 0.3);
+  border: 0.6px solid rgba(240, 240, 240, 0.2);
+  box-sizing: border-box;
+  border-radius: 2px;
+  width: 600px;
+  height: 390px;
+  padding: 30px 65px;
+}
+.logo-body {
+  text-align: center;
+}
+.logo-img {
+  height: 100px;
+  width: 100px;
+  text-align: center;
+}
+.logo-title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 28px;
+  text-align: center;
+  color: #ffffff;
+}
+.logo-subtitle {
+  color: $primary;
+}
+.bandconfirm-title {
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: $primary;
+  margin: 0 auto;
+}
+.bandform-text {
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 30px;
+  text-align: center;
+  color: #ffffff;
+}
+.band-decline {
+  border: 1px solid $primary;
+  box-sizing: border-box;
+  filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.24));
+  border-radius: 30px;
+  width: 130px;
+  padding: 5px;
+  line-height: 28px;
+  color: $primary;
+  cursor: pointer;
+}
+.band-btns {
+  display: flex;
+  justify-content: center;
+}

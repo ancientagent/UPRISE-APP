@@ -1,0 +1,37 @@
+<div [formGroup]="formGroup" [class]="class">
+  <div class="labelNames formFields" style="padding-left:0px;">
+    <label>{{ label }} &nbsp;</label>
+  </div>
+  <div class="inputField pt-2 formFields" >
+    <p-dropdown
+      [options]="options"
+      [showClear]="false"
+      [showClear]="showClear"
+      [filter]="filter"
+      [filterBy]="filterBy"
+      [(ngModel)]="selectedRange"
+      [placeholder]="placeholder"
+      [formControlName]="name"
+      [disabled]="disable"
+      [emptyFilterMessage]="'emptyFilterMessage'"
+      [optionLabel]="labelName"
+      [class]="error ? 'p-invalid' : ''"
+      [style]="{
+        width: '100%',
+        display:'flex',
+        alignItems:'center',
+        background: '#0f0f0f',
+        color: '#fff',
+        boxShadow: 'none',
+        border: '0.6px solid rgba(240, 240, 240, 0.3)'
+      }"
+    ></p-dropdown>
+  </div>
+
+  <div style="position: relative; top: 5px">
+    <small
+      class="p-error-invalid"
+      [innerHTML]="error !== undefined ? error : '&nbsp;'"
+    ></small>
+  </div>
+</div>

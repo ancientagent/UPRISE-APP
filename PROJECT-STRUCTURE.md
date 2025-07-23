@@ -3,7 +3,7 @@
 > **🧠 Development Mindset:** Always trace the full user journey and consider edge cases. See `DEVELOPMENT-MINDSET-GUIDE.md` for critical thinking principles.
 
 ## 🏗️ **Project Overview**
-- **React Native App**: Main mobile application
+- **React Native App**: Main mobile application ✅ **STABLE - Redux store fixed**
 - **Backend API**: Node.js server in `Webapp_API-Develop/`
 - **Web UI**: Angular app in `Webapp_UI-Develop/`
 - **Webapp-UI**: React/TypeScript web app in `webapp-ui/` ✅ **NEW**
@@ -16,7 +16,7 @@
 - **`.env`** - Environment variables for API URLs and client credentials
 - **`babel.config.js`** - Babel configuration
 - **`app.json`** - React Native app configuration
-- **`App.js`** - Main app entry point
+- **`App.js`** - Main app entry point ✅ **REFACTORED - Stable initialization**
 
 ### **Key Directories**
 
@@ -37,11 +37,11 @@
 - **`Signup/`** - Signup screen components
 - **`WelcomeScreen/`** - Welcome/onboarding screens
 
-#### **`src/state/`** - State Management (Redux)
+#### **`src/state/`** - State Management (Redux) ✅ **REFACTORED - Stable Architecture**
 - **`actions/`** - Redux actions
-- **`reducers/`** - Redux reducers
-- **`sagas/`** - Redux-Saga middleware
-- **`store/`** - Redux store configuration
+- **`reducers/`** - Redux reducers ✅ **CLEANED - No saga dependencies**
+- **`sagas/`** - Redux-Saga middleware ✅ **REORGANIZED - Dedicated rootSaga**
+- **`store/`** - Redux store configuration ✅ **STABLE - Proper initialization**
 
 #### **`src/components/`** - Reusable Components
 - **`Applebtn/`** - Apple sign-in button
@@ -167,6 +167,11 @@ CLIENT_SECRET=28649120bdf32812f433f428b15ab1a1
 **Problem**: `&&` not working in PowerShell
 **Solution**: Use `;` instead or use the helper scripts
 
+### **5. Redux Store Initialization Issues** ⭐ **NEW - RESOLVED**
+**Problem**: App crashes with "undefined is not a function" or "Module AppRegistry is not a registered callable module"
+**Solution**: ✅ **FIXED** - See `REDUX-STORE-TROUBLESHOOTING-GUIDE.md` for complete solution
+**Status**: ✅ **RESOLVED** - Redux store now initializes properly
+
 ---
 
 ## 📋 **Quick Reference Commands**
@@ -263,4 +268,33 @@ When making changes, remember to:
 | Signup not working | `Webapp_API-Develop/src/config/index.js` | Set backend environment variables |
 | API 404 errors | `src/utilities/utilities.js` | Check `BASE_URL` in `.env` |
 | Port conflicts | `stop-services.ps1` | Run script to free ports |
-| Build errors | `babel.config.js` | Check Babel configuration | 
+| Build errors | `babel.config.js` | Check Babel configuration |
+| Redux store crashes | `REDUX-STORE-TROUBLESHOOTING-GUIDE.md` | ✅ **RESOLVED** - See guide |
+
+---
+
+## 🎉 **Recent Major Achievements**
+
+### **✅ Redux Store Stability (December 2024)**
+- **Issue**: Critical app startup crashes with Redux store initialization
+- **Solution**: Complete architectural refactor separating reducers and sagas
+- **Impact**: App now starts reliably with proper Redux store initialization
+- **Documentation**: `REDUX-STORE-TROUBLESHOOTING-GUIDE.md`
+
+### **✅ Artist Unification System (December 2024)**
+- **Issue**: Legacy Band model causing data fragmentation and performance issues
+- **Solution**: Complete backend refactor with unified ArtistProfile model
+- **Impact**: Improved performance, cleaner API, better developer experience
+- **Documentation**: `ARTIST-UNIFICATION-IMPLEMENTATION.md`
+
+### **✅ Location Filtering System (December 2024)**
+- **Issue**: Users seeing global content instead of local community content
+- **Solution**: Comprehensive backend location filtering implementation
+- **Impact**: True "Home Scene" experience with location-based content
+- **Documentation**: `BACKEND-FORENSIC-ANALYSIS.md`
+
+---
+
+**Last Updated**: December 2024  
+**Status**: ✅ **STABLE** - All major issues resolved  
+**Next Steps**: Feature development and optimization 

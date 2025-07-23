@@ -1,32 +1,40 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable global-require */
-import React, { useEffect } from 'react';
-import { LogBox } from 'react-native';
+/**
+ * @format
+ */
+import React from 'react';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
 import TrackPlayer from 'react-native-track-player';
-import { PersistGate } from 'redux-persist/integration/react';
-import { Provider } from 'react-redux';
-import AppNavigator from './src/navigators/AppNavigator';
-import reduxManager from './src/state/store';
-import { navigationRef } from './src/navigators/RootNavigation';
-import { requestUserPermission, notificationListener } from './src/utilities/notificationServices';
-import messaging from '@react-native-firebase/messaging';
+import { LogBox } from 'react-native';
 
-const { store, storePersistor } = reduxManager;
+// Core application imports
+import AppNavigator from './src/navigators/AppNavigator';
+import { navigationRef } from './src/navigators/RootNavigation';
+import { store, storePersistor } from './src/state/store';
+import { requestUserPermission, notificationListener } from './src/utilities/notificationServices';
 
 const App = () => {
-  useEffect(() => {
-    requestUserPermission();
-    notificationListener();
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
+  React.useEffect(() => {
+    // This code runs only after the component has successfully mounted.
     SplashScreen.hide();
-    TrackPlayer.setupPlayer();
+
+    // Safely initialize services with error handling.
+    try {
+      TrackPlayer.setupPlayer();
+      requestUserPermission();
+      notificationListener();
+    } catch (error) {
+      console.error('UPRISE Service Initialization Error:', error);
+    }
+
+    // Ignore non-critical warnings.
     LogBox.ignoreLogs(['Reanimated 2']);
-    return unsubscribe;
-  }, []);
+    LogBox.ignoreLogs(["Require cycle:"]);
+    LogBox.ignoreLogs(["`new NativeEventEmitter()`"]);
+
+  }, []); // The empty array ensures this runs only once.
 
   return (
     <Provider store={store}>

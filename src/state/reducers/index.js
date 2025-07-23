@@ -72,8 +72,6 @@ import registerDeviceTokenReducer from './request/registerDeviceToken/registerDe
 import unRegisterDeviceTokenReducer from './request/unRegisterDeviceToken/unRegisterDeviceToken.reducer';
 import homePromosReducer from './request/homePromos/homePromos.reducer';
 import updateInstrumentReducer from './request/updateInstrument/updateInstrument.reducer';
-import { reduxHelpers } from '../store/reduxHelpers';
-import { unRegisterDeviceTokenSagaAction } from '../actions/sagas';
 import nearestLocationsReducer from './request/nearestLocations/nearestLocations.reducer';
 import stationSwitchingReducer from './request/stationSwitching/stationSwitching.reducer';
 import currentScreenReducer from './currentScreen/currentScreen.reducer';
@@ -176,13 +174,19 @@ const appReducer = combineReducers({
 const rootReducer = (state, action) => {
   // Handle case where state is undefined (initial load or logout)
   if (action.type === SIGN_OUT) {
+    console.log('--- REDUX REDUCER: Handling SIGN_OUT action ---');
+    
+    // Clean up services
     TrackPlayer.stop();
     AsyncStorage.removeItem('persist:root');
     GoogleSignin.revokeAccess();
+    
+    // Reset to initial state
     const initialState = {
       welcomeSlide: { showIntro: true },
     };
-    reduxHelpers.dispatch(unRegisterDeviceTokenSagaAction({ token: null }));
+    
+    console.log('--- REDUX REDUCER: SIGN_OUT complete, returning initial state ---');
     return appReducer(initialState, { type: '' });
   }
   

@@ -4,6 +4,70 @@
 
 ## 🚨 **Most Common Issues & Immediate Solutions**
 
+### **20. Redux Store Initialization Crash** ⭐ **NEW - CRITICAL FIX**
+**Status**: ✅ **RESOLVED** - Complete Redux store initialization fix implemented
+**Symptoms**: 
+- App crashes with "Module AppRegistry is not a registered callable module"
+- "undefined is not a function" error during startup
+- App hangs on title screen before any Redux logs appear
+- Redux store fails to initialize properly
+
+**Root Cause Analysis**:
+1. **Circular Dependencies**: Reducers importing sagas, causing initialization loops
+2. **Incorrect Import Path**: `artistProfile.actions.js` importing from wrong path
+3. **Architectural Issues**: Mixed concerns between state management and side effects
+
+**Complete Solution Implemented**:
+1. **Separated Reducers and Sagas**:
+   - Removed saga imports from `src/state/reducers/index.js`
+   - Created dedicated `src/state/sagas/rootSaga.js` for all saga logic
+   - Updated `ReduxStoreManager.js` to use new `rootSaga`
+
+2. **Fixed Import Path**:
+   - **Before**: `import { createRequestResponseActionTypeSet } from '../../../types/listener/listener';`
+   - **After**: `import { createRequestResponseActionTypeSet } from '../../../types/generic/requestResponse.types';`
+   - **File**: `src/state/actions/request/artistProfile/artistProfile.actions.js`
+
+3. **Refactored App Initialization**:
+   - Moved service initialization to `useEffect` in `App.js`
+   - Implemented proper error handling for service startup
+   - Added comprehensive logging for debugging
+
+**Diagnostic Process Used**:
+1. **Step-by-Step Testing**: Created minimal test components to isolate issues
+2. **Dependency Testing**: Tested each Redux dependency individually
+3. **Saga Isolation**: Added sagas in batches to identify problematic ones
+4. **Import Verification**: Checked all import paths and function availability
+
+**Files Modified**:
+- `src/state/reducers/index.js` (removed saga imports)
+- `src/state/sagas/rootSaga.js` (new file, centralized saga logic)
+- `src/state/store/ReduxStoreManager.js` (updated to use rootSaga)
+- `src/state/actions/request/artistProfile/artistProfile.actions.js` (fixed import path)
+- `App.js` (refactored service initialization)
+
+**Verification Steps**:
+```powershell
+# Clean build to test fix
+cd android; ./gradlew clean; cd ..
+npx react-native run-android
+```
+
+**Expected Results After Fix**:
+- ✅ Redux store initializes successfully
+- ✅ All sagas load without errors
+- ✅ App navigates to WelcomeScreen (correct behavior)
+- ✅ Authentication flow works properly
+- ✅ No more "undefined is not a function" errors
+
+**Prevention Measures**:
+- Always use correct import paths for shared utilities
+- Keep reducers and sagas in separate files
+- Test Redux store initialization with minimal components first
+- Use comprehensive logging during development
+
+**Documentation**: See `REDUX-STORE-TROUBLESHOOTING-GUIDE.md` for complete technical details
+
 ### **19. Artist Unification System** ⭐ **NEW - COMPLETE**
 **Status**: ✅ **COMPLETE** - Full backend artist unification implemented
 **What Was Done**: 

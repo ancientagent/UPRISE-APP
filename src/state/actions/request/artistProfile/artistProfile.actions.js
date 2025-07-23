@@ -1,4 +1,4 @@
-import { createRequestResponseActionTypeSet } from '../../../types/listener/listener';
+import { createRequestResponseActionTypeSet } from '../../../types/generic/requestResponse.types';
 
 const ActionNamespace = 'ARTIST_PROFILE';
 

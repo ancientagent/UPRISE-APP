@@ -12,11 +12,15 @@
 
 ## 📱 **React Native App (Main Directory)**
 
-### **Environment Configuration**
-- **`.env`** - Environment variables for API URLs and client credentials
+### **Environment Configuration** ✅ **PROPERLY MANAGED**
+- **`.env`** - Environment variables for API URLs and client credentials (❌ **IGNORED** - contains secrets)
+- **`.env.example`** - Complete template with 120 variables (✅ **TRACKED** - visible)
+- **`.env.backup`** - Working configuration backup (✅ **TRACKED** - visible)
 - **`babel.config.js`** - Babel configuration
 - **`app.json`** - React Native app configuration
 - **`App.js`** - Main app entry point ✅ **REFACTORED - Stable initialization**
+
+**✅ Status**: Environment files are now properly protected with multi-layer .gitignore system. Template and backup files are tracked and visible, while secret files remain appropriately ignored.
 
 ### **Key Directories**
 
@@ -58,18 +62,21 @@
 - **Framework**: React + TypeScript + Vite
 
 ### **Key Files**
-- **`.env.example`** - Complete environment template (85+ variables)
+- **`.env.example`** - Complete environment template (3 essential Vite variables) (✅ **TRACKED** - visible)
+- **`.env`** - Environment variables (❌ **IGNORED** - contains secrets)
 - **`package.json`** - Dependencies and scripts
 - **`vite.config.ts`** - Vite configuration
 - **`src/`** - Source code directory
 
-### **Environment Configuration**
+### **Environment Configuration** ✅ **SIMPLIFIED & PROTECTED**
 ```env
 # Vite Environment Variables (must be prefixed with VITE_)
 VITE_API_BASE_URL=http://10.0.2.2:3000
 VITE_CLIENT_ID=437920819fa89d19abe380073d28839c
 VITE_CLIENT_SECRET=28649120bdf32812f433f428b15ab1a1
 ```
+
+**✅ Status**: Webapp-UI environment is simplified to 3 essential variables and properly protected with .gitignore negation patterns.
 
 ### **Setup Instructions**
 1. Copy `webapp-ui/.env.example` to `webapp-ui/.env`
@@ -135,10 +142,17 @@ The backend artist unification has been fully implemented:
 
 **See**: `ARTIST-UNIFICATION-IMPLEMENTATION.md` for complete implementation details
 
-### **Environment Variables Needed**
+### **Backend Environment Variables** ✅ **PROPERLY MANAGED**
 ```bash
 # Server Configuration
 PORT=3000
+NODE_ENV=development
+
+# JWT Configuration (Required for authentication)
+JWT_ACCESS_TOKEN_SECRET=uprise_access_token_secret_key_2024
+JWT_REFRESH_TOKEN_SECRET=uprise_refresh_token_secret_key_2024
+JWT_ACCESS_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
 
 # Database Configuration
 DB_HOST=localhost
@@ -147,26 +161,36 @@ DB_PASSWORD=postgres
 DB_NAME=postgres
 DB_PORT=5432
 
-# JWT Configuration (Required for authentication)
-JWT_ACCESS_TOKEN_SECRET=uprise_access_token_secret_key_2024
-JWT_REFRESH_TOKEN_SECRET=uprise_refresh_token_secret_key_2024
-JWT_ACCESS_EXPIRES_IN=15m
-JWT_REFRESH_EXPIRES_IN=7d
-
 # Client Authentication
 CLIENT_ID=437920819fa89d19abe380073d28839c
 CLIENT_SECRET=28649120bdf32812f433f428b15ab1a1
+
+# Web URL
+WEB_URL=http://localhost:4321
 ```
+
+**✅ Status**: Backend environment files are properly protected with `sample.env` template tracked and `.env` secrets ignored.
 
 ---
 
 ## 🚀 **Development Scripts**
 
 ### **PowerShell Scripts (Root Directory)**
+- **`launch-and-build.ps1`** ⭐ **UPDATED** - Complete workflow with legacy Metro mode
 - **`start-all.ps1`** - Start both backend and Metro bundler
 - **`start-backend.ps1`** - Start backend server only
 - **`start-metro.ps1`** - Start Metro bundler only
+- **`start-metro-legacy.ps1`** ⭐ **NEW** - Start Metro bundler in legacy mode
 - **`stop-services.ps1`** - Stop all services and free ports
+
+### **Recommended Workflow**
+```powershell
+# Complete development workflow with legacy Metro
+.\launch-and-build.ps1
+
+# Stop everything when done
+.\stop-services.ps1
+```
 
 ---
 
@@ -244,11 +268,22 @@ GET_POPULAR_ARTIST_GENRES_STATISTICS=/popular/artist_per_genre
 GET_USERS_STATISTICS=/popular/users
 ```
 
-### **Backend Server (Environment Variables)**
+### **Backend Server (`Webapp_API-Develop/.env`)**
 ```bash
+PORT=3000
+NODE_ENV=development
+JWT_ACCESS_TOKEN_SECRET=uprise_access_token_secret_key_2024
+JWT_REFRESH_TOKEN_SECRET=uprise_refresh_token_secret_key_2024
+JWT_ACCESS_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
+DB_HOST=localhost
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_NAME=postgres
+DB_PORT=5432
 CLIENT_ID=437920819fa89d19abe380073d28839c
 CLIENT_SECRET=28649120bdf32812f433f428b15ab1a1
-PORT=3000
+WEB_URL=http://localhost:4321
 ```
 
 ---
@@ -338,63 +373,4 @@ I have successfully performed a full system audit of the Uprise mobile app and i
 
 1. **`src/services/getAllGenres/getAllGenres.service.js`** - Fixed to use `Config.GET_ALL_GENRES_URL`
 2. **`src/services/onboarding/onboarding.service.js`** - Fixed to use environment variables for all endpoints
-3. **`COMPREHENSIVE-API-ENDPOINT-AUDIT.md`** - Complete audit report with all findings
-4. **`setup-environment.ps1`** - Automated setup script for environment files
-
-### **📋 COMPLETE SOLUTION PROVIDED**
-
-#### **1. Master Endpoint Analysis (Documentation-Led)**
-- ✅ **9 Authentication endpoints** mapped
-- ✅ **15 User Management endpoints** mapped  
-- ✅ **7 Home & Community endpoints** mapped
-- ✅ **7 Statistics endpoints** mapped (recently fixed)
-- ✅ **6 Discovery endpoints** mapped
-- ✅ **8 Radio & Music endpoints** mapped
-- ✅ **3 Onboarding endpoints** mapped
-- ✅ **30+ Additional endpoints** mapped
-
-#### **2. Configuration Audit & Repair**
-- ✅ **85+ environment variables** defined in comprehensive template
-- ✅ **All service files** analyzed for missing Config variables
-- ✅ **Hardcoded URLs** replaced with environment variables
-- ✅ **Backend environment** properly configured
-
-#### **3. Implementation Ready**
-- ✅ **`.env.example` template** with all 85+ variables
-- ✅ **Automated setup script** (`setup-environment.ps1`)
-- ✅ **Service file fixes** applied
-- ✅ **Backend configuration** provided
-
-### **🚀 IMMEDIATE NEXT STEPS**
-
-1. **Run the setup script:**
-   ```powershell
-   .\setup-environment.ps1
-   ```
-
-2. **Edit the generated `.env` file** with your actual values
-
-3. **Restart services:**
-   ```powershell
-   .\stop-services.ps1
-   .\start-all.ps1
-   ```
-
-4. **Test all 85+ API endpoints** to verify they're working
-
-### **📚 DOCUMENTATION CREATED**
-
-- **`COMPREHENSIVE-API-ENDPOINT-AUDIT.md`** - Complete audit report with all findings and solutions
-- **`setup-environment.ps1`** - Automated environment setup script
-- **Complete `.env.example` template** - All 85+ environment variables organized by category
-
-### **🎯 IMPACT**
-
-This audit and fix will resolve:
-- **85+ API calls** that were failing due to undefined environment variables
-- **Statistics endpoints** 404 errors (already fixed)
-- **Onboarding flow** issues due to missing genre endpoints
-- **Home scene creation** problems due to missing location endpoints
-- **All discovery and social features** that were broken
-
-The solution is **immediately implementable** and will ensure every single API call in the mobile app is properly configured and working correctly. 
+3. **`

@@ -3,16 +3,18 @@
 ## 📋 **Overview**
 This document tracks ALL environment-related files across the Uprise project after comprehensive cleanup and organization.
 
+**✅ STATUS UPDATE**: All environment file visibility issues have been resolved. Template and backup files are now properly tracked and visible, while secret `.env` files remain appropriately ignored.
+
 ---
 
-## 🗂️ **Environment Files Inventory (CLEANED)**
+## 🗂️ **Environment Files Inventory (CLEANED & PROTECTED)**
 
 ### **1. React Native App (Main Directory)**
-| File | Status | Purpose | Location |
-|------|--------|---------|----------|
-| `.env` | ✅ **EXISTS** | React Native environment variables | `Mobile_App-Dev/.env` (hidden by .gitignore) |
-| `.env.example` | ✅ **COMPLETE** | 85+ variable template | `Mobile_App-Dev/.env.example` |
-| `.env.backup` | ✅ **BACKUP** | Backup of working config | `Mobile_App-Dev/.env.backup` |
+| File | Status | Purpose | Location | Visibility |
+|------|--------|---------|----------|------------|
+| `.env` | ✅ **EXISTS** | React Native environment variables | `Mobile_App-Dev/.env` | ❌ **IGNORED** (contains secrets) |
+| `.env.example` | ✅ **COMPLETE** | 85+ variable template | `Mobile_App-Dev/.env.example` | ✅ **TRACKED** |
+| `.env.backup` | ✅ **BACKUP** | Backup of working config | `Mobile_App-Dev/.env.backup` | ✅ **TRACKED** |
 
 **React Native Config Path**: `Mobile_App-Dev/src/config/index.js` (line 2)
 ```javascript
@@ -20,11 +22,11 @@ require('dotenv').config({ path: path.resolve(__dirname, '..', '..', '.env') });
 ```
 
 ### **2. Backend API (Webapp_API-Develop)**
-| File | Status | Purpose | Location |
-|------|--------|---------|----------|
-| `.env` | ✅ **EXISTS** | Backend environment variables | `Webapp_API-Develop/.env` (hidden by .gitignore) |
-| `sample.env` | ✅ **COMPLETE** | Complete backend template | `Webapp_API-Develop/sample.env` |
-| `.env.backup` | ✅ **BACKUP** | Backup of backend config | `Webapp_API-Develop/.env.backup` |
+| File | Status | Purpose | Location | Visibility |
+|------|--------|---------|----------|------------|
+| `.env` | ✅ **EXISTS** | Backend environment variables | `Webapp_API-Develop/.env` | ❌ **IGNORED** (contains secrets) |
+| `sample.env` | ✅ **COMPLETE** | Complete backend template | `Webapp_API-Develop/sample.env` | ✅ **TRACKED** |
+| `.env.backup` | ✅ **BACKUP** | Backup of backend config | `Webapp_API-Develop/.env.backup` | ✅ **TRACKED** |
 
 **Backend Config Path**: `Webapp_API-Develop/src/config/index.js` (line 2)
 ```javascript
@@ -32,20 +34,42 @@ require('dotenv').config({ path: path.resolve(__dirname, '..', '..', '.env') });
 ```
 
 ### **3. Webapp-UI (React/TypeScript Web App)**
-| File | Status | Purpose | Location |
-|------|--------|---------|----------|
-| `.env` | ✅ **EXISTS** | Web UI environment variables | `webapp-ui/.env` (hidden by .gitignore) |
-| `.env.example` | ✅ **COMPLETE** | Web UI template | `webapp-ui/.env.example` |
+| File | Status | Purpose | Location | Visibility |
+|------|--------|---------|----------|------------|
+| `.env` | ✅ **EXISTS** | Web UI environment variables | `webapp-ui/.env` | ❌ **IGNORED** (contains secrets) |
+| `.env.example` | ✅ **COMPLETE** | Web UI template | `webapp-ui/.env.example` | ✅ **TRACKED** |
 
 **Web UI Config**: Uses Vite environment variables
 
 ### **4. Legacy Angular App (ARCHIVED)**
-| File | Status | Purpose | Location |
-|------|--------|---------|----------|
-| `.env` | ❌ **CORRUPTED** | Legacy Angular config | `legacy-angular-app/src/.env` (corrupted) |
-| `config.json` | ⚠️ **OUTDATED** | Generated config | `legacy-angular-app/config.json` |
+| File | Status | Purpose | Location | Visibility |
+|------|--------|---------|----------|------------|
+| `.env` | ❌ **CORRUPTED** | Legacy Angular config | `legacy-angular-app/src/.env` | ❌ **ARCHIVED** |
+| `config.json` | ⚠️ **OUTDATED** | Generated config | `legacy-angular-app/config.json` | ❌ **ARCHIVED** |
 
 **Status**: ❌ **DEPRECATED** - Replaced by React/TypeScript web app
+
+---
+
+## 🛡️ **Protection Status**
+
+### **✅ Files Properly Tracked (Visible)**
+- `Mobile_App-Dev/.env.example` - Complete template with 85+ variables
+- `Mobile_App-Dev/.env.backup` - Working configuration backup
+- `Webapp_API-Develop/sample.env` - Complete backend template
+- `Webapp_API-Develop/.env.backup` - Backend configuration backup
+- `webapp-ui/.env.example` - Vite environment template
+
+### **❌ Files Properly Ignored (Hidden)**
+- `Mobile_App-Dev/.env` - Contains actual secrets
+- `Webapp_API-Develop/.env` - Contains actual secrets
+- `webapp-ui/.env` - Contains actual secrets
+
+### **🔧 Protection Mechanisms**
+- **Multi-layer .gitignore**: Explicit negation patterns prevent accidental ignoring
+- **Automated scripts**: `protect-environment-files.ps1` ensures proper tracking
+- **Validation tools**: `validate-gitignore.ps1` verifies protection status
+- **Documentation**: Comprehensive guides for maintenance and recovery
 
 ---
 

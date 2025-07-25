@@ -11,7 +11,12 @@ export default function homePromosRequest(payload) {
   console.log('--- HOME PROMOS SERVICE: payload.state ---', payload.state);
   console.log('--- HOME PROMOS SERVICE: payload.accessToken ---', payload.accessToken ? 'Present' : 'Missing');
   
-  const finalUrl = Config.HOME_PROMOS.replace('{STATENAME}', payload.state);
+  // FIXED: Send station as query parameter instead of URL parameter
+  // Backend expects: /home/promos?state=Austin
+  // Not: /home/promos/Austin
+  const baseUrl = '/home/promos';
+  const finalUrl = `${baseUrl}?state=${encodeURIComponent(payload.state)}`;
+  
   console.log('--- HOME PROMOS SERVICE: finalUrl ---', finalUrl);
   
   const requestOptions = {

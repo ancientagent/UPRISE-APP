@@ -32,20 +32,39 @@ export function* homeEventsWorkerSaga() {
     console.log('--- EVENTS SAGA: userLocation ---', userLocation);
     console.log('--- EVENTS SAGA: LoginData ---', LoginData);
     
-    const location = 'radioPrefrence.location';
-    const prefrence = 'user.radioPrefrence.location';
-    const locationFromSelected = _.get(selectedLocation, location, '');
-    const locationFromLogin = _.get(LoginData, prefrence, '');
-    const locationFromUser = userLocation.city;
+    // FIXED: Use the correct location data from UserStationPrefrence
+    // The location should come from the user's station preference created during onboarding
+    let userStationLocation = '';
+    
+    // Try to get location from user details (which should contain station preference)
+    // Backend returns: user.radioPrefrence.location, user.city, user.state
+    if (selectedLocation && selectedLocation.radioPrefrence && selectedLocation.radioPrefrence.location) {
+      userStationLocation = selectedLocation.radioPrefrence.location;
+    } else if (selectedLocation && selectedLocation.city) {
+      userStationLocation = selectedLocation.city;
+    } else if (selectedLocation && selectedLocation.state) {
+      userStationLocation = selectedLocation.state;
+    } else if (userLocation && userLocation.city) {
+      userStationLocation = userLocation.city;
+    } else if (LoginData && LoginData.user && LoginData.user.city) {
+      userStationLocation = LoginData.user.city;
+    }
     
     console.log('--- EVENTS SAGA: Location resolution ---');
-    console.log('--- EVENTS SAGA: locationFromSelected ---', locationFromSelected);
-    console.log('--- EVENTS SAGA: locationFromLogin ---', locationFromLogin);
-    console.log('--- EVENTS SAGA: locationFromUser ---', locationFromUser);
+    console.log('--- EVENTS SAGA: userStationLocation ---', userStationLocation);
+    console.log('--- EVENTS SAGA: selectedLocation.radioPrefrence ---', selectedLocation?.radioPrefrence);
+    console.log('--- EVENTS SAGA: selectedLocation.city ---', selectedLocation?.city);
+    console.log('--- EVENTS SAGA: selectedLocation.state ---', selectedLocation?.state);
+    
+    // If we still don't have a location, use a default
+    if (!userStationLocation) {
+      console.log('--- EVENTS SAGA: No location found, using default ---');
+      userStationLocation = 'Austin'; // Default fallback
+    }
     
     const payload = {
       accessToken: userToken,
-      state: locationFromSelected || locationFromLogin || locationFromUser,
+      state: userStationLocation,
     };
     
     console.log('--- EVENTS SAGA: API payload prepared ---', payload);

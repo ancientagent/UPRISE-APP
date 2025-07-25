@@ -11,7 +11,12 @@ export default function homeEventsRequest(payload) {
   console.log('--- HOME EVENTS SERVICE: payload.state ---', payload.state);
   console.log('--- HOME EVENTS SERVICE: payload.accessToken ---', payload.accessToken ? 'Present' : 'Missing');
   
-  const finalUrl = Config.HOME_EVENTS.replace('{STATENAME}', payload.state);
+  // FIXED: Send station as query parameter instead of URL parameter
+  // Backend expects: /home/feed/events?station=Austin
+  // Not: /home/feed/events/Austin
+  const baseUrl = '/home/feed/events';
+  const finalUrl = `${baseUrl}?station=${encodeURIComponent(payload.state)}`;
+  
   console.log('--- HOME EVENTS SERVICE: finalUrl ---', finalUrl);
   
   const requestOptions = {

@@ -97,7 +97,7 @@ Write-Host "`n=== UPRISE MOBILE APP - LAUNCH AND BUILD SCRIPT ===" -ForegroundCo
 Write-Host "This script will:" -ForegroundColor White
 Write-Host "1. Stop any existing services" -ForegroundColor White
 Write-Host "2. Start backend server" -ForegroundColor White
-Write-Host "3. Start Metro bundler" -ForegroundColor White
+Write-Host "3. Start Metro bundler in LEGACY MODE" -ForegroundColor White
 Write-Host "4. Verify services are running" -ForegroundColor White
 Write-Host "5. Clean and build Android app" -ForegroundColor White
 Write-Host "6. Install and launch app on emulator" -ForegroundColor White
@@ -117,12 +117,18 @@ if (-not $SkipServices) {
         exit 1
     }
     
-    Write-Host "`n--- STEP 3: Metro Bundler ---" -ForegroundColor Yellow
-    Write-Status "Metro bundler will be started automatically by the build process..." "Cyan"
+    Write-Host "`n--- STEP 3: Starting Metro Bundler in LEGACY MODE ---" -ForegroundColor Yellow
+    Write-Status "Starting Metro bundler in legacy mode..." "Cyan"
+    Start-Process cmd.exe -ArgumentList "/k", "powershell.exe -ExecutionPolicy Bypass -File .\start-metro-legacy.ps1"
+    
+    if (-not (Wait-ForService -ServiceName "Metro" -Port $MetroPort)) {
+        Write-Error "Metro bundler failed to start. Exiting."
+        exit 1
+    }
     
     Write-Host "`n--- STEP 4: Verifying Services ---" -ForegroundColor Yellow
     Write-Success "✅ Backend server is running on port $BackendPort"
-    Write-Status "Metro bundler will be verified during build process" "Cyan"
+    Write-Success "✅ Metro bundler is running on port $MetroPort (LEGACY MODE)"
 } else {
     Write-Warning "Skipping service startup (SkipServices flag used)"
 }
@@ -151,7 +157,8 @@ if (-not $SkipBuild) {
     try {
         $env:NODE_OPTIONS="--openssl-legacy-provider"
         Write-Status "Set NODE_OPTIONS to: $env:NODE_OPTIONS" "Green"
-        npx react-native run-android
+        Write-Status "Metro is already running in legacy mode, proceeding with build..." "Green"
+        npx react-native run-android --no-packager
         Write-Success "App built and installed successfully!"
     } catch {
         Write-Error "Failed to build and install app: $_"
@@ -164,7 +171,7 @@ if (-not $SkipBuild) {
 Write-Host "`n=== LAUNCH COMPLETE ===" -ForegroundColor Green
 Write-Success "🎉 Uprise mobile app is ready!"
 Write-Status "Backend: http://localhost:$BackendPort" "Cyan"
-Write-Status "Metro: http://localhost:$MetroPort" "Cyan"
+Write-Status "Metro: http://localhost:$MetroPort (LEGACY MODE)" "Cyan"
 Write-Status "App should be running on your emulator" "Cyan"
 Write-Host "`nPress any key to exit..." -ForegroundColor Gray
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") 

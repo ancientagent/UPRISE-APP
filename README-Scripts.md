@@ -23,10 +23,15 @@ This directory contains PowerShell scripts to help you start and stop the develo
 
 ## Environment Configuration
 
-### **React Native App (`.env`)**
-- Contains 85+ environment variables for API endpoints
+### **React Native App (`.env` - Main Directory)**
+- Contains 120 environment variables for API endpoints
 - Includes authentication, user preferences, statistics, and more
 - Template available in `.env.example` (main project)
+
+### **Backend API (`Webapp_API-Develop/.env`)**
+- Contains 15 basic server configuration variables
+- Includes database, JWT, client credentials, and server settings
+- Template available in `Webapp_API-Develop/sample.env`
 
 ### **Webapp-UI (`.env.example`)**
 - Complete environment template in `webapp-ui/.env.example`
@@ -78,12 +83,52 @@ Stops all services and frees up ports.
 .\stop-services.ps1
 ```
 
+### 5. `launch-and-build.ps1` ⭐ **UPDATED - LEGACY METRO**
+Comprehensive script that handles the complete development workflow with **legacy Metro mode**.
+- Stops existing services
+- Starts backend server in separate window
+- **Starts Metro bundler in LEGACY MODE** in separate window
+- Verifies services are running
+- Cleans Android build
+- Builds and deploys app to emulator
+- **Always uses legacy Metro mode** for consistent behavior
+
+**Usage:**
+```powershell
+.\launch-and-build.ps1
+```
+
+**Features:**
+- ✅ **Legacy Metro Mode**: Always uses `--legacy` flag for Metro bundler
+- ✅ **Service Verification**: Checks that both backend and Metro are running
+- ✅ **Clean Build**: Automatically cleans Android build before deployment
+- ✅ **Error Handling**: Comprehensive error checking and reporting
+- ✅ **Colored Output**: Clear status messages with color coding
+
+### 6. `start-metro-legacy.ps1` ⭐ **NEW**
+Starts the React Native Metro bundler specifically in legacy mode.
+- Sets NODE_OPTIONS for legacy OpenSSL provider
+- Uses `--legacy` flag for Metro bundler
+- Includes cache reset for clean builds
+
+**Usage:**
+```powershell
+.\start-metro-legacy.ps1
+```
+
+**Note**: This script is called automatically by `launch-and-build.ps1` to ensure legacy mode is always used.
+
 ## Quick Start Guide
 
-1. **Start everything at once:**
+1. **Start everything with legacy Metro (recommended):**
    ```powershell
-   .\start-all.ps1
+   .\launch-and-build.ps1
    ```
+   **This will:**
+   - ✅ Start backend server
+   - ✅ Start Metro bundler in **LEGACY MODE**
+   - ✅ Clean and build Android app
+   - ✅ Install on emulator
 
 2. **Stop everything when done:**
    ```powershell
@@ -93,7 +138,13 @@ Stops all services and frees up ports.
 3. **Start services individually:**
    ```powershell
    .\start-backend.ps1    # In one terminal
-   .\start-metro.ps1      # In another terminal
+   .\start-metro-legacy.ps1  # In another terminal (LEGACY MODE)
+   ```
+
+4. **Manual build (if Metro is already running):**
+   ```powershell
+   cd android; ./gradlew clean; cd ..
+   npx react-native run-android --no-packager
    ```
 
 ## Benefits

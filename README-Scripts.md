@@ -14,6 +14,8 @@ This directory contains PowerShell scripts to help you start and stop the develo
 - **Comprehensive Genre System** - 97 genres with sub-genres ✅ **IMPLEMENTED**
 - **Statistics Dashboard** - All endpoints working ✅ **FIXED**
 - **Artist Unification System** - Unified ArtistProfile model ✅ **COMPLETE**
+- **Song Upload System** - Complete file upload with feed integration ✅ **COMPLETE**
+- **Architectural Realignment** - Feed = notifications only, Player = music only ✅ **CRITICAL FIX COMPLETE**
 
 ### **Webapp-UI** (React/TypeScript Web App)
 - Modern React web application in `webapp-ui/` directory
@@ -158,6 +160,8 @@ Starts the React Native Metro bundler specifically in legacy mode.
 
 ## 📚 **Documentation**
 
+- **`ARCHITECTURAL-REALIGNMENT-IMPLEMENTATION.md`** - Complete architectural realignment implementation report
+- **`PROJECT-MANAGER-REPORT-SONG-UPLOAD-SUCCESS.md`** - Complete song upload system implementation report
 - **`GOOGLE-PLACES-API-DOCUMENTATION.md`** - Complete Google Places API integration guide
 - **`QUICK-FIXES.md`** - Common issues and solutions
 - **`PROJECT-STRUCTURE.md`** - Detailed project architecture

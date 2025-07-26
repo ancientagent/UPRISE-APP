@@ -35,7 +35,7 @@ const SignupForm = props => {
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
   const [showRequire, setShowRequire] = useState(false);
   const [selectedGender, setSelectedGender] = useState('PREFER NOT TO SAY');
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
   
   console.log('--- SIGNUP FORM is rendering ---');
   console.log('Navigation:', navigation);

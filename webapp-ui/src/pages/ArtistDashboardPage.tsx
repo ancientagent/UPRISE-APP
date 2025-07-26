@@ -95,6 +95,52 @@ const ArtistDashboardPage: React.FC = () => {
     }
   };
 
+  // Error display component
+  const ErrorDisplay = ({ error, onRetry }: { error: string; onRetry: () => void }) => (
+    <div style={{ 
+      padding: '20px', 
+      backgroundColor: '#f8d7da', 
+      borderRadius: '8px', 
+      border: '2px dashed #dc3545',
+      textAlign: 'center',
+      margin: '20px 0'
+    }}>
+      <p style={{ margin: '0 0 15px 0', color: '#721c24', fontSize: '16px' }}>
+        ⚠️ Unable to load data: {error}
+      </p>
+      <button 
+        onClick={onRetry}
+        style={{ 
+          padding: '8px 16px', 
+          backgroundColor: '#dc3545', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '4px',
+          cursor: 'pointer',
+          fontSize: '14px'
+        }}
+      >
+        Retry
+      </button>
+    </div>
+  );
+
+  // Loading display component
+  const LoadingDisplay = ({ message }: { message: string }) => (
+    <div style={{ 
+      padding: '20px', 
+      backgroundColor: '#f8f9fa', 
+      borderRadius: '8px', 
+      border: '2px dashed #dee2e6',
+      textAlign: 'center',
+      margin: '20px 0'
+    }}>
+      <p style={{ margin: '0', color: '#6c757d', fontSize: '16px' }}>
+        🔄 {message}
+      </p>
+    </div>
+  );
+
   const renderSongSlots = () => {
     const songs = band?.songs || band?.band?.songs || [];
     const slots = [];
@@ -144,34 +190,15 @@ const ArtistDashboardPage: React.FC = () => {
 
   const renderEvents = () => {
     if (eventsStatus === 'loading') {
-      return (
-        <div style={{ 
-          padding: '20px', 
-          backgroundColor: '#f8f9fa', 
-          borderRadius: '8px', 
-          border: '2px dashed #dee2e6',
-          textAlign: 'center'
-        }}>
-          <p style={{ margin: '0', color: '#6c757d' }}>
-            Loading events...
-          </p>
-        </div>
-      );
+      return <LoadingDisplay message="Loading events..." />;
     }
 
     if (eventsStatus === 'failed') {
       return (
-        <div style={{ 
-          padding: '20px', 
-          backgroundColor: '#f8d7da', 
-          borderRadius: '8px', 
-          border: '2px dashed #dc3545',
-          textAlign: 'center'
-        }}>
-          <p style={{ margin: '0', color: '#721c24' }}>
-            Error loading events: {eventsError}
-          </p>
-        </div>
+        <ErrorDisplay 
+          error={eventsError || 'Failed to load events'} 
+          onRetry={() => token && dispatch(fetchEvents(token))} 
+        />
       );
     }
 
@@ -205,10 +232,74 @@ const ArtistDashboardPage: React.FC = () => {
     );
   };
 
-  if (status === 'loading') return <div>Loading Dashboard...</div>;
-  if (status === 'failed') return <div>Error: {error}</div>;
+  // Handle loading states with proper error handling
+  if (status === 'loading' && eventsStatus === 'loading') {
+    return (
+      <div style={{ maxWidth: 1000, margin: '40px auto', background: '#fff', color: '#222', padding: 24, borderRadius: 8 }}>
+        <LoadingDisplay message="Loading your dashboard..." />
+      </div>
+    );
+  }
+
+  // Handle band data errors
+  if (status === 'failed') {
+    return (
+      <div style={{ maxWidth: 1000, margin: '40px auto', background: '#fff', color: '#222', padding: 24, borderRadius: 8 }}>
+        <ErrorDisplay 
+          error={error || 'Failed to load band data'} 
+          onRetry={() => token && dispatch(fetchBandData(token))} 
+        />
+        <div style={{ marginTop: '20px' }}>
+          <button
+            onClick={() => navigate('/create-band')}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#007bff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '14px'
+            }}
+          >
+            Create New Band Profile
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle events data errors (but band data is available)
+  if (eventsStatus === 'failed' && status === 'succeeded') {
+    return (
+      <div style={{ maxWidth: 1000, margin: '40px auto', background: '#fff', color: '#222', padding: 24, borderRadius: 8 }}>
+        <h2>Artist Dashboard</h2>
+        <ErrorDisplay 
+          error={eventsError || 'Failed to load events'} 
+          onRetry={() => token && dispatch(fetchEvents(token))} 
+        />
+        {/* Show band data if available, even if events failed */}
+        {band && (
+          <div>
+            <h3>Rotation Stack</h3>
+            <p>Manage your songs for the Fair Play system.</p>
+            <div className="song-slots" style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+              gap: '20px', 
+              marginTop: '20px' 
+            }}>
+              {renderSongSlots()}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   const bandTitle = band?.title || band?.band?.title || 'Artist Dashboard';
   const bandDescription = band?.description || band?.band?.description;
+  
   return (
     <div style={{ maxWidth: 1000, margin: '40px auto', background: '#fff', color: '#222', padding: 24, borderRadius: 8 }}>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>

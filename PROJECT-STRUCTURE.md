@@ -30,6 +30,7 @@
 - **`request/request.service.js`** - Base HTTP request service
 - **`constants/Constants.js`** - API constants (GET, POST, etc.)
 - **`googlePlaces/googlePlaces.service.js`** - Google Places API integration ⭐ **NEW**
+- **`getAllGenres/getAllGenres.service.js`** - Genre fetching service ✅ **FIXED - Uses correct endpoint**
 
 #### **`src/utilities/`** - Utility Functions
 - **`utilities.js`** - Contains `getRequestURL()` function for building API URLs
@@ -40,6 +41,7 @@
 - **`Login/`** - Login screen components
 - **`Signup/`** - Signup screen components
 - **`WelcomeScreen/`** - Welcome/onboarding screens
+- **`userLocation/`** - Home Scene Creation screen ✅ **FIXED - Uses correct genre endpoint**
 
 #### **`src/state/`** - State Management (Redux) ✅ **REFACTORED - Stable Architecture**
 - **`actions/`** - Redux actions
@@ -114,14 +116,23 @@ VITE_CLIENT_SECRET=28649120bdf32812f433f428b15ab1a1
 - **`src/routes/auth.js`** - Authentication routes (signup, login, etc.) ✅ **ARTIST UNIFICATION COMPLETE**
 - **`src/routes/user.js`** - User profile and artist management ✅ **ARTIST UNIFICATION COMPLETE**
 - **`src/routes/band.js`** - Legacy band routes (⚠️ **DEPRECATED**)
-- **`src/routes/home.js`** - Home feed and community content ✅ **Location filtering working**
+- **`src/routes/home.js`** - Home feed and community content ✅ **ARCHITECTURAL REALIGNMENT COMPLETE**
 - **`src/routes/discovery.js`** - Discovery content ✅ **Location filtering working**
-- **`src/routes/radio.js`** - Radio system with tier-based filtering
+- **`src/routes/radio.js`** - Radio system with tier-based filtering ✅ **MUSIC PLAYBACK ONLY**
 - **`src/routes/statistics.js`** - Statistics with proper location filtering
 - **`src/utils/fairPlayAlgorithm.js`** - Fair Play algorithm for song selection
 - **`src/database/models/artistprofile.js`** - Unified ArtistProfile model ✅ **NEW**
 - **`src/database/migrations/20241202000002-unify-bands-into-artist-profiles.js`** - Artist unification migration ✅ **NEW**
 - **`package.json`** - Backend dependencies and scripts
+
+### **Architectural Realignment** ✅ **COMPLETE - CRITICAL FIX**
+The backend has been completely realigned with core architectural principles:
+- **✅ Feed = Notifications ONLY**: `/home/feed` returns only notification-based data
+- **✅ Player = Music ONLY**: `/radio/song` handles all music discovery and playback
+- **✅ Data Integrity**: Correct genre endpoints and user preference validation
+- **✅ Separation of Concerns**: Clear distinction between community updates and music content
+
+**See**: `ARCHITECTURAL-REALIGNMENT-IMPLEMENTATION.md` for complete implementation details
 
 ### **Location Filtering System** ✅ **RESOLVED**
 The backend location filtering has been implemented and tested:
@@ -331,6 +342,18 @@ When making changes, remember to:
 
 ## 🎉 **Recent Major Achievements**
 
+### **✅ Architectural Realignment (July 2025)** ⭐ **NEW - CRITICAL FIX**
+- **Issue**: Feed returning songs directly, violating core architectural principles
+- **Solution**: Complete three-part systemic fix implementing proper separation of concerns
+- **Impact**: Feed now returns notifications only, Player handles music only, data integrity restored
+- **Documentation**: `ARCHITECTURAL-REALIGNMENT-IMPLEMENTATION.md`
+
+### **✅ Song Upload System (July 2025)** ⭐ **NEW**
+- **Issue**: Missing song upload functionality with feed integration
+- **Solution**: Complete song upload system with file storage, metadata extraction, and feed integration
+- **Impact**: Artists can now upload songs that appear in community feeds with proper filtering
+- **Documentation**: `PROJECT-MANAGER-REPORT-SONG-UPLOAD-SUCCESS.md`
+
 ### **✅ Redux Store Stability (December 2024)**
 - **Issue**: Critical app startup crashes with Redux store initialization
 - **Solution**: Complete architectural refactor separating reducers and sagas
@@ -351,8 +374,8 @@ When making changes, remember to:
 
 ---
 
-**Last Updated**: December 2024  
-**Status**: ✅ **STABLE** - All major issues resolved  
+**Last Updated**: July 2025  
+**Status**: ✅ **STABLE** - All major issues resolved including architectural realignment  
 **Next Steps**: Feature development and optimization 
 
 ## 🎉 **COMPREHENSIVE SYSTEM AUDIT COMPLETE**

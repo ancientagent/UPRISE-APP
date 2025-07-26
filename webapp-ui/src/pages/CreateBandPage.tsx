@@ -12,6 +12,8 @@ const CreateBandPage: React.FC = () => {
   const [instagram, setInstagram] = useState('');
   const [youtube, setYoutube] = useState('');
   const [twitter, setTwitter] = useState('');
+  const [cityName, setCityName] = useState('');
+  const [stateName, setStateName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const token = useSelector(selectCurrentToken);
@@ -41,6 +43,8 @@ const CreateBandPage: React.FC = () => {
       if (instagram) formData.append('instagram', instagram);
       if (youtube) formData.append('youtube', youtube);
       if (twitter) formData.append('twitter', twitter);
+      if (cityName) formData.append('cityName', cityName);
+      if (stateName) formData.append('stateName', stateName);
       await createBand(formData, token);
       navigate('/dashboard');
     } catch (error: any) {
@@ -92,6 +96,25 @@ const CreateBandPage: React.FC = () => {
             accept="image/*"
             onChange={handleLogoChange}
             style={{ fontSize: '16px' }}
+          />
+        </div>
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Home Scene Location:</label>
+          <input
+            type="text"
+            placeholder="City (e.g., Austin)"
+            value={cityName}
+            onChange={(e) => setCityName(e.target.value)}
+            style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '16px', marginBottom: '10px' }}
+            required
+          />
+          <input
+            type="text"
+            placeholder="State (e.g., Texas)"
+            value={stateName}
+            onChange={(e) => setStateName(e.target.value)}
+            style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '16px' }}
+            required
           />
         </div>
         <div style={{ marginBottom: '20px' }}>

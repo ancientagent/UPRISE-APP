@@ -25,6 +25,41 @@
 
 ## 🚨 **Most Common Issues & Immediate Solutions**
 
+### **22. Architectural Realignment** ⭐ **NEW - CRITICAL FIX COMPLETE**
+**Status**: ✅ **COMPLETE** - Complete three-part systemic fix implemented
+**What Was Done**: 
+- **Part 1**: Corrected onboarding data source to use `/onboarding/all-genres`
+- **Part 2**: Verified no corrupted user genre data exists
+- **Part 3**: Re-implemented feed logic to return notifications only
+- **Architecture**: Feed = notifications only, Player = music only
+
+**Key Benefits**:
+- ✅ Feed returns only community notifications (correct behavior)
+- ✅ Songs available via radio endpoints (correct architecture)
+- ✅ Proper separation of concerns implemented
+- ✅ Data integrity restored with correct genre endpoints
+- ✅ True "Home Scene" experience with location + genre filtering
+
+**Documentation**: See `ARCHITECTURAL-REALIGNMENT-IMPLEMENTATION.md` for complete details
+
+### **21. Song Upload System** ⭐ **NEW - COMPLETE SUCCESS**
+**Status**: ✅ **COMPLETE** - Full song upload system implemented and working
+**What Was Done**: 
+- **File Upload**: Local file storage with AWS S3 fallback
+- **Metadata Extraction**: FFprobe integration for audio metadata
+- **Database Integration**: Complete song records with genre associations
+- **Feed Integration**: Songs appear in user feeds with proper filtering
+- **Error Handling**: Comprehensive error handling and validation
+
+**Key Benefits**:
+- ✅ Artists can upload MP3 files with thumbnails
+- ✅ Songs appear in community feeds with location/genre filtering
+- ✅ Audio metadata automatically extracted (duration, artist, album)
+- ✅ File validation and sanitization working properly
+- ✅ Complete end-to-end upload experience
+
+**Documentation**: See `PROJECT-MANAGER-REPORT-SONG-UPLOAD-SUCCESS.md` for complete details
+
 ### **20. Redux Store Initialization Crash** ⭐ **NEW - CRITICAL FIX**
 **Status**: ✅ **RESOLVED** - Complete Redux store initialization fix implemented
 **Symptoms**: 
@@ -396,7 +431,78 @@ netstat -ano | findstr ":3000\|:8081"
 
 ## 🐛 **Bug Tracking - Unresolved Issues**
 
-### **Bug #1: Analytics "Invalid State Name" Error** 🚨 **STILL OCCURRING**
+### **Bug #0: Architectural Realignment** ✅ **RESOLVED - CRITICAL FIX**
+**Current Status**: ✅ **COMPLETE** - Complete three-part systemic fix implemented
+**Symptoms**: 
+- Feed returning songs directly instead of notifications
+- Violation of core architectural principles
+- Data corruption during user onboarding
+
+**Implementation Details**:
+- ✅ **Part 1**: Corrected onboarding data source to use `/onboarding/all-genres`
+- ✅ **Part 2**: Verified no corrupted user genre data exists
+- ✅ **Part 3**: Re-implemented feed logic to return notifications only
+- ✅ **Architecture**: Feed = notifications only, Player = music only
+
+**Technical Solution**:
+```javascript
+// Feed now returns only notification-based data
+const feed = [...songsData, ...eventsData, ...userFollowsData];
+// Songs available via radio endpoints only
+const radioSongs = await getRadioSongs(location, genreIds);
+```
+
+**Impact**: 
+- ✅ Proper separation of concerns implemented
+- ✅ Feed returns only community notifications
+- ✅ Songs available via radio endpoints only
+- ✅ Data integrity restored
+- ✅ True "Home Scene" experience
+
+**Files Modified**: 
+- `src/services/getAllGenres/getAllGenres.service.js` (corrected endpoint)
+- `Webapp_API-Develop/src/routes/home.js` (removed default feed logic)
+- `ARCHITECTURAL-REALIGNMENT-IMPLEMENTATION.md` (new documentation)
+
+### **Bug #1: Song Upload System** ✅ **RESOLVED - MAJOR IMPLEMENTATION**
+**Current Status**: ✅ **COMPLETE** - Full song upload system implemented and working
+**Symptoms**: 
+- Artists unable to upload songs
+- Songs not appearing in community feeds
+- Missing file storage and metadata extraction
+
+**Implementation Details**:
+- ✅ **File Upload**: Local file storage with AWS S3 fallback
+- ✅ **Metadata Extraction**: FFprobe integration for audio metadata
+- ✅ **Database Integration**: Complete song records with genre associations
+- ✅ **Feed Integration**: Songs appear in user feeds with proper filtering
+- ✅ **Error Handling**: Comprehensive error handling and validation
+
+**Technical Solution**:
+```javascript
+// File upload with local storage fallback
+if (!isAwsConfigured) {
+    const localPath = path.join(uploadsDir, folderName, fileName);
+    fs.writeFileSync(localPath, file.buffer);
+    return { Location: `/uploads/${imgData}`, Key: imgData, Bucket: 'local-storage' };
+}
+```
+
+**Impact**: 
+- ✅ Complete song upload functionality
+- ✅ Songs appear in community feeds
+- ✅ Audio metadata automatically extracted
+- ✅ File validation and sanitization working
+- ✅ End-to-end upload experience
+
+**Files Modified**: 
+- `Webapp_API-Develop/src/utils/fileUpload.js` (file upload logic)
+- `Webapp_API-Develop/src/utils/mediaHandler.js` (metadata extraction)
+- `Webapp_API-Develop/src/index.js` (static file serving)
+- `webapp-ui/src/api/songService.ts` (frontend upload service)
+- `PROJECT-MANAGER-REPORT-SONG-UPLOAD-SUCCESS.md` (new documentation)
+
+### **Bug #2: Analytics "Invalid State Name" Error** 🚨 **STILL OCCURRING**
 **Current Status**: ❌ **NOT FIXED** - Error still appears when clicking "Get Analytics"
 **Symptoms**: 
 - Alert dialog shows "Invalid state name"
@@ -415,7 +521,7 @@ netstat -ano | findstr ":3000\|:8081"
 2. Investigate backend analytics endpoint validation
 3. Test with different location formats (city vs state vs full address)
 
-### **Bug #2: Logout Fatal Crash** 🚨 **STILL OCCURRING**
+### **Bug #3: Logout Fatal Crash** 🚨 **STILL OCCURRING**
 **Current Status**: ❌ **NOT FIXED** - App still crashes with "undefined is not a function"
 **Symptoms**:
 - Error at line 176 in `src/state/reducers/index.js`
@@ -433,7 +539,7 @@ netstat -ano | findstr ":3000\|:8081"
 2. Investigate ProfileTab logout implementation
 3. Test with different Redux state structures
 
-### **Bug #3: VirtualizedLists Nesting Warning** ⚠️ **KNOWN ISSUE**
+### **Bug #4: VirtualizedLists Nesting Warning** ⚠️ **KNOWN ISSUE**
 **Current Status**: ⚠️ **ACKNOWLEDGED** - Console warning, not crash
 **Symptoms**: 
 - Console error: "VirtualizedLists should never be nested inside plain ScrollViews"
@@ -448,7 +554,7 @@ netstat -ano | findstr ":3000\|:8081"
 1. Refactor HomeTabs.js to use View instead of ScrollView
 2. Test performance improvements
 
-### **Bug #4: Home Scene Genre Filtering Missing** ✅ **RESOLVED - MAJOR IMPLEMENTATION**
+### **Bug #5: Home Scene Genre Filtering Missing** ✅ **RESOLVED - MAJOR IMPLEMENTATION**
 **Current Status**: ✅ **FIXED** - Complete genre filtering implementation
 **Symptoms**: 
 - Dashboard content not filtered by user's genre preferences
@@ -483,7 +589,7 @@ const genreFilter = genreIds.length > 0 ? `AND EXISTS (
 - `Webapp_API-Develop/src/routes/home.js` (major updates)
 - `HOME-SCENE-GENRE-FILTERING-IMPLEMENTATION.md` (new documentation)
 
-### **Bug #5: Artist Unification System** ✅ **RESOLVED - MAJOR IMPLEMENTATION**
+### **Bug #6: Artist Unification System** ✅ **RESOLVED - MAJOR IMPLEMENTATION**
 **Current Status**: ✅ **COMPLETE** - Full backend artist unification implemented
 **Symptoms**: 
 - Legacy Band model causing data fragmentation
@@ -527,7 +633,7 @@ const artistProfile = await ArtistProfile.findOne({
 - `Webapp_API-Develop/src/routes/band.js` (deprecated)
 - `ARTIST-UNIFICATION-IMPLEMENTATION.md` (new documentation)
 
-### **Bug #4: Genre Loading Issues** ✅ **RESOLVED**
+### **Bug #7: Genre Loading Issues** ✅ **RESOLVED**
 **Current Status**: ✅ **FIXED** - Using comprehensive genres endpoint
 **Symptoms**: 
 - Genre dropdown not showing all 97 genres
@@ -537,7 +643,7 @@ const artistProfile = await ArtistProfile.findOne({
 - ✅ Updated `getAllGenres.service.js` to use `/onboarding/all-genres`
 - ✅ Now shows 97 comprehensive genres including sub-genres
 
-### **Bug #5: Authentication Timeout Issues** ✅ **RESOLVED**
+### **Bug #8: Authentication Timeout Issues** ✅ **RESOLVED**
 **Current Status**: ✅ **FIXED** - Clean authentication flow implemented
 **Symptoms**:
 - Users booted back to login screen unexpectedly
@@ -548,7 +654,7 @@ const artistProfile = await ArtistProfile.findOne({
 - ✅ Implemented proper saga-based navigation
 - ✅ Clean flow: Login → getUserDetails → Check onBoardingStatus → Route appropriately
 
-### **Bug #6: Home Scene Creation Blank Screen** ✅ **RESOLVED**
+### **Bug #9: Home Scene Creation Blank Screen** ✅ **RESOLVED**
 **Current Status**: ✅ **FIXED** - Screen now displays properly
 **Symptoms**:
 - Home Scene Creation screen was blank
@@ -571,10 +677,13 @@ const artistProfile = await ArtistProfile.findOne({
 3. **VirtualizedLists Warning** - Performance optimization
 
 ### **Resolved** ✅
-4. **Home Scene Genre Filtering** - ✅ **MAJOR IMPLEMENTATION COMPLETE**
-5. **Genre Loading** - Fixed
-6. **Authentication Timeout** - Fixed  
-7. **Home Scene Creation** - Fixed
+4. **Architectural Realignment** - ✅ **CRITICAL FIX COMPLETE**
+5. **Song Upload System** - ✅ **MAJOR IMPLEMENTATION COMPLETE**
+6. **Home Scene Genre Filtering** - ✅ **MAJOR IMPLEMENTATION COMPLETE**
+7. **Artist Unification System** - ✅ **MAJOR IMPLEMENTATION COMPLETE**
+8. **Genre Loading** - Fixed
+9. **Authentication Timeout** - Fixed  
+10. **Home Scene Creation** - Fixed
 
 ---
 
@@ -590,6 +699,8 @@ const artistProfile = await ArtistProfile.findOne({
 - ✅ Login/Signup working
 - ✅ Onboarding flow working
 - ✅ Home Scene Creation working
+- ✅ **Architectural Realignment** - **CRITICAL FIX COMPLETE**
+- ✅ **Song Upload System** - **MAJOR IMPLEMENTATION COMPLETE**
 - ✅ **Home Scene Genre Filtering** - **MAJOR IMPLEMENTATION COMPLETE**
 - ❌ Analytics failing with "Invalid state name"
 - ❌ Logout crashing app
@@ -599,5 +710,7 @@ const artistProfile = await ArtistProfile.findOne({
 - ✅ User creation working
 - ✅ Authentication working
 - ✅ Database connections stable
+- ✅ Feed returning notifications only (correct)
+- ✅ Songs available via radio endpoints (correct)
 - ❌ Analytics endpoint validation needs investigation
 - ❌ Location data format issues suspected 

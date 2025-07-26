@@ -15,11 +15,12 @@ import SignupForm from './Signup.form';
 import Loader from '../../components/Loader/Loader';
 import Applebtn from '../../components/Applebtn/Applebtn';
 import { signupRequestSagaAction } from '../../state/actions/sagas';
+import { signupRequestActions } from '../../state/actions/request/signup/signup.actions';
 
 const Signup = props => {
   const { navigation, route } = props;
   const showLoading = useSelector(state => state.signup.isWaiting);
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
   console.log('--- SIGNUP SCREEN is rendering ---');
   console.log('Props:', props);
@@ -33,10 +34,17 @@ const Signup = props => {
   useEffect(() => {
     console.log('=== SIGNUP SCREEN MOUNTED ===');
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    
+    // Reset signup loading state when screen mounts
+    if (showLoading) {
+      console.log('=== SIGNUP SCREEN: Resetting stuck loading state ===');
+      dispatch(signupRequestActions.reset());
+    }
+    
     return async () => {
       BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
     };
-  }, []);
+  }, [showLoading, dispatch]);
 
   const handleSignupComplete = (data) => {
     console.log('=== SIGNUP COMPLETE CALLED ===');

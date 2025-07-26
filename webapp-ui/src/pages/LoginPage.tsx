@@ -18,24 +18,49 @@ const LoginPage: React.FC = () => {
     setLoading(true);
 
     try {
+      console.log('Attempting login with email:', email);
       const response = await login(email, password);
-      console.log('Login successful:', response);
+      console.log('Login response:', response);
       
-      // Extract user data and token from response
-      const { user, accessToken } = response.data;
+      // Handle different response structures
+      let user, accessToken;
+      
+      if (response.data) {
+        // Response has data wrapper
+        user = response.data.user || response.data;
+        accessToken = response.data.accessToken || response.data.token;
+      } else {
+        // Response is direct
+        user = response.user || response;
+        accessToken = response.accessToken || response.token;
+      }
+      
+      console.log('Extracted user data:', user);
+      console.log('Extracted token:', accessToken ? 'Token present' : 'No token');
+      
+      // Validate that we have the required data
+      if (!user || !accessToken) {
+        throw new Error('Invalid response format: missing user data or token');
+      }
       
       // Store token in localStorage
-      if (accessToken) {
         localStorage.setItem('userToken', accessToken);
-      }
+      console.log('Token stored in localStorage');
       
       // Dispatch Redux action to save credentials
       dispatch(setCredentials({ user, accessToken }));
+      console.log('Credentials dispatched to Redux store');
       
-      // Redirect to dashboard
-      navigate('/dashboard');
+      // Small delay to ensure Redux state is updated
+      setTimeout(() => {
+        console.log('Redirecting to dashboard...');
+        navigate('/dashboard', { replace: true });
+      }, 100);
+      
     } catch (err: any) {
-      setError(err.message || 'Login failed. Please try again.');
+      console.error('Login error:', err);
+      const errorMessage = err.message || err.response?.data?.message || 'Login failed. Please try again.';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -45,7 +70,14 @@ const LoginPage: React.FC = () => {
     <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px' }}>
       <h2>Login to UPRISE</h2>
       {error && (
-        <div style={{ color: 'red', marginBottom: '10px' }}>
+        <div style={{ 
+          color: 'white', 
+          backgroundColor: '#dc3545', 
+          padding: '10px', 
+          borderRadius: '4px',
+          marginBottom: '15px',
+          fontSize: '14px'
+        }}>
           {error}
         </div>
       )}
@@ -60,7 +92,14 @@ const LoginPage: React.FC = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px', border: '1px solid #ccc' }}
+            disabled={loading}
+            style={{ 
+              width: '100%', 
+              padding: '8px', 
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              opacity: loading ? 0.7 : 1
+            }}
           />
         </div>
         <div style={{ marginBottom: '15px' }}>
@@ -73,7 +112,14 @@ const LoginPage: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px', border: '1px solid #ccc' }}
+            disabled={loading}
+            style={{ 
+              width: '100%', 
+              padding: '8px', 
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              opacity: loading ? 0.7 : 1
+            }}
           />
         </div>
         <button
@@ -81,16 +127,38 @@ const LoginPage: React.FC = () => {
           disabled={loading}
           style={{
             width: '100%',
-            padding: '10px',
+            padding: '12px',
             backgroundColor: loading ? '#ccc' : '#007bff',
             color: 'white',
             border: 'none',
-            cursor: loading ? 'not-allowed' : 'pointer'
+            borderRadius: '4px',
+            cursor: loading ? 'not-allowed' : 'pointer',
+            fontSize: '16px',
+            fontWeight: 'bold'
           }}
         >
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
+      
+      <div style={{ marginTop: '20px', textAlign: 'center' }}>
+        <p style={{ fontSize: '14px', color: '#666' }}>
+          Don't have an account?{' '}
+          <button
+            onClick={() => navigate('/register')}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#007bff',
+              cursor: 'pointer',
+              textDecoration: 'underline',
+              fontSize: '14px'
+            }}
+          >
+            Register here
+          </button>
+        </p>
+      </div>
     </div>
   );
 };

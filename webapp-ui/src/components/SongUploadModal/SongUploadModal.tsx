@@ -3,6 +3,7 @@ import { uploadSong, replaceSong } from '../../api/songService';
 import { useAppSelector } from '../../store/hooks';
 import { selectCurrentToken } from '../../store/selectors';
 import type { Song } from '../../store/types';
+import api from '../../api/api';
 
 interface SongUploadModalProps {
   isOpen: boolean;
@@ -18,10 +19,21 @@ const SongUploadModal: React.FC<SongUploadModalProps> = ({
   songToReplace = null
 }) => {
   const [file, setFile] = useState<File | null>(null);
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [title, setTitle] = useState('');
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+  const [availableGenres, setAvailableGenres] = useState<Array<{id: number, name: string}>>([]);
+  const [isLoadingGenres, setIsLoadingGenres] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState('');
   const token = useAppSelector(selectCurrentToken);
+
+  // Load available genres when modal opens
+  useEffect(() => {
+    if (isOpen && availableGenres.length === 0) {
+      loadGenres();
+    }
+  }, [isOpen]);
 
   // Prefill title in replace mode
   useEffect(() => {
@@ -31,13 +43,53 @@ const SongUploadModal: React.FC<SongUploadModalProps> = ({
       setTitle('');
     }
     setFile(null);
+    setThumbnail(null);
+    setSelectedGenres([]);
     setError('');
   }, [songToReplace, isOpen]);
+
+  const loadGenres = async () => {
+    if (!token) return;
+    
+    setIsLoadingGenres(true);
+    try {
+      const response = await api.get('/onboarding/all-genres', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setAvailableGenres(response.data.data || []);
+    } catch (error) {
+      console.error('Failed to load genres:', error);
+      setError('Failed to load genres. Please try again.');
+    } finally {
+      setIsLoadingGenres(false);
+    }
+  };
+
+  const handleGenreChange = (genreName: string) => {
+    setSelectedGenres(prev => {
+      if (prev.includes(genreName)) {
+        return prev.filter(g => g !== genreName);
+      } else if (prev.length < 3) {
+        return [...prev, genreName];
+      }
+      return prev;
+    });
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
+      setError('');
+    }
+  };
+
+  const handleThumbnailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      setThumbnail(selectedFile);
       setError('');
     }
   };
@@ -55,6 +107,11 @@ const SongUploadModal: React.FC<SongUploadModalProps> = ({
       return;
     }
 
+    if (selectedGenres.length === 0) {
+      setError('Please select at least one genre');
+      return;
+    }
+
     if (!token) {
       setError('Authentication token is missing');
       return;
@@ -66,17 +123,24 @@ const SongUploadModal: React.FC<SongUploadModalProps> = ({
     try {
       if (songToReplace) {
         // Replace mode
-        await replaceSong(songToReplace.id, file, title, token);
+        await replaceSong(songToReplace.id, file, title, selectedGenres, token, thumbnail || undefined);
       } else {
         // Add mode
-        await uploadSong(file, title, token);
+        await uploadSong(file, title, selectedGenres, token, thumbnail || undefined);
       }
       setFile(null);
+      setThumbnail(null);
       setTitle('');
+      setSelectedGenres([]);
       onUploadSuccess();
       onClose();
     } catch (error: any) {
-      setError(error.message || 'Failed to upload song');
+      const errorMessage = error?.message || error?.toString() || 'Failed to upload song';
+      if (errorMessage.includes('does not have a band')) {
+        setError('You need to create a band first. Please contact support to set up your artist profile.');
+      } else {
+        setError(errorMessage);
+      }
     } finally {
       setIsUploading(false);
     }
@@ -144,6 +208,29 @@ const SongUploadModal: React.FC<SongUploadModalProps> = ({
 
           <div style={{ marginBottom: '20px' }}>
             <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+              Album Art (Optional)
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleThumbnailChange}
+              style={{
+                width: '100%',
+                padding: '8px',
+                border: '1px solid #ddd',
+                borderRadius: '4px'
+              }}
+              disabled={isUploading}
+            />
+            {thumbnail && (
+              <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
+                Selected: {thumbnail.name}
+              </p>
+            )}
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
               Song Title *
             </label>
             <input
@@ -159,6 +246,45 @@ const SongUploadModal: React.FC<SongUploadModalProps> = ({
               }}
               disabled={isUploading}
             />
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+              Genres * (Select up to 3)
+            </label>
+            {isLoadingGenres ? (
+              <p style={{ color: '#666', fontStyle: 'italic' }}>Loading genres...</p>
+            ) : (
+              <div style={{ 
+                maxHeight: '200px', 
+                overflowY: 'auto', 
+                border: '1px solid #ddd', 
+                borderRadius: '4px',
+                padding: '8px'
+              }}>
+                {availableGenres.map((genre) => (
+                  <label key={genre.id} style={{ 
+                    display: 'block', 
+                    marginBottom: '8px',
+                    cursor: 'pointer'
+                  }}>
+                    <input
+                      type="checkbox"
+                      checked={selectedGenres.includes(genre.name)}
+                      onChange={() => handleGenreChange(genre.name)}
+                      disabled={isUploading}
+                      style={{ marginRight: '8px' }}
+                    />
+                    {genre.name}
+                  </label>
+                ))}
+              </div>
+            )}
+            {selectedGenres.length > 0 && (
+              <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
+                Selected: {selectedGenres.join(', ')}
+              </p>
+            )}
           </div>
 
           {error && (

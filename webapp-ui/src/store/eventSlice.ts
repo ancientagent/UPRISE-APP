@@ -53,7 +53,8 @@ const eventSlice = createSlice({
       })
       .addCase(fetchEvents.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.events = action.payload;
+        // Handle both array and object responses
+        state.events = Array.isArray(action.payload) ? action.payload : (action.payload?.data || []);
         state.error = null;
       })
       .addCase(fetchEvents.rejected, (state, action) => {

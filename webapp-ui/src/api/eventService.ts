@@ -48,21 +48,39 @@ export const createEvent = async (eventData: CreateEventData, token: string) => 
     });
     return response.data;
   } catch (error: any) {
-    throw error.response?.data || error.message;
+    console.error('Create event error:', error);
+    const errorMessage = error.response?.data?.message || error.response?.data || error.message || 'Failed to create event';
+    throw new Error(errorMessage);
   }
 };
 
 // Add this function to eventService.ts
 export const getMyEvents = async (token: string) => {
   try {
-    const response = await api.get('/eventmanagement/events-list', {
+    // First, get the user's band/artist profile
+    const bandResponse = await api.get('/user/band', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    
+    const bandData = bandResponse.data;
+    if (!bandData || !bandData.id) {
+      // User doesn't have a band, return empty events
+      return { data: [] };
+    }
+    
+    // Now get events for this band
+    const response = await api.get(`/eventmanagement/events-list?bandId=${bandData.id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
   } catch (error: any) {
-    throw error.response?.data || error.message;
+    console.error('Get my events error:', error);
+    const errorMessage = error.response?.data?.message || error.response?.data || error.message || 'Failed to fetch events';
+    throw new Error(errorMessage);
   }
 };
 
@@ -76,7 +94,9 @@ export const getEventById = async (eventId: string, token: string) => {
     });
     return response.data;
   } catch (error: any) {
-    throw error.response?.data || error.message;
+    console.error('Get event by ID error:', error);
+    const errorMessage = error.response?.data?.message || error.response?.data || error.message || 'Failed to fetch event';
+    throw new Error(errorMessage);
   }
 };
 
@@ -106,7 +126,9 @@ export const updateEvent = async (eventId: string, eventData: CreateEventData, t
     });
     return response.data;
   } catch (error: any) {
-    throw error.response?.data || error.message;
+    console.error('Update event error:', error);
+    const errorMessage = error.response?.data?.message || error.response?.data || error.message || 'Failed to update event';
+    throw new Error(errorMessage);
   }
 };
 
@@ -120,6 +142,8 @@ export const deleteEvent = async (eventId: string, token: string) => {
     });
     return response.data;
   } catch (error: any) {
-    throw error.response?.data || error.message;
+    console.error('Delete event error:', error);
+    const errorMessage = error.response?.data?.message || error.response?.data || error.message || 'Failed to delete event';
+    throw new Error(errorMessage);
   }
 }; 

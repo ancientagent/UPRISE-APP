@@ -63,6 +63,15 @@ export async function errorResponse(error, status) {
 
 // eslint-disable-next-line consistent-return
 export async function request(requestOptions, omitAuth) {
+  // Log every outgoing request with a stack trace
+  const stack = new Error().stack;
+  console.log('GLOBAL REQUEST LOGGER:', {
+    method: requestOptions.method,
+    url: requestOptions.url,
+    headers: requestOptions.headers,
+    data: requestOptions.data,
+    stack: stack
+  });
   const requestData = requestOptions;
   
   // Check if the data is FormData

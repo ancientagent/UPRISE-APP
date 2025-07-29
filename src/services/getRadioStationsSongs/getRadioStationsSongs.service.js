@@ -6,7 +6,7 @@ import {
 import { getRequestURL } from '../../utilities/utilities';
 
 export default function getRadioStationsSongsRequest(payload) {
-  const finalUrl = Config.GET_RADIOSTATIONS_SONGS.replace('{STATENAME}', payload.state);
+  const finalUrl = Config.GET_RADIO_STATIONS_SONGS.replace('{STATENAME}', payload.state);
   const requestOptions = {
     method: GET,
     url: getRequestURL(finalUrl),

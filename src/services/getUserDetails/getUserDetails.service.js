@@ -6,6 +6,7 @@ import {
 import { getRequestURL } from '../../utilities/utilities';
 
 export default function getUserDetailsRequest(payload) {
+  console.log('DEBUG: Config.GET_USER_DETAILS_URL =', Config.GET_USER_DETAILS_URL);
   const requestOptions = {
     method: GET,
     url: getRequestURL(Config.GET_USER_DETAILS_URL),

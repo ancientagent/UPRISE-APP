@@ -6,9 +6,10 @@ import {
 import { getRequestURL } from '../../utilities/utilities';
 
 export default function getNewReleasesRequest(payload) {
+  console.log('DEBUG: Config.HOME_NEW_RELEASES =', Config.HOME_NEW_RELEASES);
   const requestOptions = {
     method: GET,
-    url: getRequestURL(Config.GET_NEW_RELEASES),
+    url: getRequestURL(Config.HOME_NEW_RELEASES),
     headers: { Authorization: `Bearer ${payload.accessToken}` },
   };
   return request(requestOptions)

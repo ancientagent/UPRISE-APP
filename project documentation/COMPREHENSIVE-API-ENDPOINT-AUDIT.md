@@ -95,7 +95,7 @@ GET /discovery/songs_by_genre/:id
 ```
 GET /radio/song
 GET /radio/avaliable-states
-GET /radio/stations
+GET /popular/radio_stations
 GET /radio/stations/songs
 GET /popular/most_played_songs
 GET /popular/most_rated_songs
@@ -230,7 +230,7 @@ BAND_FOLLOWING=/band/following
 # RADIO & SONGS
 # =============================================================================
 GET_RADIO_SONG=/radio/song/{LOCATION}
-GET_RADIO_STATIONS=/radio/stations
+GET_RADIO_STATIONS=/popular/radio_stations
 GET_RADIO_STATIONS_SONGS=/radio/stations/songs
 GET_RADIO_AVAILABLE_STATES=/radio/avaliable-states
 SONG_UPLOAD=/song/upload

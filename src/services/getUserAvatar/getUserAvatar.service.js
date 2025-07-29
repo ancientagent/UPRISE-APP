@@ -6,6 +6,7 @@ import {
 import { getRequestURL } from '../../utilities/utilities';
 
 export default function getUserAvatarRequest(payload) {
+  console.log('DEBUG: Config.GET_USER_AVATAR =', Config.GET_USER_AVATAR);
   const requestOptions = {
     method: GET,
     url: getRequestURL(Config.GET_USER_AVATAR),

@@ -6,9 +6,10 @@ import {
 import { getRequestURL } from '../../utilities/utilities';
 
 export default function getRadioStationsRequest(payload) {
+  console.log('DEBUG: Config.HOME_RECOMMENDED_STATIONS =', Config.HOME_RECOMMENDED_STATIONS);
   const requestOptions = {
     method: GET,
-    url: getRequestURL(Config.GET_RADIO_STATIONS),
+    url: getRequestURL(Config.HOME_RECOMMENDED_STATIONS),
     headers: { Authorization: `Bearer ${payload.accessToken}` },
   };
   return request(requestOptions)

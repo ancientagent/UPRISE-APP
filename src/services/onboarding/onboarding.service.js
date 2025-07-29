@@ -8,6 +8,7 @@ import * as HttpMethods from '../constants/Constants';
  * @returns {Promise<any>}
  */
 export const getSuperGenres = () => {
+    console.log('DEBUG: Config.ONBOARDING_SUPER_GENRES =', Config.ONBOARDING_SUPER_GENRES);
     const url = getRequestURL(Config.ONBOARDING_SUPER_GENRES);
     return request({
         method: HttpMethods.GET,
@@ -21,6 +22,7 @@ export const getSuperGenres = () => {
  * @returns {Promise<any>}
  */
 export const validateCommunity = (data) => {
+    console.log('DEBUG: Config.ONBOARDING_VALIDATE_COMMUNITY =', Config.ONBOARDING_VALIDATE_COMMUNITY);
     const url = getRequestURL(Config.ONBOARDING_VALIDATE_COMMUNITY);
     return request({
         method: HttpMethods.POST,
@@ -35,6 +37,7 @@ export const validateCommunity = (data) => {
  * @returns {Promise<any>}
  */
 export const getCitySuggestions = (query) => {
+    console.log('DEBUG: Config.COMMUNITIES_CITIES_AUTOCOMPLETE =', Config.COMMUNITIES_CITIES_AUTOCOMPLETE);
     // Note: The spec has this under /communities, and the main router file in the backend
     // puts authentication on the /communities routes. For now, to match the backend
     // code I just wrote, I am putting it here and assuming it might need auth.

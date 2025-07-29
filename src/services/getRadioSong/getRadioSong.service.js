@@ -12,6 +12,7 @@ export default function getRadioSongRequest(payload) {
     url: getRequestURL(finalUrl),
     headers: { Authorization: `Bearer ${payload.accessToken}` },
   };
+  console.log('[DIAGNOSTIC LOG] Full RaDIYo Player Request:', JSON.stringify(requestOptions, null, 2));
   return request(requestOptions)
     .then(response => response);
 }

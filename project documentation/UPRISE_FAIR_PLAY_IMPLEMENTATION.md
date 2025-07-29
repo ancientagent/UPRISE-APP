@@ -210,4 +210,25 @@ Run the following migrations in order:
 - Indexed queries for efficient song selection
 - Regular cleanup of inactive records
 
+### Resilience and Error Handling ⭐ **UPDATED: July 29, 2025**
+The Fair Play Algorithm has been made resilient to handle edge cases:
+
+**Problem Addressed**: Songs with no engagement data (new songs) were causing TypeErrors when accessing `.count` properties from null/undefined database results.
+
+**Solution Implemented**: The `getSongMetrics` function now uses defensive programming:
+```javascript
+// Resilient approach for all metrics
+const likes = (likesResult && likesResult.count !== undefined) ? likesResult.count : 0;
+const dislikes = (dislikesResult && dislikesResult.count !== undefined) ? dislikesResult.count : 0;
+const blasts = (blastsResult && blastsResult.count !== undefined) ? blastsResult.count : 0;
+const fullListens = (fullListensResult && fullListensResult.count !== undefined) ? fullListensResult.count : 0;
+const skips = (skipsResult && skipsResult.count !== undefined) ? skipsResult.count : 0;
+```
+
+**Benefits**:
+- New songs with no engagement data are handled gracefully
+- Algorithm continues processing even with incomplete data
+- Prevents backend crashes that were affecting the RaDIYo Player
+- Ensures fair exposure for all songs, regardless of engagement history
+
 This implementation provides a robust, fair, and scalable system for music discovery that benefits both artists and listeners while maintaining the integrity of the UPRISE platform. 

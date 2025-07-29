@@ -8,6 +8,14 @@ export const showminiPlayer = ['UserProfile', 'Discovery', 'Following', 'Followe
 export const genrePreferencePieChartColor = ['rgba(248, 174, 76, 1)', 'rgba(55, 24, 180, 1)', 'rgba(165, 64, 118, 1)', 'rgba(254, 112, 0, 1)', 'rgba(252, 207, 85, 1)', 'rgba(253, 29, 5, 1)'];
 
 export function getRequestURL(path) {
+  if (typeof path === 'undefined') {
+    // Print a stack trace and the value of path
+    console.error('getRequestURL CALLED WITH UNDEFINED PATH!', { 
+      stack: new Error().stack,
+      path: path,
+      Config_BASE_URL: Config.BASE_URL 
+    });
+  }
   return `${Config.BASE_URL}${path}`;
 }
 

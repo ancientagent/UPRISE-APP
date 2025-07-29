@@ -49,8 +49,25 @@ export function* homeFeedWorkerSaga() {
     console.log('--- HOME FEED SAGA: Error response ---', e.response);
     console.log('--- HOME FEED SAGA: Error stack ---', e.stack);
     console.log('--- HOME FEED SAGA: Error name ---', e.name);
+    
+    // Dispatch fail action to update Redux state
     yield put(homeFeedActions.fail(e));
-    yield call(showAlert, e.error);
+    
+    // Handle error gracefully without showing alert
+    // This prevents the "missing alert" unhandled promise rejection
+    console.log('--- HOME FEED SAGA: Error handled gracefully - no alert shown ---');
+    
+    // Only show alert for specific error types that user should know about
+    if (e.response && e.response.status === 401) {
+      console.log('--- HOME FEED SAGA: Authentication error - showing alert ---');
+      yield call(showAlert, 'Session expired. Please log in again.');
+    } else if (e.response && e.response.status === 403) {
+      console.log('--- HOME FEED SAGA: Authorization error - showing alert ---');
+      yield call(showAlert, 'Access denied. Please check your permissions.');
+    } else {
+      console.log('--- HOME FEED SAGA: Other error - handled silently ---');
+      // For other errors, handle silently to prevent unhandled promise rejections
+    }
   }
 }
 

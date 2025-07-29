@@ -9,6 +9,7 @@ export default function homeFeedRequest(payload) {
   console.log('--- HOME FEED SERVICE: Starting API request ---');
   console.log('--- HOME FEED SERVICE: Config.HOME_FEED ---', Config.HOME_FEED);
   console.log('--- HOME FEED SERVICE: payload.accessToken ---', payload.accessToken ? 'Present' : 'Missing');
+  console.log('DEBUG: Config.HOME_FEED =', Config.HOME_FEED);
   
   const requestOptions = {
     method: GET,

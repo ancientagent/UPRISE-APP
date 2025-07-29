@@ -8,7 +8,7 @@ import { getRequestURL } from '../../utilities/utilities';
 export default function nearestLocationsRequest(payload) {
   const requestOptions = {
     method: GET,
-    url: getRequestURL(Config.NEAREST_LOCATION),
+    url: getRequestURL(Config.NEAREST_LOCATIONS), // Fixed: NEAREST_LOCATIONS (plural)
     headers: { Authorization: `Bearer ${payload.accessToken}` },
   };
   return request(requestOptions)

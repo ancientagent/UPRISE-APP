@@ -11,22 +11,20 @@ export default function homePromosRequest(payload) {
   console.log('--- HOME PROMOS SERVICE: payload.state ---', payload.state);
   console.log('--- HOME PROMOS SERVICE: payload.accessToken ---', payload.accessToken ? 'Present' : 'Missing');
   
-  // FIXED: Send station as query parameter instead of URL parameter
-  // Backend expects: /home/promos?state=Austin
-  // Not: /home/promos/Austin
-  const baseUrl = '/home/promos';
-  const finalUrl = `${baseUrl}?state=${encodeURIComponent(payload.state)}`;
+  // FIXED: Use Config variable instead of hardcoded URL
+  // Replace the placeholder with actual state
+  const url = Config.HOME_PROMOS.replace('{STATENAME}', payload.state);
   
-  console.log('--- HOME PROMOS SERVICE: finalUrl ---', finalUrl);
+  console.log('--- HOME PROMOS SERVICE: finalUrl ---', url);
   
   const requestOptions = {
     method: GET,
-    url: getRequestURL(finalUrl),
+    url: getRequestURL(url), // FIXED: Use Config variable instead of hardcoded URL
     headers: { Authorization: `Bearer ${payload.accessToken}` },
   };
   
   console.log('--- HOME PROMOS SERVICE: requestOptions ---', requestOptions);
-  console.log('--- HOME PROMOS SERVICE: Full URL ---', getRequestURL(finalUrl));
+  console.log('--- HOME PROMOS SERVICE: Full URL ---', getRequestURL(url));
   
   return request(requestOptions)
     .then(response => {

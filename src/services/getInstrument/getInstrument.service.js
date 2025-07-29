@@ -6,6 +6,7 @@ import {
 import { getRequestURL } from '../../utilities/utilities';
 
 export default function getInstrumentsRequest(payload) {
+  console.log('DEBUG: Config.GET_INSTRUMENTS =', Config.GET_INSTRUMENTS);
   const requestOptions = {
     method: GET,
     url: getRequestURL(Config.GET_INSTRUMENTS),

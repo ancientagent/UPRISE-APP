@@ -25,6 +25,54 @@
 
 ## 🚨 **Most Common Issues & Immediate Solutions**
 
+### **24. Fair Play Algorithm Crash Fix** ⭐ **NEW - CRITICAL FIX COMPLETE**
+**Status**: ✅ **COMPLETE** - Fixed TypeError causing RaDIYo Player to be empty
+**What Was Done**: 
+- **Root Cause Identified**: `getSongMetrics` function in `fairPlayAlgorithm.js` was crashing when database queries returned null/undefined for songs with no engagement data
+- **Function Made Resilient**: Updated to check if results exist and have `.count` property before accessing
+- **Default Values Added**: Returns 0 for any missing metrics (likes, dislikes, blasts, fullListens, skips)
+
+**Key Benefits**:
+- ✅ RaDIYo Player no longer crashes when encountering new songs
+- ✅ Songs with no engagement data are handled gracefully
+- ✅ Fair Play Algorithm now resilient to incomplete data
+- ✅ Backend no longer crashes in a loop
+
+**Technical Solution**:
+```javascript
+// Before (vulnerable):
+const likes = (likesResult || { count: 0 }).count;
+
+// After (resilient):
+const likes = (likesResult && likesResult.count !== undefined) ? likesResult.count : 0;
+```
+
+**Files Modified**:
+- `Webapp_API-Develop/src/utils/fairPlayAlgorithm.js` (made getSongMetrics resilient)
+
+**Prevention**: Always use defensive programming when accessing nested properties from database results
+
+### **23. Environment Variables Fix** ⭐ **NEW - CRITICAL FIX COMPLETE**
+**Status**: ✅ **COMPLETE** - Fixed `http://10.0.2.2:3000undefined` error and missing variables
+**What Was Done**: 
+- **Root Cause Identified**: `nearestLocations` service was using `Config.NEAREST_LOCATION` but environment variable was `NEAREST_LOCATIONS` (plural)
+- **Service Fixed**: Updated `src/services/nearestLocations/nearestLocations.service.js` to use correct variable name
+- **Missing Variables Added**: Added 15 missing environment variables to `.env` files
+- **Total Variables**: Increased from 123 to 138 environment variables
+
+**Key Benefits**:
+- ✅ No more `http://10.0.2.2:3000undefined` errors
+- ✅ No more "Alert - Not Found" dialogs on home screen
+- ✅ Music should now appear in player
+- ✅ All services have proper environment variable references
+
+**Files Modified**:
+- `src/services/nearestLocations/nearestLocations.service.js` (fixed variable name)
+- `.env.txt` and `.env.backup` (added 15 missing variables)
+- `project documentation/ENVIRONMENT-VARIABLES-REFERENCE.md` (updated count and added missing variables)
+
+**Documentation**: See `ENVIRONMENT-VARIABLES-REFERENCE.md` for complete details
+
 ### **22. Architectural Realignment** ⭐ **NEW - CRITICAL FIX COMPLETE**
 **Status**: ✅ **COMPLETE** - Complete three-part systemic fix implemented
 **What Was Done**: 
@@ -200,6 +248,18 @@ GET_USERS_STATISTICS=/popular/users
 **Files Modified**: 
 - `src/services/analytics/analytics.service.js` (added logging and error handling)
 - `src/screens/Analytics/Analytics.js` (improved error display)
+
+### **19. Radio Stations 404 Error** ⭐ **NEW - FIXED**
+**Symptom**: "Alert - Not Found" when loading feed section
+**Root Cause**: Frontend calling wrong radio endpoints
+**Quick Fix**: ✅ Updated radio station environment variables
+**Note**: 
+- Changed `GET_RADIO_STATIONS` from `/radio/stations` to `/home/recommended-radio-stations`
+- Changed `GET_RADIO_STATIONS_SONGS` from `/radio/stations/songs` to `/home/recommended-radio-stations/{STATENAME}`
+- Updated `getRadioStations.service.js` to use correct endpoint
+**Files Modified**: 
+- `src/services/getRadioStations/getRadioStations.service.js` (updated to use HOME_RECOMMENDED_STATIONS)
+- `.env.txt` and `.env.backup` (updated endpoint URLs)
 
 ### **14. React Native VirtualizedLists Error** ⭐ **NEW**
 **Symptom**: Console error "VirtualizedLists should never be nested inside plain ScrollViews"
@@ -431,7 +491,38 @@ netstat -ano | findstr ":3000\|:8081"
 
 ## 🐛 **Bug Tracking - Unresolved Issues**
 
-### **Bug #0: Architectural Realignment** ✅ **RESOLVED - CRITICAL FIX**
+### **Bug #0: Environment Variables Fix** ✅ **RESOLVED - CRITICAL FIX**
+**Current Status**: ✅ **COMPLETE** - Fixed `http://10.0.2.2:3000undefined` error and missing variables
+**Symptoms**: 
+- `http://10.0.2.2:3000undefined` URL appearing in Metro logs
+- "Alert - Not Found" dialogs on home screen
+- No music appearing in player
+- Services failing due to undefined Config variables
+
+**Implementation Details**:
+- ✅ **Root Cause Identified**: `nearestLocations` service variable name mismatch
+- ✅ **Service Fixed**: Updated to use `Config.NEAREST_LOCATIONS` (plural)
+- ✅ **Missing Variables Added**: Added 15 missing environment variables
+- ✅ **Documentation Updated**: Updated environment variable reference
+
+**Technical Solution**:
+```javascript
+// Fixed: nearestLocations.service.js
+url: getRequestURL(Config.NEAREST_LOCATIONS), // Fixed: NEAREST_LOCATIONS (plural)
+```
+
+**Impact**: 
+- ✅ No more undefined URL errors
+- ✅ Home screen loads without alerts
+- ✅ Music appears in player
+- ✅ All services have proper environment variable references
+
+**Files Modified**: 
+- `src/services/nearestLocations/nearestLocations.service.js` (fixed variable name)
+- `.env.txt` and `.env.backup` (added 15 missing variables)
+- `project documentation/ENVIRONMENT-VARIABLES-REFERENCE.md` (updated documentation)
+
+### **Bug #1: Architectural Realignment** ✅ **RESOLVED - CRITICAL FIX**
 **Current Status**: ✅ **COMPLETE** - Complete three-part systemic fix implemented
 **Symptoms**: 
 - Feed returning songs directly instead of notifications
@@ -677,13 +768,16 @@ const artistProfile = await ArtistProfile.findOne({
 3. **VirtualizedLists Warning** - Performance optimization
 
 ### **Resolved** ✅
-4. **Architectural Realignment** - ✅ **CRITICAL FIX COMPLETE**
-5. **Song Upload System** - ✅ **MAJOR IMPLEMENTATION COMPLETE**
-6. **Home Scene Genre Filtering** - ✅ **MAJOR IMPLEMENTATION COMPLETE**
-7. **Artist Unification System** - ✅ **MAJOR IMPLEMENTATION COMPLETE**
-8. **Genre Loading** - Fixed
-9. **Authentication Timeout** - Fixed  
-10. **Home Scene Creation** - Fixed
+4. **Environment Variables Fix** - ✅ **CRITICAL FIX COMPLETE**
+5. **Radio Stations 404 Error** - ✅ **FIXED**
+6. **Architectural Realignment** - ✅ **CRITICAL FIX COMPLETE**
+7. **Song Upload System** - ✅ **MAJOR IMPLEMENTATION COMPLETE**
+8. **Home Scene Genre Filtering** - ✅ **MAJOR IMPLEMENTATION COMPLETE**
+9. **Artist Unification System** - ✅ **MAJOR IMPLEMENTATION COMPLETE**
+10. **Genre Loading** - Fixed
+11. **Authentication Timeout** - Fixed  
+12. **Home Scene Creation** - Fixed
+13. **Fair Play Algorithm Crash** - ✅ **CRITICAL FIX COMPLETE**
 
 ---
 

@@ -62,9 +62,15 @@ const Feed = props => {
     console.log('FeedList', FeedList);
   }, [FeedList]);
   useEffect(() => {
-    dispatch(homeFeedSagaAction());
-    dispatch(getNewReleasesSagaAction());
-    dispatch(getRadioStationsSagaAction());
+    try {
+      console.log('--- FEED COMPONENT: Dispatching saga actions ---');
+      dispatch(homeFeedSagaAction());
+      dispatch(getNewReleasesSagaAction());
+      dispatch(getRadioStationsSagaAction());
+    } catch (error) {
+      console.log('--- FEED COMPONENT: Error dispatching saga actions ---', error);
+      // Handle error gracefully to prevent unhandled promise rejections
+    }
   }, []);
   const getFeedData = Data => {
     // const data = _.orderBy(FeedData, [item => moment(item.createdAt)], ['desc']);

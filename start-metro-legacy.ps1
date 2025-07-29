@@ -9,9 +9,9 @@ $env:NODE_OPTIONS = "--openssl-legacy-provider"
 Write-Host "Set NODE_OPTIONS to: $env:NODE_OPTIONS" -ForegroundColor Green
 
 # Start Metro bundler in legacy mode
-Write-Host "Starting Metro bundler with --legacy flag..." -ForegroundColor Yellow
+Write-Host "Starting Metro bundler with legacy options..." -ForegroundColor Yellow
 try {
-    npx react-native start --legacy --reset-cache
+    npx react-native start --reset-cache
 } catch {
     Write-Host "Error starting Metro bundler: $_" -ForegroundColor Red
     Write-Host "Press any key to exit..." -ForegroundColor Gray

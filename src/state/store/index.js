@@ -9,5 +9,7 @@ console.log('--- REDUX STORE: ReduxStoreManager instantiated successfully ---');
 export const store = storeManager.store;
 export const storePersistor = storeManager.storePersistor;
 
-console.log('--- REDUX STORE: Store and storePersistor exported successfully ---');
+console.log(
+  '--- REDUX STORE: Store and storePersistor exported successfully ---',
+);
 export default storeManager;

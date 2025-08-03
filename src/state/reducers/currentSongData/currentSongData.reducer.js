@@ -1,4 +1,4 @@
-import { App } from '../../types';
+import {App} from '../../types';
 
 const currentSongDataReducer = (state = {}, action) => {
   switch (action.type) {

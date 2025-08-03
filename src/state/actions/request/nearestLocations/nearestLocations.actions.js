@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  nearestLocationsType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {nearestLocationsType} from '../../../types/listener/listener';
 
-export const nearestLocationsActions = createRequestResponseActionSet(nearestLocationsType);
+export const nearestLocationsActions =
+  createRequestResponseActionSet(nearestLocationsType);

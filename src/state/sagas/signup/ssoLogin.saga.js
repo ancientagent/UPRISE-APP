@@ -1,15 +1,15 @@
-import {
-  call, put, takeLatest,
-} from 'redux-saga/effects';
-import AsyncStorage
-from '@react-native-community/async-storage';
+import {call, put, takeLatest} from 'redux-saga/effects';
+import AsyncStorage from '@react-native-community/async-storage';
 import * as RootNavigation from '../../../navigators/RootNavigation';
 import ssoLoginRequest from '../../../services/signup/ssoLogin.service';
-import { SSOLoginType } from '../../types/sagas';
-import { ssoLoginRequestAction } from '../../actions/request/signup/ssoLogin.action';
+import {SSOLoginType} from '../../types/sagas';
+import {ssoLoginRequestAction} from '../../actions/request/signup/ssoLogin.action';
 import showAlert from '../AlertUtility';
-import { getUserDetailsSagaAction, registerDeviceTokenSagaAction } from '../../actions/sagas';
-import { userAuthAction } from '../../actions/userAuth/userAuth.action';
+import {
+  getUserDetailsSagaAction,
+  registerDeviceTokenSagaAction,
+} from '../../actions/sagas';
+import {userAuthAction} from '../../actions/userAuth/userAuth.action';
 import TokenService from '../../../utilities/TokenService';
 
 export default function* ssoLoginWatcherSaga() {
@@ -35,15 +35,17 @@ export function* ssoLoginWorkerSaga(action) {
       yield put(ssoLoginRequestAction.succeed(response));
       yield put(userAuthAction(authDetails));
       if (yield AsyncStorage.getItem('fcmToken') !== null) {
-        yield put(registerDeviceTokenSagaAction({
-          token: yield AsyncStorage.getItem('fcmToken'),
-        }));
+        yield put(
+          registerDeviceTokenSagaAction({
+            token: yield AsyncStorage.getItem('fcmToken'),
+          }),
+        );
       }
       yield put(getUserDetailsSagaAction());
       if (response.data.onBoardingStatus === 0) {
-        RootNavigation.navigate({ name: 'HomeSceneCreation' });
+        RootNavigation.navigate({name: 'HomeSceneCreation'});
       } else {
-        RootNavigation.navigate({ name: 'Dashboard' });
+        RootNavigation.navigate({name: 'Dashboard'});
       }
     }
   } catch (e) {
@@ -51,4 +53,3 @@ export function* ssoLoginWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

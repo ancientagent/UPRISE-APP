@@ -1,17 +1,25 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import TrackPlayer from 'react-native-track-player';
 import upDateCityRequest from '../../../services/upDateCity/upDateCity.service';
-import { upDateCitySagaType } from '../../types/sagas';
-import { upDateCityRequestActions } from '../../actions/request/upDateCity/upDateCity.actions';
-import { accessToken, getRadioSong, currentScreen } from '../../selectors/UserProfile';
+import {upDateCitySagaType} from '../../types/sagas';
+import {upDateCityRequestActions} from '../../actions/request/upDateCity/upDateCity.actions';
 import {
-  getRadioSongSagaAction, homeEventsSagaAction, homePromosSagaAction,
-  getUserDetailsSagaAction, getUserStatisticsSagaAction,
-  getEventsStatisticsSagaAction, getBandsStatisticsSagaAction,
-  getRadioStationStatisticsSagaAction, getPopularArtistStatisticsSagaAction,
-  getGenresPrefrenceStatisticsSagaAction, getPopularArtistGenresStatisticsSagaAction,
+  accessToken,
+  getRadioSong,
+  currentScreen,
+} from '../../selectors/UserProfile';
+import {
+  getRadioSongSagaAction,
+  homeEventsSagaAction,
+  homePromosSagaAction,
+  getUserDetailsSagaAction,
+  getUserStatisticsSagaAction,
+  getEventsStatisticsSagaAction,
+  getBandsStatisticsSagaAction,
+  getRadioStationStatisticsSagaAction,
+  getPopularArtistStatisticsSagaAction,
+  getGenresPrefrenceStatisticsSagaAction,
+  getPopularArtistGenresStatisticsSagaAction,
 } from '../../actions/sagas';
 
 import showAlert from '../AlertUtility';
@@ -66,4 +74,3 @@ export function* upDateCityWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

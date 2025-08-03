@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import * as RootNavigation from '../../../navigators/RootNavigation';
 import changePasswordRequest from '../../../services/changePassword/changePassword.service';
-import { changePasswordSagaType } from '../../types/sagas';
-import { changePasswordActions } from '../../actions/request/changePassword/changePassword.actions';
-import { accessToken } from '../../selectors/UserProfile';
+import {changePasswordSagaType} from '../../types/sagas';
+import {changePasswordActions} from '../../actions/request/changePassword/changePassword.actions';
+import {accessToken} from '../../selectors/UserProfile';
 import showAlert from '../AlertUtility';
 
 export default function* changePasswordWatcherSaga() {
@@ -31,4 +29,3 @@ export function* changePasswordWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

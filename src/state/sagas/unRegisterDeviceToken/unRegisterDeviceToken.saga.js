@@ -1,14 +1,15 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import unRegisterDeviceTokenRequest from '../../../services/unRegisterDeviceToken/unRegisterDeviceToken.service';
-import { unRegisterDeviceTokenSagaType } from '../../types/sagas';
-import { unRegisterDeviceTokenRequestActions } from '../../actions/request/unRegisterDeviceToken/unRegisterDeviceToken.actions';
-import { accessToken } from '../../selectors/UserProfile';
+import {unRegisterDeviceTokenSagaType} from '../../types/sagas';
+import {unRegisterDeviceTokenRequestActions} from '../../actions/request/unRegisterDeviceToken/unRegisterDeviceToken.actions';
+import {accessToken} from '../../selectors/UserProfile';
 import showAlert from '../AlertUtility';
 
 export default function* unRegisterDeviceTokenWatcherSaga() {
-  yield takeLatest(unRegisterDeviceTokenSagaType, unRegisterDeviceTokenWorkerSaga);
+  yield takeLatest(
+    unRegisterDeviceTokenSagaType,
+    unRegisterDeviceTokenWorkerSaga,
+  );
 }
 
 export function* unRegisterDeviceTokenWorkerSaga(action) {
@@ -28,4 +29,3 @@ export function* unRegisterDeviceTokenWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

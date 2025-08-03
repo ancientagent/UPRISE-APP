@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
 import {
   SafeAreaView,
   Button,
@@ -10,33 +10,43 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Formik, Field } from 'formik';
-import { Menu, MenuItem } from 'react-native-material-menu';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Formik, Field} from 'formik';
+import {Menu, MenuItem} from 'react-native-material-menu';
 import ImagePicker from 'react-native-image-crop-picker';
-import { Icon } from 'react-native-elements';
+import {Icon} from 'react-native-elements';
 import URTextfield from '../../components/URTextfield/URTextfield';
 import RadioButton from '../../components/RadioButton/RadioButton';
 import SignupValidators from './SignupValidators';
 import styles from './Signup.styles';
-import { strings } from '../../utilities/localization/localization';
-import { signupRequestSagaAction } from '../../state/actions/sagas';
+import {strings} from '../../utilities/localization/localization';
+import {signupRequestSagaAction} from '../../state/actions/sagas';
 
-const genderData = [{
-  id: 1,
-  label: strings('staticLables.male'),
-  value: 'male',
-}, {
-  id: 2,
-  label: strings('staticLables.female'),
-  value: 'female',
-}, {
-  id: 3,
-  label: strings('staticLables.other'),
-  value: 'other',
-}];
+const genderData = [
+  {
+    id: 1,
+    label: strings('staticLables.male'),
+    value: 'male',
+  },
+  {
+    id: 2,
+    label: strings('staticLables.female'),
+    value: 'female',
+  },
+  {
+    id: 3,
+    label: strings('staticLables.other'),
+    value: 'other',
+  },
+];
 
-export const onSubmitForm = (dispatch, values, genderSelect, navigation, profileImage) => {
+export const onSubmitForm = (
+  dispatch,
+  values,
+  genderSelect,
+  navigation,
+  profileImage,
+) => {
   // eslint-disable-next-line no-param-reassign
   values.gender = genderSelect;
   const formData = new FormData();
@@ -50,7 +60,12 @@ export const onSubmitForm = (dispatch, values, genderSelect, navigation, profile
   if (profileImage) {
     const timeStamp = Math.round(new Date().getTime() / 1000);
     const fileType = profileImage.path.split('.').pop();
-    const fileExtension = (fileType.toLowerCase() === 'jpeg' || fileType.toLowerCase() === 'jpg' || fileType.toLowerCase() === 'png') ? fileType : 'gif';
+    const fileExtension =
+      fileType.toLowerCase() === 'jpeg' ||
+      fileType.toLowerCase() === 'jpg' ||
+      fileType.toLowerCase() === 'png'
+        ? fileType
+        : 'gif';
     const photo = {
       // uri: Platform.OS === 'ios' ? profileImage.path.replace('file://', '') : profileImage.path,
       uri: profileImage.path,
@@ -63,7 +78,7 @@ export const onSubmitForm = (dispatch, values, genderSelect, navigation, profile
   navigation.navigate('SignupSubmit');
 };
 export default function Signup(props) {
-  const { navigation } = props;
+  const {navigation} = props;
   const [profileImage, setProfileImage] = useState(null);
   const [hidePassword, setHidePassword] = useState(true);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
@@ -98,14 +113,14 @@ export default function Signup(props) {
     });
   };
   return (
-    <View style={ styles.container }>
-      <StatusBar barStyle='light-content' />
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" />
       <SafeAreaView>
         <KeyboardAwareScrollView>
-          <View style={ styles.signupContainer }>
-            <Text style={ styles.signupText }>{ strings('General.signup') }</Text>
+          <View style={styles.signupContainer}>
+            <Text style={styles.signupText}>{strings('General.signup')}</Text>
             <Formik
-              initialValues={ {
+              initialValues={{
                 firstName: '',
                 lastName: '',
                 gender: '',
@@ -113,128 +128,146 @@ export default function Signup(props) {
                 email: '',
                 createPassword: '',
                 confirmPassword: '',
-              } }
-              validationSchema={ SignupValidators }
-              onSubmit={ values => {
-                onSubmitForm(dispatch, values, genderSelect, navigation, profileImage);
-              } }
-            >
-              { ({
-                handleSubmit,
-                isValid,
-              }) => (
+              }}
+              validationSchema={SignupValidators}
+              onSubmit={values => {
+                onSubmitForm(
+                  dispatch,
+                  values,
+                  genderSelect,
+                  navigation,
+                  profileImage,
+                );
+              }}>
+              {({handleSubmit, isValid}) => (
                 <>
-                  { profileImage && (
-                  <Image
-                    source={ { uri: profileImage.path } }
-                    style={ {
-                      width: 150, height: 150, borderRadius: 150, alignSelf: 'center',
-                    } }
-                  />
-                  ) }
-                  <View style={ {
-                    flex: 1, flexDirection: 'row', alignSelf: 'center',
-                  } }
-                  >
+                  {profileImage && (
+                    <Image
+                      source={{uri: profileImage.path}}
+                      style={{
+                        width: 150,
+                        height: 150,
+                        borderRadius: 150,
+                        alignSelf: 'center',
+                      }}
+                    />
+                  )}
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      alignSelf: 'center',
+                    }}>
                     <Menu
-                      visible={ visible }
-                      style={ { marginTop: 40, marginLeft: 70 } }
-                      anchor={ <Button onPress={ showMenu } title='upload Image' /> }
-                      onRequestClose={ hideMenu }
-                    >
-                      <MenuItem onPress={ galleryImageUpload } style={ { alignItems: 'center' } }>Gallery</MenuItem>
-                      <MenuItem onPress={ cameraImageUpload } style={ { alignItems: 'center' } }>Camera</MenuItem>
+                      visible={visible}
+                      style={{marginTop: 40, marginLeft: 70}}
+                      anchor={
+                        <Button onPress={showMenu} title="upload Image" />
+                      }
+                      onRequestClose={hideMenu}>
+                      <MenuItem
+                        onPress={galleryImageUpload}
+                        style={{alignItems: 'center'}}>
+                        Gallery
+                      </MenuItem>
+                      <MenuItem
+                        onPress={cameraImageUpload}
+                        style={{alignItems: 'center'}}>
+                        Camera
+                      </MenuItem>
                     </Menu>
                   </View>
                   <Field
-                    inputStyle={ styles.textInput }
-                    placeholder={ strings('Placehoders.typeHere') }
-                    component={ URTextfield }
-                    name='firstName'
-                    autoCapitalize='none'
-                    autoCorrect={ false }
-                    label={ strings('Labels.firstName') }
+                    inputStyle={styles.textInput}
+                    placeholder={strings('Placehoders.typeHere')}
+                    component={URTextfield}
+                    name="firstName"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    label={strings('Labels.firstName')}
                   />
                   <Field
-                    inputStyle={ styles.textInput }
-                    placeholder={ strings('Placehoders.typeHere') }
-                    component={ URTextfield }
-                    name='lastName'
-                    autoCapitalize='none'
-                    autoCorrect={ false }
-                    label={ strings('Labels.lastName') }
+                    inputStyle={styles.textInput}
+                    placeholder={strings('Placehoders.typeHere')}
+                    component={URTextfield}
+                    name="lastName"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    label={strings('Labels.lastName')}
                   />
                   <RadioButton
-                    name='gender'
-                    Data={ genderData }
-                    initial={ 1 }
-                    selectedBtn={ e => setGenderSelect(e.value) }
-                    box={ false }
-                    circleSize={ 11 }
+                    name="gender"
+                    Data={genderData}
+                    initial={1}
+                    selectedBtn={e => setGenderSelect(e.value)}
+                    box={false}
+                    circleSize={11}
                   />
                   <Field
-                    inputStyle={ styles.textInput }
-                    placeholder={ strings('Placehoders.typeHere') }
-                    component={ URTextfield }
-                    name='mobile'
-                    autoCapitalize='none'
-                    autoCorrect={ false }
-                    label={ strings('Labels.phoneNumber') }
+                    inputStyle={styles.textInput}
+                    placeholder={strings('Placehoders.typeHere')}
+                    component={URTextfield}
+                    name="mobile"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    label={strings('Labels.phoneNumber')}
                   />
                   <Field
-                    inputStyle={ styles.textInput }
-                    placeholder={ strings('Placehoders.typeHere') }
-                    component={ URTextfield }
-                    name='email'
-                    autoCapitalize='none'
-                    autoCorrect={ false }
-                    label={ strings('Labels.email') }
+                    inputStyle={styles.textInput}
+                    placeholder={strings('Placehoders.typeHere')}
+                    component={URTextfield}
+                    name="email"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    label={strings('Labels.email')}
                   />
                   <Field
-                    inputStyle={ styles.textInput }
-                    placeholder={ strings('Placehoders.typeHere') }
-                    component={ URTextfield }
-                    name='createPassword'
-                    autoCapitalize='none'
-                    rightIcon={ (
+                    inputStyle={styles.textInput}
+                    placeholder={strings('Placehoders.typeHere')}
+                    component={URTextfield}
+                    name="createPassword"
+                    autoCapitalize="none"
+                    rightIcon={
                       <Icon
-                        type='ionicon'
-                        name={ hidePassword ? 'eye' : 'eye-off' }
-                        size={ 24 }
-                        color='black'
-                        onPress={ () => setHidePassword(!hidePassword) }
+                        type="ionicon"
+                        name={hidePassword ? 'eye' : 'eye-off'}
+                        size={24}
+                        color="black"
+                        onPress={() => setHidePassword(!hidePassword)}
                       />
-                    ) }
-                    autoCorrect={ false }
-                    secureTextEntry={ !!hidePassword }
-                    label={ strings('Labels.createPassword') }
+                    }
+                    autoCorrect={false}
+                    secureTextEntry={!!hidePassword}
+                    label={strings('Labels.createPassword')}
                   />
                   <Field
-                    inputStyle={ styles.textInput }
-                    placeholder={ strings('Placehoders.typeHere') }
-                    component={ URTextfield }
-                    name='confirmPassword'
-                    autoCapitalize='none'
-                    rightIcon={ (
+                    inputStyle={styles.textInput}
+                    placeholder={strings('Placehoders.typeHere')}
+                    component={URTextfield}
+                    name="confirmPassword"
+                    autoCapitalize="none"
+                    rightIcon={
                       <Icon
-                        type='ionicon'
-                        name={ hideConfirmPassword ? 'eye' : 'eye-off' }
-                        size={ 24 }
-                        color='black'
-                        onPress={ () => setHideConfirmPassword(!hideConfirmPassword) }
+                        type="ionicon"
+                        name={hideConfirmPassword ? 'eye' : 'eye-off'}
+                        size={24}
+                        color="black"
+                        onPress={() =>
+                          setHideConfirmPassword(!hideConfirmPassword)
+                        }
                       />
-                    ) }
-                    autoCorrect={ false }
-                    secureTextEntry={ !!hideConfirmPassword }
-                    label={ strings('Labels.confirmPassword') }
+                    }
+                    autoCorrect={false}
+                    secureTextEntry={!!hideConfirmPassword}
+                    label={strings('Labels.confirmPassword')}
                   />
                   <Button
-                    onPress={ handleSubmit }
-                    title={ strings('General.signup') }
-                    disabled={ !isValid }
+                    onPress={handleSubmit}
+                    title={strings('General.signup')}
+                    disabled={!isValid}
                   />
                 </>
-              ) }
+              )}
             </Formik>
           </View>
         </KeyboardAwareScrollView>
@@ -242,4 +275,3 @@ export default function Signup(props) {
     </View>
   );
 }
-

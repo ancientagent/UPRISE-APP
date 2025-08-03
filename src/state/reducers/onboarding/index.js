@@ -1,4 +1,4 @@
-import { Onboarding as OnboardingTypes } from '../../types';
+import {Onboarding as OnboardingTypes} from '../../types';
 
 const initialState = {
   superGenres: [],
@@ -36,7 +36,7 @@ const onboardingReducer = (state = initialState, action) => {
         citySuggestions: [],
         error: action.error,
       };
-    
+
     // Validate Community
     case OnboardingTypes.VALIDATE_COMMUNITY_SUCCESS:
       return {
@@ -56,4 +56,4 @@ const onboardingReducer = (state = initialState, action) => {
   }
 };
 
-export default onboardingReducer; 
+export default onboardingReducer;

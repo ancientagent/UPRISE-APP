@@ -1,14 +1,14 @@
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 import AsyncStorage from '@react-native-community/async-storage';
-import { reducer as network } from 'react-native-offline';
+import {reducer as network} from 'react-native-offline';
 import TrackPlayer from 'react-native-track-player';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 // import navReducer from './navigation/NavigationReducer';
 import sampleReducer from './request/samplerequest/samplerequest.reducer';
 import networkPopup from './network/Network.reducer';
 import signupReducer from './request/signup/signup.reducer';
 import loginReducer from './request/login/login.reducer';
-import { SIGN_OUT } from '../types/ActionTypes';
+import {SIGN_OUT} from '../types/ActionTypes';
 import forgotPasswordReducer from './request/forgotPassword/forgotPassword.reducer';
 import welcomeSlideReducer from './welcomeSlide/welcomeSlide.reducer';
 import currentSongDataReducer from './currentSongData/currentSongData.reducer';
@@ -83,7 +83,10 @@ import getRadioStationStatisticsReducer from './request/getRadioStationStatistic
 import getPopularArtistStatisticsReducer from './request/getPopularArtistStatistics/getPopularArtistStatistics.reducer';
 import getPopularArtistGenresStatisticsReducer from './request/getPopularArtistGenresStatistics/getPopularArtistGenresStatistics.reducer';
 import getSongAnalyticsReducer from './request/getSongAnalytics/getSongAnalytics.reducer';
-import { artistProfileReducer, updateArtistProfileReducer } from './request/artistProfile/artistProfile.reducer';
+import {
+  artistProfileReducer,
+  updateArtistProfileReducer,
+} from './request/artistProfile/artistProfile.reducer';
 import onboardingReducer from './onboarding';
 import logoutReducer from './logout/logout.reducer';
 
@@ -178,23 +181,25 @@ const rootReducer = (state, action) => {
   // Handle case where state is undefined (initial load or logout)
   if (action.type === SIGN_OUT) {
     console.log('--- REDUX REDUCER: Handling SIGN_OUT action ---');
-    
+
     // Clean up services
     TrackPlayer.stop();
     AsyncStorage.removeItem('persist:root');
     GoogleSignin.revokeAccess();
-    
+
     // Reset to initial state
     const initialState = {
-      welcomeSlide: { showIntro: true },
+      welcomeSlide: {showIntro: true},
     };
-    
-    console.log('--- REDUX REDUCER: SIGN_OUT complete, returning initial state ---');
-    return appReducer(initialState, { type: '' });
+
+    console.log(
+      '--- REDUX REDUCER: SIGN_OUT complete, returning initial state ---',
+    );
+    return appReducer(initialState, {type: ''});
   }
-  
+
   // Ensure state is not undefined before spreading
-  const initialState = state ? { ...state } : {};
+  const initialState = state ? {...state} : {};
   return appReducer(initialState, action);
 };
 

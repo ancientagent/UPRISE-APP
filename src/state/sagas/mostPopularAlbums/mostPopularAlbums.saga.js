@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import mostPopularAlbumsRequest from '../../../services/mostPopularAlbums/mostPopularAlbums.service';
-import { mostPopularAlbumsSagaType } from '../../types/sagas';
-import { mostPopularAlbumsActions } from '../../actions/request/mostPopularAlbums/mostPopularAlbums.actions';
+import {mostPopularAlbumsSagaType} from '../../types/sagas';
+import {mostPopularAlbumsActions} from '../../actions/request/mostPopularAlbums/mostPopularAlbums.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* mostPopularAlbumsWatcherSaga() {
   yield takeLatest(mostPopularAlbumsSagaType, mostPopularAlbumsWorkerSaga);

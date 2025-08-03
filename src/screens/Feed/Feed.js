@@ -1,14 +1,21 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable global-require */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import _ from 'lodash';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {
-  View, Text, Image, Modal, TouchableOpacity, FlatList, Alert, ActivityIndicator,
+  View,
+  Text,
+  Image,
+  Modal,
+  TouchableOpacity,
+  FlatList,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
-import { Icon } from 'react-native-elements';
+import {Icon} from 'react-native-elements';
 import moment from 'moment';
-import { ScrollView } from 'react-native-virtualized-view';
+import {ScrollView} from 'react-native-virtualized-view';
 import TrackPlayer from 'react-native-track-player';
 import albumVector from '../../../assets/images/albumVector.svg';
 import clock from '../../../assets/images/clock.svg';
@@ -19,29 +26,39 @@ import styles from './Feed.styles';
 import SvgImage from '../../components/SvgImage/SvgImage';
 import radioStations from '../../../assets/images/radio_stations.svg';
 import {
-  getHomeFeed, getRadioStations, getNewReleases, getUserDetails,
+  getHomeFeed,
+  getRadioStations,
+  getNewReleases,
+  getUserDetails,
 } from '../../state/selectors/UserProfile';
 import {
-  homeFeedSagaAction, googleEventSagaAction, getNewReleasesSagaAction,
-  getRadioStationsSagaAction, removeEventSagaAction,
+  homeFeedSagaAction,
+  googleEventSagaAction,
+  getNewReleasesSagaAction,
+  getRadioStationsSagaAction,
+  removeEventSagaAction,
 } from '../../state/actions/sagas';
 import bandVector from '../../../assets/images/bandVector.svg';
-import { strings } from '../../utilities/localization/localization';
-import { getStationBgColor } from '../../utilities/utilities';
+import {strings} from '../../utilities/localization/localization';
+import {getStationBgColor} from '../../utilities/utilities';
 
 const Feed = props => {
-  const { navigation } = props;
+  const {navigation} = props;
   const FeedData = useSelector(getHomeFeed);
   const stateName = useSelector(getRadioStations);
   const newReleases = useSelector(getNewReleases);
   const userDetails = useSelector(getUserDetails);
   const [FeedList, setFeedList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const showLoading = useSelector(state => state.getNewReleases.isWaiting
-    || state.getRadioStations.isWaiting || state.homeFeed.isWaiting);
+  const showLoading = useSelector(
+    state =>
+      state.getNewReleases.isWaiting ||
+      state.getRadioStations.isWaiting ||
+      state.homeFeed.isWaiting,
+  );
 
   const eventInfo = {
-    band: { title: '' },
+    band: {title: ''},
     createdAt: '',
     event: {
       endTime: '',
@@ -68,7 +85,10 @@ const Feed = props => {
       dispatch(getNewReleasesSagaAction());
       dispatch(getRadioStationsSagaAction());
     } catch (error) {
-      console.log('--- FEED COMPONENT: Error dispatching saga actions ---', error);
+      console.log(
+        '--- FEED COMPONENT: Error dispatching saga actions ---',
+        error,
+      );
       // Handle error gracefully to prevent unhandled promise rejections
     }
   }, []);
@@ -134,187 +154,196 @@ const Feed = props => {
     }
   };
   const ListEmptyComponent = () => (
-    <View style={ { alignItems: 'center' } }>
+    <View style={{alignItems: 'center'}}>
       <Image
-        style={ styles.illustrationStyle }
-        source={ require('../../../assets/images/More_feed_illustration.png') }
+        style={styles.illustrationStyle}
+        source={require('../../../assets/images/More_feed_illustration.png')}
       />
-      { userDetails.following === 0 && (<Text style={ styles.welcomeText }>{ strings('Feed.welcomeText') }</Text>) }
-      <Text style={ styles.followText }>{ strings('Feed.followText') }</Text>
+      {userDetails.following === 0 && (
+        <Text style={styles.welcomeText}>{strings('Feed.welcomeText')}</Text>
+      )}
+      <Text style={styles.followText}>{strings('Feed.followText')}</Text>
     </View>
   );
   const navOndemandPage = item => {
-    const songDetails = [{
-      id: item.song.id,
-      artist: item.band.title,
-      artwork: item.song.thumbnail,
-      url: item.song.song,
-      title: item.song.title,
-      duration: item.song.duration,
-      isSongFavorite: item.song.isSongFavorite,
-    }];
-    return (
-      Alert.alert(
-        'Uprise',
-        "Now you're switching to on-demand player",
-        [
-          {
-            text: 'Cancel',
-            style: 'cancel',
-          },
-          {
-            text: 'Continue',
-            onPress: async () => {
-              const songInfo = await TrackPlayer.getTrack(0);
-              navigation.navigate('OnDemandMusic', {
-                songList: songDetails,
-                intialSongId: 0,
-                songInfo,
-                songState: await TrackPlayer.getState(),
-                position: await TrackPlayer.getPosition(),
-              });
-            },
-          },
-        ],
-      ));
+    const songDetails = [
+      {
+        id: item.song.id,
+        artist: item.band.title,
+        artwork: item.song.thumbnail,
+        url: item.song.song,
+        title: item.song.title,
+        duration: item.song.duration,
+        isSongFavorite: item.song.isSongFavorite,
+      },
+    ];
+    return Alert.alert('Uprise', "Now you're switching to on-demand player", [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Continue',
+        onPress: async () => {
+          const songInfo = await TrackPlayer.getTrack(0);
+          navigation.navigate('OnDemandMusic', {
+            songList: songDetails,
+            intialSongId: 0,
+            songInfo,
+            songState: await TrackPlayer.getState(),
+            position: await TrackPlayer.getPosition(),
+          });
+        },
+      },
+    ]);
   };
 
   const renderUploadFeed = item => (
     <TouchableOpacity
-      style={ styles.feedContainerView }
-      activeOpacity={ 1 }
-      onPress={ () => navigation.navigate('BandDetails', {
-        bandId: item.band.id,
-      }) }
-    >
-      <View style={ {
-        margin: 15,
-      } }
-      >
-        <View style={ styles.feedProfileView }>
+      style={styles.feedContainerView}
+      activeOpacity={1}
+      onPress={() =>
+        navigation.navigate('BandDetails', {
+          bandId: item.band.id,
+        })
+      }>
+      <View
+        style={{
+          margin: 15,
+        }}>
+        <View style={styles.feedProfileView}>
           <Image
-            style={ styles.feedProfile }
-            source={ item.band.logo ? {
-              uri: item.band.logo,
-            } : require('../../../assets/images/band_defult_img.png') }
+            style={styles.feedProfile}
+            source={
+              item.band.logo
+                ? {
+                    uri: item.band.logo,
+                  }
+                : require('../../../assets/images/band_defult_img.png')
+            }
           />
           <TouchableOpacity
-            style={ {
+            style={{
               flexDirection: 'column',
-            } }
-            onPress={ () => navigation.navigate('BandDetails', {
-              bandId: item.band.id,
-            }) }
-          >
-            <Text style={ [styles.feedText, { textTransform: 'capitalize' }] }>
-              { item.band.title }
+            }}
+            onPress={() =>
+              navigation.navigate('BandDetails', {
+                bandId: item.band.id,
+              })
+            }>
+            <Text style={[styles.feedText, {textTransform: 'capitalize'}]}>
+              {item.band.title}
             </Text>
-            <Text style={ styles.feedTimeText }>
-              { moment.utc(item.createdAt).local().startOf('seconds').fromNow() }
+            <Text style={styles.feedTimeText}>
+              {moment.utc(item.createdAt).local().startOf('seconds').fromNow()}
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={ {
-          marginVertical: 8,
-        } }
-        >
+        <View
+          style={{
+            marginVertical: 8,
+          }}>
           <Image
-            style={ styles.imageView }
-            source={ item.song.thumbnail ? {
-              uri: item.song.thumbnail,
-            } : require('../../../assets/images/feed_music_img.png') }
+            style={styles.imageView}
+            source={
+              item.song.thumbnail
+                ? {
+                    uri: item.song.thumbnail,
+                  }
+                : require('../../../assets/images/feed_music_img.png')
+            }
           />
         </View>
         <View>
-          <Text style={ styles.feedText }>
-            { strings('Feed.heyThere') }
-            { item.band.title }
-            { strings('Feed.haveReleased') }
-            <Text style={ styles.songTitle }>
-              { item.song.title }
-            </Text>
-            { /* { strings('Feed.theirAlbum') } */ }
+          <Text style={styles.feedText}>
+            {strings('Feed.heyThere')}
+            {item.band.title}
+            {strings('Feed.haveReleased')}
+            <Text style={styles.songTitle}>{item.song.title}</Text>
+            {/* { strings('Feed.theirAlbum') } */}
           </Text>
-          { /* <TouchableOpacity onPress={ () => navOndemandPage(item) }>
+          {/* <TouchableOpacity onPress={ () => navOndemandPage(item) }>
             <Text style={ styles.feedClick }>
               { strings('General.listenSong') }
             </Text>
-          </TouchableOpacity> */ }
+          </TouchableOpacity> */}
         </View>
       </View>
     </TouchableOpacity>
   );
 
   const renderEventFeed = item => (
-    <View style={ styles.feedContainerView }>
-      <View style={ {
-        margin: 15,
-      } }
-      >
-        <View style={ styles.feedProfileView }>
+    <View style={styles.feedContainerView}>
+      <View
+        style={{
+          margin: 15,
+        }}>
+        <View style={styles.feedProfileView}>
           <Image
-            style={ styles.feedProfile }
-            source={ item.band.logo ? {
-              uri: item.band.logo,
-            } : require('../../../assets/images/band_defult_img.png') }
+            style={styles.feedProfile}
+            source={
+              item.band.logo
+                ? {
+                    uri: item.band.logo,
+                  }
+                : require('../../../assets/images/band_defult_img.png')
+            }
           />
           <TouchableOpacity
-            style={ {
+            style={{
               flexDirection: 'column',
-            } }
-            onPress={ () => {
+            }}
+            onPress={() => {
               navigation.navigate('BandDetails', {
                 bandId: item.band.id,
               });
-            } }
-          >
-            <Text style={ styles.eventBandName }>
-              { item.band.title }
-            </Text>
-            <Text style={ styles.feedTimeText }>
-              { moment.utc(item.createdAt).local().startOf('seconds').fromNow() }
+            }}>
+            <Text style={styles.eventBandName}>{item.band.title}</Text>
+            <Text style={styles.feedTimeText}>
+              {moment.utc(item.createdAt).local().startOf('seconds').fromNow()}
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={ {
-          marginVertical: 8,
-        } }
-        >
+        <View
+          style={{
+            marginVertical: 8,
+          }}>
           <Image
-            style={ styles.imageView }
-            source={ item.event.thumbnail ? {
-              uri: item.event.thumbnail,
-            } : require('../../../assets/images/event.png') }
+            style={styles.imageView}
+            source={
+              item.event.thumbnail
+                ? {
+                    uri: item.event.thumbnail,
+                  }
+                : require('../../../assets/images/event.png')
+            }
           />
         </View>
         <View>
-          <Text style={ styles.feedText }>
-            { item.band.title }
-            { strings('Feed.hasEvent') }
-            <Text style={ {
-              color: Colors.heighlatedColor,
-            } }
-            >
-              { item.event.eventName }
+          <Text style={styles.feedText}>
+            {item.band.title}
+            {strings('Feed.hasEvent')}
+            <Text
+              style={{
+                color: Colors.heighlatedColor,
+              }}>
+              {item.event.eventName}
             </Text>
-            { strings('Feed.on') }
-            { new Date(item.event.startTime).toLocaleDateString('en-US', {
+            {strings('Feed.on')}
+            {new Date(item.event.startTime).toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
-            }) }
-            { strings('Feed.in') }
-            { item.event.cityName ? item.event.cityName : item.event.stateName }
-            .
+            })}
+            {strings('Feed.in')}
+            {item.event.cityName ? item.event.cityName : item.event.stateName}.
           </Text>
-          <TouchableOpacity onPress={ () => {
-            setEventDetails(item);
-            setModalVisible(!modalVisible);
-          } }
-          >
-            <Text style={ styles.feedClick }>
-              { strings('Feed.moreDetails') }
-            </Text>
+          <TouchableOpacity
+            onPress={() => {
+              setEventDetails(item);
+              setModalVisible(!modalVisible);
+            }}>
+            <Text style={styles.feedClick}>{strings('Feed.moreDetails')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -322,84 +351,97 @@ const Feed = props => {
   );
 
   const renderUpvoteFeed = item => {
-    const songDetails = [{
-      id: item.song.id,
-      artist: item.band.title,
-      artwork: item.song.thumbnail,
-      url: item.song.song,
-      title: item.song.title,
-      duration: item.song.duration,
-      isSongFavorite: item.song.isSongFavorite,
-    }];
+    const songDetails = [
+      {
+        id: item.song.id,
+        artist: item.band.title,
+        artwork: item.song.thumbnail,
+        url: item.song.song,
+        title: item.song.title,
+        duration: item.song.duration,
+        isSongFavorite: item.song.isSongFavorite,
+      },
+    ];
     return (
       <TouchableOpacity
-        style={ styles.feedContainerView }
-        activeOpacity={ 1 }
-        onPress={ () => navigation.navigate({
-          name: 'OtherProfile',
-          params: {
-            Listener: item.initiator.role.name,
-            userName: item.initiator.userName,
-            userId: item.initiator.id,
-          },
-        }) }
-      >
-        <View style={ {
-          margin: 15,
-        } }
-        >
-          <View style={ styles.feedProfileView }>
+        style={styles.feedContainerView}
+        activeOpacity={1}
+        onPress={() =>
+          navigation.navigate({
+            name: 'OtherProfile',
+            params: {
+              Listener: item.initiator.role.name,
+              userName: item.initiator.userName,
+              userId: item.initiator.id,
+            },
+          })
+        }>
+        <View
+          style={{
+            margin: 15,
+          }}>
+          <View style={styles.feedProfileView}>
             <Image
-              style={ styles.feedProfile }
-              source={ item.initiator.avatar ? {
-                uri: item.initiator.avatar,
-              } : require('../../../assets/images/users.png') }
+              style={styles.feedProfile}
+              source={
+                item.initiator.avatar
+                  ? {
+                      uri: item.initiator.avatar,
+                    }
+                  : require('../../../assets/images/users.png')
+              }
             />
             <TouchableOpacity
-              style={ {
+              style={{
                 flexDirection: 'column',
-              } }
-              onPress={ () => navigation.navigate({
-                name: 'OtherProfile',
-                params: {
-                  Listener: item.initiator.role.name,
-                  userName: item.initiator.userName,
-                  userId: item.initiator.id,
-                },
-              }) }
-            >
-              <Text style={ styles.feedText }>
-                { item.initiator.userName }
-              </Text>
-              <Text style={ styles.feedTimeText }>
-                { moment.utc(item.createdAt).local().startOf('seconds').fromNow() }
+              }}
+              onPress={() =>
+                navigation.navigate({
+                  name: 'OtherProfile',
+                  params: {
+                    Listener: item.initiator.role.name,
+                    userName: item.initiator.userName,
+                    userId: item.initiator.id,
+                  },
+                })
+              }>
+              <Text style={styles.feedText}>{item.initiator.userName}</Text>
+              <Text style={styles.feedTimeText}>
+                {moment
+                  .utc(item.createdAt)
+                  .local()
+                  .startOf('seconds')
+                  .fromNow()}
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={ {
-            marginVertical: 8,
-          } }
-          >
+          <View
+            style={{
+              marginVertical: 8,
+            }}>
             <Image
-              style={ styles.imageView }
-              source={ item.song.thumbnail ? {
-                uri: item.song.thumbnail,
-              } : require('../../../assets/images/feed_music_img.png') }
+              style={styles.imageView}
+              source={
+                item.song.thumbnail
+                  ? {
+                      uri: item.song.thumbnail,
+                    }
+                  : require('../../../assets/images/feed_music_img.png')
+              }
             />
           </View>
           <View>
-            <Text style={ styles.feedText }>
-              { item.initiator.userName }
-              { strings('Feed.upvotedSong') }
-              <Text style={ {
-                color: Colors.heighlatedColor,
-              } }
-              >
-                { item.song.title }
-                { ' ' }
+            <Text style={styles.feedText}>
+              {item.initiator.userName}
+              {strings('Feed.upvotedSong')}
+              <Text
+                style={{
+                  color: Colors.heighlatedColor,
+                }}>
+                {item.song.title}{' '}
               </Text>
             </Text>
-            { /* <TouchableOpacity
+            {/* <TouchableOpacity
               activeOpacity={ 0.8 }
               onPress={ async () => {
                 Alert.alert(
@@ -430,7 +472,7 @@ const Feed = props => {
               <Text style={ styles.feedClick }>
                 { strings('General.listenSong') }
               </Text>
-            </TouchableOpacity> */ }
+            </TouchableOpacity> */}
           </View>
         </View>
       </TouchableOpacity>
@@ -439,9 +481,9 @@ const Feed = props => {
 
   const renderFollowFeed = item => (
     <TouchableOpacity
-      style={ styles.feedContainerView }
-      activeOpacity={ 1 }
-      onPress={ () => {
+      style={styles.feedContainerView}
+      activeOpacity={1}
+      onPress={() => {
         navigation.navigate({
           name: 'OtherProfile',
           params: {
@@ -450,60 +492,66 @@ const Feed = props => {
             userId: item.initiator.id,
           },
         });
-      } }
-    >
-      <View style={ {
-        margin: 15,
-      } }
-      >
-        <View style={ styles.feedProfileView }>
+      }}>
+      <View
+        style={{
+          margin: 15,
+        }}>
+        <View style={styles.feedProfileView}>
           <Image
-            style={ styles.feedProfile }
-            source={ item.initiator.avatar ? {
-              uri: item.initiator.avatar,
-            } : require('../../../assets/images/notifyProfileIcon1.png') }
+            style={styles.feedProfile}
+            source={
+              item.initiator.avatar
+                ? {
+                    uri: item.initiator.avatar,
+                  }
+                : require('../../../assets/images/notifyProfileIcon1.png')
+            }
           />
-          <View style={ {
-            flexDirection: 'column',
-          } }
-          >
-            <View style={ {
-              flexDirection: 'row',
-            } }
-            >
-              <TouchableOpacity onPress={ () => {
-                navigation.navigate({
-                  name: 'OtherProfile',
-                  params: {
-                    Listener: item.initiator.role.name,
-                    userName: item.initiator.userName,
-                    userId: item.initiator.id,
-                  },
-                });
-              } }
-              >
-                <Text style={ styles.feedText }>{ item.initiator.userName }</Text>
+          <View
+            style={{
+              flexDirection: 'column',
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate({
+                    name: 'OtherProfile',
+                    params: {
+                      Listener: item.initiator.role.name,
+                      userName: item.initiator.userName,
+                      userId: item.initiator.id,
+                    },
+                  });
+                }}>
+                <Text style={styles.feedText}>{item.initiator.userName}</Text>
               </TouchableOpacity>
-              <Text style={ styles.feedText }>
-                { strings('Feed.hasStarted') }
-                <Text style={ {
-                  color: Colors.heighlatedColor,
-                } }
-                >
-                  { strings('Feed.followingYou') }
+              <Text style={styles.feedText}>
+                {strings('Feed.hasStarted')}
+                <Text
+                  style={{
+                    color: Colors.heighlatedColor,
+                  }}>
+                  {strings('Feed.followingYou')}
                 </Text>
               </Text>
             </View>
-            <Text style={ styles.feedTimeText }>
-              { moment.utc(item.createdAt).local().startOf('seconds').fromNow() }
+            <Text style={styles.feedTimeText}>
+              {moment.utc(item.createdAt).local().startOf('seconds').fromNow()}
             </Text>
           </View>
         </View>
-        <View style={ {
-          marginVertical: 8,
-        } }
-        >
-          <Image style={ styles.imageView } source={ require('../../../assets/images/feed_defult_Following.png') } />
+        <View
+          style={{
+            marginVertical: 8,
+          }}>
+          <Image
+            style={styles.imageView}
+            source={require('../../../assets/images/feed_defult_Following.png')}
+          />
         </View>
       </View>
     </TouchableOpacity>
@@ -511,99 +559,101 @@ const Feed = props => {
 
   const renderBlastFeed = item => (
     <TouchableOpacity
-      style={ styles.feedContainerView }
-      activeOpacity={ 1 }
-      onPress={ () => navigation.navigate({
-        name: 'OtherProfile',
-        params: {
-          Listener: item.initiator.role.name,
-          userName: item.initiator.userName,
-          userId: item.initiator.id,
-        },
-      }) }
-    >
-      <View style={ {
-        margin: 15,
-      } }
-      >
-        <View style={ styles.feedProfileView }>
+      style={styles.feedContainerView}
+      activeOpacity={1}
+      onPress={() =>
+        navigation.navigate({
+          name: 'OtherProfile',
+          params: {
+            Listener: item.initiator.role.name,
+            userName: item.initiator.userName,
+            userId: item.initiator.id,
+          },
+        })
+      }>
+      <View
+        style={{
+          margin: 15,
+        }}>
+        <View style={styles.feedProfileView}>
           <Image
-            style={ styles.feedProfile }
-            source={ item.initiator.avatar ? {
-              uri: item.initiator.avatar,
-            } : require('../../../assets/images/users.png') }
+            style={styles.feedProfile}
+            source={
+              item.initiator.avatar
+                ? {
+                    uri: item.initiator.avatar,
+                  }
+                : require('../../../assets/images/users.png')
+            }
           />
           <TouchableOpacity
-            style={ {
+            style={{
               flexDirection: 'column',
-            } }
-            onPress={ () => navigation.navigate({
-              name: 'OtherProfile',
-              params: {
-                Listener: item.initiator.role.name,
-                userName: item.initiator.userName,
-                userId: item.initiator.id,
-              },
-            }) }
-          >
-            <Text style={ styles.feedText }>
-              { item.initiator.userName }
-            </Text>
-            <Text style={ styles.feedTimeText }>
-              { moment.utc(item.createdAt).local().startOf('seconds').fromNow() }
+            }}
+            onPress={() =>
+              navigation.navigate({
+                name: 'OtherProfile',
+                params: {
+                  Listener: item.initiator.role.name,
+                  userName: item.initiator.userName,
+                  userId: item.initiator.id,
+                },
+              })
+            }>
+            <Text style={styles.feedText}>{item.initiator.userName}</Text>
+            <Text style={styles.feedTimeText}>
+              {moment.utc(item.createdAt).local().startOf('seconds').fromNow()}
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={ {
-          marginVertical: 8,
-        } }
-        >
+        <View
+          style={{
+            marginVertical: 8,
+          }}>
           <Image
-            style={ styles.imageView }
-            source={ item.song.thumbnail ? {
-              uri: item.song.thumbnail,
-            } : require('../../../assets/images/feed_music_img.png') }
+            style={styles.imageView}
+            source={
+              item.song.thumbnail
+                ? {
+                    uri: item.song.thumbnail,
+                  }
+                : require('../../../assets/images/feed_music_img.png')
+            }
           />
         </View>
         <View>
-          <Text style={ styles.feedText }>
-            { item.initiator.userName }
-            { strings('Feed.hasBlasted') }
-            <Text style={ {
-              color: Colors.heighlatedColor,
-            } }
-            >
-              { item.song.title }
-              { ' ' }
+          <Text style={styles.feedText}>
+            {item.initiator.userName}
+            {strings('Feed.hasBlasted')}
+            <Text
+              style={{
+                color: Colors.heighlatedColor,
+              }}>
+              {item.song.title}{' '}
             </Text>
           </Text>
-          { /* <TouchableOpacity
+          {/* <TouchableOpacity
           onPress={ () => navOndemandPage(item) }
           >
             <Text style={ styles.feedClick }>
               { strings('General.listenSong') }
             </Text>
-          </TouchableOpacity> */ }
+          </TouchableOpacity> */}
         </View>
       </View>
     </TouchableOpacity>
   );
 
   const renderNewReleases = () => (
-    <View style={ {
-      marginLeft: 20,
-    } }
-    >
-      <Text style={ styles.newRelease }>
-        { strings('Feed.newReleases') }
-      </Text>
+    <View
+      style={{
+        marginLeft: 20,
+      }}>
+      <Text style={styles.newRelease}>{strings('Feed.newReleases')}</Text>
       <FlatList
         horizontal
-        data={ newReleases }
-        renderItem={ ({
-          item,
-          index,
-        }) => (
+        data={newReleases}
+        renderItem={({item, index}) => (
           <View
           // activeOpacity={ 0.8 }
           // onPress={ async () => {
@@ -618,17 +668,19 @@ const Feed = props => {
           // } }
           // eslint-disable-next-line react/jsx-closing-bracket-location
           >
-            <View style={ styles.albumsImageView }>
+            <View style={styles.albumsImageView}>
               <Image
-                style={ styles.albumsImage }
-                source={ item.thumbnail ? {
-                  uri: item.thumbnail,
-                } : require('../../../assets/images/music_default_img.png') }
+                style={styles.albumsImage}
+                source={
+                  item.thumbnail
+                    ? {
+                        uri: item.thumbnail,
+                      }
+                    : require('../../../assets/images/music_default_img.png')
+                }
               />
-              <Text style={ styles.albumsTextStyle }>
-                { item.title }
-              </Text>
-              { /* { item.album && item.album.title !== null && (
+              <Text style={styles.albumsTextStyle}>{item.title}</Text>
+              {/* { item.album && item.album.title !== null && (
                 <View style={ styles.AlbumNameView }>
                   <SvgImage
                     iconName={ albumVector }
@@ -640,254 +692,245 @@ const Feed = props => {
                   />
                   <Text style={ styles.AlbumTitle }>{ item.album.title }</Text>
                 </View>
-              ) } */ }
-              <View style={ styles.AlbumNameView }>
+              ) } */}
+              <View style={styles.AlbumNameView}>
                 <SvgImage
-                  iconName={ bandVector }
-                  iconStyle={ {
+                  iconName={bandVector}
+                  iconStyle={{
                     marginRight: 7,
-                  } }
-                  width={ 12 }
-                  height={ 12 }
+                  }}
+                  width={12}
+                  height={12}
                 />
-                <Text style={ styles.AlbumTitle }>{ item.band.title }</Text>
+                <Text style={styles.AlbumTitle}>{item.band.title}</Text>
               </View>
             </View>
           </View>
-        ) }
+        )}
       />
     </View>
   );
 
   const renderRadioStations = () => (
-    <View style={ styles.radioStaionView }>
-      <Text style={ styles.radioStaion }>
-        { strings('Feed.radioStations') }
-      </Text>
+    <View style={styles.radioStaionView}>
+      <Text style={styles.radioStaion}>{strings('Feed.radioStations')}</Text>
       <FlatList
-        data={ stateName }
+        data={stateName}
         horizontal
-        renderItem={ ({
-          item,
-          index,
-        }) => (
+        renderItem={({item, index}) => (
           <TouchableOpacity
-            style={ {
+            style={{
               flexDirection: 'row',
-            } }
-            onPress={ () => {
+            }}
+            onPress={() => {
               navigation.navigate('RadioStations', {
                 stateName: item,
                 bgColor: getStationBgColor[index],
               });
-            } }
-          >
+            }}>
             <SvgImage
-              iconName={ radioStations }
-              iconStyle={ {
+              iconName={radioStations}
+              iconStyle={{
                 backgroundColor: getStationBgColor[index],
                 width: 150,
                 marginRight: 15,
-              } }
-              width={ 150 }
-              height={ 145 }
+              }}
+              width={150}
+              height={145}
             />
-            <Text style={ styles.svgTxt }>
-              { item }
-            </Text>
+            <Text style={styles.svgTxt}>{item}</Text>
           </TouchableOpacity>
-        ) }
+        )}
       />
     </View>
   );
 
   const renderPopupView = item => (
-    <View style={ styles.popUpContainer }>
+    <View style={styles.popUpContainer}>
       <View>
         <Image
-          style={ styles.eventImage }
-          source={ item.event.thumbnail ? {
-            uri: item.event.thumbnail,
-          } : require('../../../assets/images/event.png') }
+          style={styles.eventImage}
+          source={
+            item.event.thumbnail
+              ? {
+                  uri: item.event.thumbnail,
+                }
+              : require('../../../assets/images/event.png')
+          }
         />
-        <View style={ {
-          marginHorizontal: 10,
-        } }
-        >
-          <View style={ styles.eventTextView }>
-            <Text style={ styles.eventText } numberOfLines={ 1 }>
-              { item.event.eventName }
+        <View
+          style={{
+            marginHorizontal: 10,
+          }}>
+          <View style={styles.eventTextView}>
+            <Text style={styles.eventText} numberOfLines={1}>
+              {item.event.eventName}
             </Text>
-            { item.event.startTime >= moment.utc(new Date()).format()
-                   && (
-                   <>
-                     { item.event && item.event.addtoCalender ? (
-                       <TouchableOpacity
-                         style={ styles.calendarBtnView }
-                         onPress={ () => {
-                           setFeedList(prevState => {
-                             const newState = prevState.map(obj => {
-                               if (obj.type === 'ADD_EVENT' && obj.event.id === item.event.id) {
-                                 obj.event.addtoCalender = false;
-                               }
-                               return obj;
-                             });
-                             return newState;
-                           });
-                           dispatch(removeEventSagaAction(item.event.id));
-                           setModalVisible(!modalVisible);
-                         } }
-                       >
-                         <View style={ styles.addedCalBtn }>
-                           <Icon type='ionicon' name='checkmark-outline' size={ 11 } color={ Colors.White } />
-                           <Text style={ styles.addCalendarBtnText }>
-                             { strings('General.addedToCalendar') }
-                           </Text>
-                         </View>
-                       </TouchableOpacity>
-                     ) : (
-                       <TouchableOpacity
-                         style={ styles.calendarBtnView }
-                         onPress={ () => {
-                           setFeedList(prevState => {
-                             const newState = prevState.map(obj => {
-                               if (obj.type === 'ADD_EVENT' && obj.event.id === item.event.id) {
-                                 obj.event.addtoCalender = true;
-                               }
-                               return obj;
-                             });
-                             return newState;
-                           });
-                           dispatch(googleEventSagaAction(item.event.id));
-                           setModalVisible(!modalVisible);
-                         } }
-                       >
-                         <Text style={ styles.calendarBtnText }>
-                           { strings('General.addToCalendar') }
-                         </Text>
-                       </TouchableOpacity>
-                     ) }
-                   </>
-                   ) }
+            {item.event.startTime >= moment.utc(new Date()).format() && (
+              <>
+                {item.event && item.event.addtoCalender ? (
+                  <TouchableOpacity
+                    style={styles.calendarBtnView}
+                    onPress={() => {
+                      setFeedList(prevState => {
+                        const newState = prevState.map(obj => {
+                          if (
+                            obj.type === 'ADD_EVENT' &&
+                            obj.event.id === item.event.id
+                          ) {
+                            obj.event.addtoCalender = false;
+                          }
+                          return obj;
+                        });
+                        return newState;
+                      });
+                      dispatch(removeEventSagaAction(item.event.id));
+                      setModalVisible(!modalVisible);
+                    }}>
+                    <View style={styles.addedCalBtn}>
+                      <Icon
+                        type="ionicon"
+                        name="checkmark-outline"
+                        size={11}
+                        color={Colors.White}
+                      />
+                      <Text style={styles.addCalendarBtnText}>
+                        {strings('General.addedToCalendar')}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.calendarBtnView}
+                    onPress={() => {
+                      setFeedList(prevState => {
+                        const newState = prevState.map(obj => {
+                          if (
+                            obj.type === 'ADD_EVENT' &&
+                            obj.event.id === item.event.id
+                          ) {
+                            obj.event.addtoCalender = true;
+                          }
+                          return obj;
+                        });
+                        return newState;
+                      });
+                      dispatch(googleEventSagaAction(item.event.id));
+                      setModalVisible(!modalVisible);
+                    }}>
+                    <Text style={styles.calendarBtnText}>
+                      {strings('General.addToCalendar')}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </>
+            )}
           </View>
-          <View style={ styles.containtView }>
+          <View style={styles.containtView}>
             <SvgImage
-              iconName={ bandVector }
-              iconStyle={ {
+              iconName={bandVector}
+              iconStyle={{
                 marginRight: 3,
-              } }
-              width={ 14 }
-              height={ 14 }
+              }}
+              width={14}
+              height={14}
             />
-            <TouchableOpacity onPress={ () => navigation.navigate('BandDetails', {
-              bandId: item.band.id,
-            }) }
-            >
-              <Text style={ styles.bandNameHeadeing }>
-                { ' ' }
-                { item.band.title }
-              </Text>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('BandDetails', {
+                  bandId: item.band.id,
+                })
+              }>
+              <Text style={styles.bandNameHeadeing}> {item.band.title}</Text>
             </TouchableOpacity>
           </View>
-          <View style={ {
-            marginRight: 16,
-          } }
-          >
-            <View style={ styles.eventDetailsTextView }>
+          <View
+            style={{
+              marginRight: 16,
+            }}>
+            <View style={styles.eventDetailsTextView}>
               <SvgImage
-                iconName={ location }
-                width={ 14 }
-                height={ 14 }
-                iconStyle={ {
+                iconName={location}
+                width={14}
+                height={14}
+                iconStyle={{
                   marginTop: 6,
-                } }
+                }}
               />
-              <Text style={ styles.eventDetailsText }>
-                { item.event.location }
-              </Text>
+              <Text style={styles.eventDetailsText}>{item.event.location}</Text>
             </View>
-            <View style={ styles.eventDetailsTextView }>
+            <View style={styles.eventDetailsTextView}>
               <SvgImage
-                iconName={ clock }
-                width={ 14 }
-                height={ 14 }
-                iconStyle={ {
+                iconName={clock}
+                width={14}
+                height={14}
+                iconStyle={{
                   marginTop: 6,
-                } }
+                }}
               />
-              <Text style={ styles.eventDetailsText }>
-                { new Date(item.event.startTime).toLocaleTimeString('en-US', {
+              <Text style={styles.eventDetailsText}>
+                {new Date(item.event.startTime).toLocaleTimeString('en-US', {
                   hour: '2-digit',
                   minute: '2-digit',
-                }) }
-                { ' ' }
-                { strings('General.onwards') }
+                })}{' '}
+                {strings('General.onwards')}
               </Text>
             </View>
-            <View style={ styles.eventDetailsTextView }>
+            <View style={styles.eventDetailsTextView}>
               <SvgImage
-                iconName={ regularcalendar }
-                width={ 14 }
-                height={ 14 }
-                iconStyle={ {
+                iconName={regularcalendar}
+                width={14}
+                height={14}
+                iconStyle={{
                   marginTop: 6,
-                } }
+                }}
               />
-              <Text style={ styles.eventDetailsText }>
-                { new Date(item.event.startTime).toLocaleDateString('en-US', {
+              <Text style={styles.eventDetailsText}>
+                {new Date(item.event.startTime).toLocaleDateString('en-US', {
                   weekday: 'long',
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
-                }) }
+                })}
               </Text>
             </View>
           </View>
         </View>
       </View>
       <TouchableOpacity
-        activeOpacity={ 0.7 }
-        style={ styles.modelView }
-        onPress={ () => setModalVisible(!modalVisible) }
-      >
-        <Text style={ styles.closeBtn }>
-          { strings('Feed.Close') }
-        </Text>
+        activeOpacity={0.7}
+        style={styles.modelView}
+        onPress={() => setModalVisible(!modalVisible)}>
+        <Text style={styles.closeBtn}>{strings('Feed.Close')}</Text>
       </TouchableOpacity>
     </View>
   );
   return (
     <ScrollView>
-      { showLoading
-        ? (
-          <ActivityIndicator
-            size='small'
-            color={ Colors.URbtnColor }
-          />
-        )
-        : (
-          <>
-            <Modal transparent statusBarTranslucent visible={ modalVisible }>
-              <View style={ styles.popUpView }>
-                { renderPopupView(eventDetails) }
-              </View>
-            </Modal>
-            <View style={ styles.viewStyle }>
-              { FeedData.length === 0 && !showLoading ? ListEmptyComponent() : (
-                <FlatList
-                  data={ FeedList }
-                  renderItem={ ({
-                    item,
-                  }) => renderFeed(item) }
-                  key={ item => item.id }
-                />
-              ) }
+      {showLoading ? (
+        <ActivityIndicator size="small" color={Colors.URbtnColor} />
+      ) : (
+        <>
+          <Modal transparent statusBarTranslucent visible={modalVisible}>
+            <View style={styles.popUpView}>
+              {renderPopupView(eventDetails)}
             </View>
-          </>
-        ) }
+          </Modal>
+          <View style={styles.viewStyle}>
+            {FeedData.length === 0 && !showLoading ? (
+              ListEmptyComponent()
+            ) : (
+              <FlatList
+                data={FeedList}
+                renderItem={({item}) => renderFeed(item)}
+                key={item => item.id}
+              />
+            )}
+          </View>
+        </>
+      )}
     </ScrollView>
   );
 };
 
 export default Feed;
-

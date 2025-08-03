@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import getUserAvatarRequest from '../../../services/getUserAvatar/getUserAvatar.service';
-import { getUserAvatarSagaType } from '../../types/sagas';
-import { getUserAvatarActions } from '../../actions/request/getUserAvatar/getUserAvatar.actions';
+import {getUserAvatarSagaType} from '../../types/sagas';
+import {getUserAvatarActions} from '../../actions/request/getUserAvatar/getUserAvatar.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* getUserAvatarWatcherSaga() {
   yield takeLatest(getUserAvatarSagaType, getUserAvatarWorkerSaga);
@@ -27,4 +25,3 @@ export function* getUserAvatarWorkerSaga() {
     yield call(showAlert, e.error);
   }
 }
-

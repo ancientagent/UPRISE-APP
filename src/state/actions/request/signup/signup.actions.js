@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  SignupRequestTypes,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {SignupRequestTypes} from '../../../types/listener/listener';
 
-export const signupRequestActions = createRequestResponseActionSet(SignupRequestTypes);
+export const signupRequestActions =
+  createRequestResponseActionSet(SignupRequestTypes);

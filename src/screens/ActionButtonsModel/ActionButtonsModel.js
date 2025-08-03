@@ -1,16 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  Alert,
-  Platform,
-} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {TouchableOpacity, View, Text, Alert, Platform} from 'react-native';
 import _ from 'lodash';
-import { useDispatch, useSelector } from 'react-redux';
-import TrackPlayer, { useProgress } from 'react-native-track-player';
+import {useDispatch, useSelector} from 'react-redux';
+import TrackPlayer, {useProgress} from 'react-native-track-player';
 import Geolocation from 'react-native-geolocation-service';
-import { strings } from '../../utilities/localization/localization';
+import {strings} from '../../utilities/localization/localization';
 import SvgImage from '../../components/SvgImage/SvgImage';
 import close from '../../../assets/images/close.svg';
 import Downvote from '../../../assets/images/downvote.svg';
@@ -26,7 +20,7 @@ import unBlast from '../../../assets/images/unBlast.svg';
 import disableDownvote from '../../../assets/images/disableDownvote.svg';
 import disableUpVoteIcon from '../../../assets/images/disableUpVoteIcon.svg';
 import styles from './ActionButtonsModel.styles';
-import { getRadioSong, getUserDetails } from '../../state/selectors/UserProfile';
+import {getRadioSong, getUserDetails} from '../../state/selectors/UserProfile';
 import {
   getRadioSongSagaAction,
   postSongIdSagaAction,
@@ -38,9 +32,7 @@ import {
 } from '../../state/actions/sagas';
 
 const ActionButtonsModel = props => {
-  const {
-    modalVisible, setModalVisible, reportModel, setReportModel,
-  } = props;
+  const {modalVisible, setModalVisible, reportModel, setReportModel} = props;
   const songData = useSelector(getRadioSong);
   const userDetails = useSelector(getUserDetails);
   const progress = useProgress();
@@ -74,7 +66,7 @@ const ActionButtonsModel = props => {
 
   useEffect(() => {
     checkVotingRights();
-  }, []);
+  }, [checkVotingRights]);
 
   /**
    * Check if user has voting rights based on GPS location and home scene
@@ -106,7 +98,7 @@ const ActionButtonsModel = props => {
       Geolocation.getCurrentPosition(
         position => resolve(position),
         error => reject(error),
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
       );
     });
   };
@@ -114,13 +106,13 @@ const ActionButtonsModel = props => {
   /**
    * Verify user is in their home scene location
    */
-  const verifyHomeSceneLocation = async (position) => {
+  const verifyHomeSceneLocation = async position => {
     try {
       // This would typically call your backend to verify location
       // For now, we'll do a basic check against user's registered location
       const userCity = userDetails.city;
       const userState = userDetails.state;
-      
+
       // In a real implementation, you'd geocode the GPS coordinates
       // and compare with the user's home scene
       // For now, we'll assume they're in their home scene if they have location data
@@ -134,14 +126,14 @@ const ActionButtonsModel = props => {
   /**
    * Enhanced voting with GPS verification and tier-specific logic
    */
-  const handleVote = async (voteType) => {
+  const handleVote = async voteType => {
     // Check if user is in NATIONAL tier - no voting allowed
     const currentTier = getCurrentTier();
     if (currentTier === 'NATIONAL') {
       Alert.alert(
         'Voting Not Available',
         'Voting is not available for nationwide broadcasts. Switch to Citywide or Statewide to vote on songs.',
-        [{ text: 'OK' }]
+        [{text: 'OK'}],
       );
       return;
     }
@@ -150,7 +142,7 @@ const ActionButtonsModel = props => {
       Alert.alert(
         'Voting Restricted',
         'You can only vote in your home scene. Please ensure you are in your registered location.',
-        [{ text: 'OK' }]
+        [{text: 'OK'}],
       );
       return;
     }
@@ -159,7 +151,7 @@ const ActionButtonsModel = props => {
       Alert.alert(
         'Location Required',
         'Please enable location services to vote.',
-        [{ text: 'OK' }]
+        [{text: 'OK'}],
       );
       return;
     }
@@ -170,7 +162,7 @@ const ActionButtonsModel = props => {
       Alert.alert(
         'Already Voted',
         'You have already voted on this song in this tier.',
-        [{ text: 'OK' }]
+        [{text: 'OK'}],
       );
       return;
     }
@@ -205,93 +197,110 @@ const ActionButtonsModel = props => {
    */
   const renderVotingButtons = () => {
     const votingEnabled = isVotingEnabled();
-    
+
     return (
       <View style={styles.votingContainer}>
         <TouchableOpacity
           style={[
             styles.voteButton,
             upVoteStatus && styles.voteButtonActive,
-            !votingEnabled && styles.voteButtonDisabled
+            !votingEnabled && styles.voteButtonDisabled,
           ]}
           onPress={() => handleVote('upvote')}
-          disabled={!votingEnabled}
-        >
-          <SvgImage 
-            iconName={upVoteStatus ? UpvoteActive : Upvote} 
-            height={24} 
-            width={24} 
+          disabled={!votingEnabled}>
+          <SvgImage
+            iconName={upVoteStatus ? Upvote : Upvote}
+            height={24}
+            width={24}
           />
         </TouchableOpacity>
-        
+
         <TouchableOpacity
           style={[
             styles.voteButton,
             downVoteStatus && styles.voteButtonActive,
-            !votingEnabled && styles.voteButtonDisabled
+            !votingEnabled && styles.voteButtonDisabled,
           ]}
           onPress={() => handleVote('downvote')}
-          disabled={!votingEnabled}
-        >
-          <SvgImage 
-            iconName={downVoteStatus ? DownvoteActive : Downvote} 
-            height={24} 
-            width={24} 
+          disabled={!votingEnabled}>
+          <SvgImage
+            iconName={downVoteStatus ? Downvote : Downvote}
+            height={24}
+            width={24}
           />
         </TouchableOpacity>
-        
+
         {!votingEnabled && (
           <Text style={styles.votingDisabledText}>
-            {getCurrentTier() === 'NATIONAL' ? 'No voting in nationwide' : 'Location required'}
+            {getCurrentTier() === 'NATIONAL'
+              ? 'No voting in nationwide'
+              : 'Location required'}
           </Text>
         )}
       </View>
     );
   };
 
-  const items = [{
-    containerStyle: styles.skipBlastBtnSet.containerStyle,
-    leftTextStyle: styles.skipBlastBtnSet.leftTextStyle,
-    leftText: strings('curvedBottomBar.skipText'),
-    leftBtnStyle: styles.skipBlastBtnSet.leftBtnStyle,
-    leftIconName: Math.round(progress.position) >= 32 ? Skip : disableSkip,
-    leftIconPress: () => (Math.round(progress.position) >= 32 ? skipNext() : ''),
-    rightIconPress: () => (blastState ? '' : songBlast()),
-    rightIconName: blastState ? unBlast : Blast,
-    rightIconText: strings('curvedBottomBar.blastText'),
-    rightTextStyle: styles.skipBlastBtnSet.rightTextStyle,
-  },
-  {
-    containerStyle: styles.reportFollowBtnSet.containerStyle,
-    leftTextStyle: styles.reportFollowBtnSet.leftTextStyle,
-    leftText: strings('curvedBottomBar.reportText'),
-    leftBtnStyle: styles.reportFollowBtnSet.leftBtnStyle,
-    leftIconName: songReport ? Reported : Report,
-    leftIconPress: () => (songReport ? '' : songReported()),
-    rightIconPress: () => (followState ? undoBandFollow() : bandFollow()),
-    rightIconName: followState ? unFollow : Follow,
-    rightIconText: followState ? strings('General.unFollow') : strings('curvedBottomBar.followText'),
-    rightTextStyle: styles.reportFollowBtnSet.rightTextStyle,
-  },
-  {
-    containerStyle: styles.downUpvoteBtnSet.containerStyle,
-    leftTextStyle: styles.downUpvoteBtnSet.leftTextStyle,
-    leftText: strings('curvedBottomBar.downvoteText'),
-    leftBtnStyle: [
-      styles.downUpvoteBtnSet.leftBtnStyle,
-      !isVotingEnabled() && styles.voteButtonDisabled
-    ],
-    leftIconName: downVoteStatus ? disableDownvote : Downvote,
-    leftIconPress: () => (!isVotingEnabled() ? 
-      Alert.alert('Voting Not Available', 'Voting is not available for nationwide broadcasts. Switch to Citywide or Statewide to vote on songs.') : 
-      (downVoteStatus ? songundoDownVote() : handleVote('downvote'))),
-    rightIconPress: () => (!isVotingEnabled() ? 
-      Alert.alert('Voting Not Available', 'Voting is not available for nationwide broadcasts. Switch to Citywide or Statewide to vote on songs.') : 
-      (upVoteStatus ? songundoUpvote() : handleVote('upvote'))),
-    rightIconName: upVoteStatus ? disableUpVoteIcon : Upvote,
-    rightIconText: strings('curvedBottomBar.upvoteText'),
-    rightTextStyle: styles.downUpvoteBtnSet.rightTextStyle,
-  }];
+  const items = [
+    {
+      containerStyle: styles.skipBlastBtnSet.containerStyle,
+      leftTextStyle: styles.skipBlastBtnSet.leftTextStyle,
+      leftText: strings('curvedBottomBar.skipText'),
+      leftBtnStyle: styles.skipBlastBtnSet.leftBtnStyle,
+      leftIconName: Math.round(progress.position) >= 32 ? Skip : disableSkip,
+      leftIconPress: () =>
+        Math.round(progress.position) >= 32 ? skipNext() : '',
+      rightIconPress: () => (blastState ? '' : songBlast()),
+      rightIconName: blastState ? unBlast : Blast,
+      rightIconText: strings('curvedBottomBar.blastText'),
+      rightTextStyle: styles.skipBlastBtnSet.rightTextStyle,
+    },
+    {
+      containerStyle: styles.reportFollowBtnSet.containerStyle,
+      leftTextStyle: styles.reportFollowBtnSet.leftTextStyle,
+      leftText: strings('curvedBottomBar.reportText'),
+      leftBtnStyle: styles.reportFollowBtnSet.leftBtnStyle,
+      leftIconName: songReport ? Reported : Report,
+      leftIconPress: () => (songReport ? '' : songReported()),
+      rightIconPress: () => (followState ? undoBandFollow() : bandFollow()),
+      rightIconName: followState ? unFollow : Follow,
+      rightIconText: followState
+        ? strings('General.unFollow')
+        : strings('curvedBottomBar.followText'),
+      rightTextStyle: styles.reportFollowBtnSet.rightTextStyle,
+    },
+    {
+      containerStyle: styles.downUpvoteBtnSet.containerStyle,
+      leftTextStyle: styles.downUpvoteBtnSet.leftTextStyle,
+      leftText: strings('curvedBottomBar.downvoteText'),
+      leftBtnStyle: [
+        styles.downUpvoteBtnSet.leftBtnStyle,
+        !isVotingEnabled() && styles.voteButtonDisabled,
+      ],
+      leftIconName: downVoteStatus ? disableDownvote : Downvote,
+      leftIconPress: () =>
+        !isVotingEnabled()
+          ? Alert.alert(
+              'Voting Not Available',
+              'Voting is not available for nationwide broadcasts. Switch to Citywide or Statewide to vote on songs.',
+            )
+          : downVoteStatus
+          ? songundoDownVote()
+          : handleVote('downvote'),
+      rightIconPress: () =>
+        !isVotingEnabled()
+          ? Alert.alert(
+              'Voting Not Available',
+              'Voting is not available for nationwide broadcasts. Switch to Citywide or Statewide to vote on songs.',
+            )
+          : upVoteStatus
+          ? songundoUpvote()
+          : handleVote('upvote'),
+      rightIconName: upVoteStatus ? disableUpVoteIcon : Upvote,
+      rightIconText: strings('curvedBottomBar.upvoteText'),
+      rightTextStyle: styles.downUpvoteBtnSet.rightTextStyle,
+    },
+  ];
 
   const songReported = () => {
     setReportModel(!reportModel);
@@ -345,10 +354,14 @@ const ActionButtonsModel = props => {
   const getCurrentTier = () => {
     const stationType = userDetails.radioPrefrence?.stationType;
     switch (stationType) {
-      case '1': return 'CITYWIDE';
-      case '2': return 'STATEWIDE';
-      case '3': return 'NATIONAL';
-      default: return 'CITYWIDE';
+      case '1':
+        return 'CITYWIDE';
+      case '2':
+        return 'STATEWIDE';
+      case '3':
+        return 'NATIONAL';
+      default:
+        return 'CITYWIDE';
     }
   };
 
@@ -383,19 +396,23 @@ const ActionButtonsModel = props => {
     title: songData.title,
     artist: songData.band ? songData.band.title : '',
     id: songData.songId,
-    artwork: songData.thumbnail === null ? 'https://images.unsplash.com/photo-1476984251899-8d7fdfc5c92c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHZpZXd8ZW58MHx8MHx8&auto=format&fit=crop&w=1400&q=60' : songData.thumbnail,
+    artwork:
+      songData.thumbnail === null
+        ? 'https://images.unsplash.com/photo-1476984251899-8d7fdfc5c92c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHZpZXd8ZW58MHx8MHx8&auto=format&fit=crop&w=1400&q=60'
+        : songData.thumbnail,
     duration: songData.duration,
   };
 
   const skipNext = async () => {
-    await (() => new Promise(resolve => {
-      const payload = {
-        songId: songData.songId,
-        listenSource: 'radio',
-        callback: resolve,
-      };
-      dispatch(postSongIdSagaAction(payload));
-    }))();
+    await (() =>
+      new Promise(resolve => {
+        const payload = {
+          songId: songData.songId,
+          listenSource: 'radio',
+          callback: resolve,
+        };
+        dispatch(postSongIdSagaAction(payload));
+      }))();
     dispatch(getRadioSongSagaAction());
     await TrackPlayer.reset();
     await TrackPlayer.updateMetadataForTrack(0, songInfo);
@@ -406,40 +423,33 @@ const ActionButtonsModel = props => {
     const circleButtons = [];
     _.forEach(items, item => {
       circleButtons.push(
-        <View style={ item.containerStyle }>
-          <Text style={ item.leftTextStyle }>{ item.leftText }</Text>
+        <View style={item.containerStyle}>
+          <Text style={item.leftTextStyle}>{item.leftText}</Text>
           <TouchableOpacity
-            activeOpacity={ 0.4 }
-            style={ item.leftBtnStyle }
-            onPress={ item.leftIconPress }
-          >
-            <SvgImage iconName={ item.leftIconName } width={ 32 } height={ 32 } />
+            activeOpacity={0.4}
+            style={item.leftBtnStyle}
+            onPress={item.leftIconPress}>
+            <SvgImage iconName={item.leftIconName} width={32} height={32} />
           </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={ 0.4 }
-            onPress={ item.rightIconPress }
-          >
-            <SvgImage iconName={ item.rightIconName } width={ 32 } height={ 32 } />
+          <TouchableOpacity activeOpacity={0.4} onPress={item.rightIconPress}>
+            <SvgImage iconName={item.rightIconName} width={32} height={32} />
           </TouchableOpacity>
-          <Text style={ item.rightTextStyle }>{ item.rightIconText }</Text>
+          <Text style={item.rightTextStyle}>{item.rightIconText}</Text>
         </View>,
       );
     });
-    return (circleButtons);
+    return circleButtons;
   };
 
   return (
     <>
-      <View style={ styles.containerStyle }>
-        <View style={ { width: '100%' } }>
-          { renderCircleButtons() }
-        </View>
+      <View style={styles.containerStyle}>
+        <View style={{width: '100%'}}>{renderCircleButtons()}</View>
         <TouchableOpacity
-          activeOpacity={ 0.7 }
-          style={ { marginBottom: 45 } }
-          onPress={ () => setModalVisible(!modalVisible) }
-        >
-          <SvgImage iconName={ close } width={ 32 } height={ 32 } />
+          activeOpacity={0.7}
+          style={{marginBottom: 45}}
+          onPress={() => setModalVisible(!modalVisible)}>
+          <SvgImage iconName={close} width={32} height={32} />
         </TouchableOpacity>
       </View>
     </>
@@ -447,4 +457,3 @@ const ActionButtonsModel = props => {
 };
 
 export default ActionButtonsModel;
-

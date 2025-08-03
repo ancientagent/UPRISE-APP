@@ -1,17 +1,25 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import TrackPlayer from 'react-native-track-player';
 import stationSwitchingRequest from '../../../services/stationSwitching/stationSwitching.service';
-import { stationSwitchingSagaType } from '../../types/sagas';
-import { stationSwitchingActions } from '../../actions/request/stationSwitching/stationSwitching.actions';
-import { accessToken, getRadioSong, currentScreen } from '../../selectors/UserProfile';
+import {stationSwitchingSagaType} from '../../types/sagas';
+import {stationSwitchingActions} from '../../actions/request/stationSwitching/stationSwitching.actions';
 import {
-  getRadioSongSagaAction, homeEventsSagaAction, homePromosSagaAction, getUserDetailsSagaAction,
+  accessToken,
+  getRadioSong,
+  currentScreen,
+} from '../../selectors/UserProfile';
+import {
+  getRadioSongSagaAction,
+  homeEventsSagaAction,
+  homePromosSagaAction,
+  getUserDetailsSagaAction,
   getUserStatisticsSagaAction,
-  getEventsStatisticsSagaAction, getBandsStatisticsSagaAction,
-  getRadioStationStatisticsSagaAction, getPopularArtistStatisticsSagaAction,
-  getGenresPrefrenceStatisticsSagaAction, getPopularArtistGenresStatisticsSagaAction,
+  getEventsStatisticsSagaAction,
+  getBandsStatisticsSagaAction,
+  getRadioStationStatisticsSagaAction,
+  getPopularArtistStatisticsSagaAction,
+  getGenresPrefrenceStatisticsSagaAction,
+  getPopularArtistGenresStatisticsSagaAction,
 } from '../../actions/sagas';
 
 import showAlert from '../AlertUtility';
@@ -66,4 +74,3 @@ export function* stationSwitchingWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

@@ -1,5 +1,5 @@
-import { all, fork } from 'redux-saga/effects';
-import { networkSaga } from 'react-native-offline';
+import {all, fork} from 'redux-saga/effects';
+import {networkSaga} from 'react-native-offline';
 
 // Only include a few basic sagas for testing
 import sampleWatcherSaga from './samplerequest/samplerequest.saga';
@@ -82,7 +82,7 @@ import watchNetworkError from './networkError/networkError.saga';
 
 export default function* rootSaga() {
   yield all([
-    fork(networkSaga, { pingInterval: 20000 }),
+    fork(networkSaga, {pingInterval: 20000}),
     sampleWatcherSaga(),
     signUpWatcherSaga(),
     loginWatcherSaga(),
@@ -161,4 +161,4 @@ export default function* rootSaga() {
     artistProfileWatcherSaga(),
     watchNetworkError(),
   ]);
-} 
+}

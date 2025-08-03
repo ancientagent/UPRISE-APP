@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  otherUserProfileType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {otherUserProfileType} from '../../../types/listener/listener';
 
-export const otherUserProfileActions = createRequestResponseActionSet(otherUserProfileType);
+export const otherUserProfileActions =
+  createRequestResponseActionSet(otherUserProfileType);

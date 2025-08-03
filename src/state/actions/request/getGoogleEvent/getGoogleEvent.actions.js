@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  getGoogleEventType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {getGoogleEventType} from '../../../types/listener/listener';
 
-export const getGoogleEventActions = createRequestResponseActionSet(getGoogleEventType);
+export const getGoogleEventActions =
+  createRequestResponseActionSet(getGoogleEventType);

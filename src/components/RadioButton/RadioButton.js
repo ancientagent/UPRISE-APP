@@ -4,20 +4,18 @@ import styles from './RadioButton.style';
 import Colors from '../../theme/colors';
 
 const RadioButton = props => {
-  const {
-    Data, selectedBtn, box, circleSize, initial,
-  } = props;
+  const {Data, selectedBtn, box, circleSize, initial} = props;
   return (
     <>
       <RadioButtonRN
-        data={ Data }
-        style={ styles.radioButtonStyle }
-        initial={ initial }
-        selectedBtn={ selectedBtn }
-        box={ box }
-        activeColor={ Colors.radiumColour }
-        circleSize={ circleSize }
-        textStyle={ styles.textStyle }
+        data={Data}
+        style={styles.radioButtonStyle}
+        initial={initial}
+        selectedBtn={selectedBtn}
+        box={box}
+        activeColor={Colors.radiumColour}
+        circleSize={circleSize}
+        textStyle={styles.textStyle}
       />
     </>
   );

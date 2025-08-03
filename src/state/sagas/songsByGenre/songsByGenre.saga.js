@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import songsByGenreRequest from '../../../services/songsByGenre/songsByGenre.service';
-import { getSongsByGenreSagaType } from '../../types/sagas';
-import { getSongsByGenreActions } from '../../actions/request/songsByGenre/songsByGenre.actions';
+import {getSongsByGenreSagaType} from '../../types/sagas';
+import {getSongsByGenreActions} from '../../actions/request/songsByGenre/songsByGenre.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* songsByGenreWatcherSaga() {
   yield takeLatest(getSongsByGenreSagaType, songsByGenreWorkerSaga);
@@ -28,4 +26,3 @@ export function* songsByGenreWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

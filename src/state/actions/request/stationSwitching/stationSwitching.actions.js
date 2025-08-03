@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  stationSwitchingType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {stationSwitchingType} from '../../../types/listener/listener';
 
-export const stationSwitchingActions = createRequestResponseActionSet(stationSwitchingType);
+export const stationSwitchingActions =
+  createRequestResponseActionSet(stationSwitchingType);

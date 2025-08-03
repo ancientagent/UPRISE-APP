@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import otherUserProfileRequest from '../../../services/otherUserProfile/otherUserProfile.service';
-import { otherUserProfileSagaType } from '../../types/sagas';
-import { otherUserProfileActions } from '../../actions/request/otherUserProfile/otherUserProfile.actions';
+import {otherUserProfileSagaType} from '../../types/sagas';
+import {otherUserProfileActions} from '../../actions/request/otherUserProfile/otherUserProfile.actions';
 import showAlert from '../AlertUtility';
-import { accessToken, getUserDetails } from '../../selectors/UserProfile';
+import {accessToken, getUserDetails} from '../../selectors/UserProfile';
 
 export default function* otherUserProfileWatcherSaga() {
   yield takeLatest(otherUserProfileSagaType, otherUserProfileWorkerSaga);
@@ -30,4 +28,3 @@ export function* otherUserProfileWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

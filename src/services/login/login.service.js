@@ -1,9 +1,7 @@
 import Config from 'react-native-config';
-import { request } from '../request/request.service';
-import {
-  POST,
-} from '../constants/Constants';
-import { getRequestURL } from '../../utilities/utilities';
+import {request} from '../request/request.service';
+import {POST} from '../constants/Constants';
+import {getRequestURL} from '../../utilities/utilities';
 
 export default function loginRequest(payload) {
   const requestOptions = {
@@ -11,6 +9,5 @@ export default function loginRequest(payload) {
     data: JSON.stringify(payload),
     url: getRequestURL(Config.LOGIN_URL),
   };
-  return request(requestOptions)
-    .then(response => response);
+  return request(requestOptions).then(response => response);
 }

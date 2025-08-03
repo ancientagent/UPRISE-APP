@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  getSongsByGenreType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {getSongsByGenreType} from '../../../types/listener/listener';
 
-export const getSongsByGenreActions = createRequestResponseActionSet(getSongsByGenreType);
+export const getSongsByGenreActions =
+  createRequestResponseActionSet(getSongsByGenreType);

@@ -1,25 +1,35 @@
 /* eslint-disable global-require */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  View, Text, FlatList, Image, TouchableOpacity, Alert,
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  Alert,
 } from 'react-native';
 import _ from 'lodash';
-import { Divider } from 'react-native-elements';
+import {Divider} from 'react-native-elements';
 import TrackPlayer from 'react-native-track-player';
-import AsyncStorage
-from '@react-native-community/async-storage';
-import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
+import {useDispatch, useSelector} from 'react-redux';
 import SvgImage from '../../../components/SvgImage/SvgImage';
 import Colors from '../../../theme/colors';
 import styles from './FavoritesTab.styles';
 import favSymbolFilledIcon from '../../../../assets/images/favSymbolFilledIcon.svg';
-import { songUnfavoriteSagaAction, favoriteSongListSagaAction } from '../../../state/actions/sagas';
-import { favoriteSongList, currentSongData } from '../../../state/selectors/UserProfile';
-import { strings } from '../../../utilities/localization/localization';
+import {
+  songUnfavoriteSagaAction,
+  favoriteSongListSagaAction,
+} from '../../../state/actions/sagas';
+import {
+  favoriteSongList,
+  currentSongData,
+} from '../../../state/selectors/UserProfile';
+import {strings} from '../../../utilities/localization/localization';
 import Loader from '../../../components/Loader/Loader';
-import { currentSongDataAction } from '../../../state/actions/currentSongData/currentSongData.action';
+import {currentSongDataAction} from '../../../state/actions/currentSongData/currentSongData.action';
 
-const FavoritesTab = ({ navigation }) => {
+const FavoritesTab = ({navigation}) => {
   const dispatch = useDispatch();
   const showLoading = useSelector(state => state.favoriteSongList.isWaiting);
   const favSongList = useSelector(favoriteSongList);
@@ -37,8 +47,11 @@ const FavoritesTab = ({ navigation }) => {
   const songunfavorite = id => {
     const playlistData = songData.songList;
     if (playerState && id === playlistData[0].id) {
-      const songList = playlistData.map(data => ({ ...data, isSongFavorite: false }));
-      dispatch(currentSongDataAction({ ...songData, songList }));
+      const songList = playlistData.map(data => ({
+        ...data,
+        isSongFavorite: false,
+      }));
+      dispatch(currentSongDataAction({...songData, songList}));
     }
     const payload = {
       songId: id,
@@ -50,20 +63,23 @@ const FavoritesTab = ({ navigation }) => {
     const artist = _.get(data, 'band.title', '');
     const artwork = data.thumbnail;
     return {
-      ...data, url, artwork, artist,
+      ...data,
+      url,
+      artwork,
+      artist,
     };
   });
   const renderFavoritesData = renderData => (
     <>
       <FlatList
-        data={ renderData }
-        renderItem={ ({ item, index }) => (
-          <View style={ { marginHorizontal: 28 } }>
-            <View style={ styles.FavoritesTabView }>
+        data={renderData}
+        renderItem={({item, index}) => (
+          <View style={{marginHorizontal: 28}}>
+            <View style={styles.FavoritesTabView}>
               <TouchableOpacity
-                style={ styles.ImageViewStyle }
-                activeOpacity={ 0.7 }
-                onPress={ async () => {
+                style={styles.ImageViewStyle}
+                activeOpacity={0.7}
+                onPress={async () => {
                   Alert.alert(
                     'Uprise',
                     "Now you're switching to on-demand player",
@@ -87,54 +103,46 @@ const FavoritesTab = ({ navigation }) => {
                       },
                     ],
                   );
-                } }
-              >
+                }}>
                 <Image
-                  style={ styles.ImageStyle }
-                  source={ item.thumbnail ? { uri: item.thumbnail } : require('../../../../assets/images/music_default_img.png') }
+                  style={styles.ImageStyle}
+                  source={
+                    item.thumbnail
+                      ? {uri: item.thumbnail}
+                      : require('../../../../assets/images/music_default_img.png')
+                  }
                 />
                 <View>
-                  <Text style={ styles.titleStyle }>
-                    { item.title }
-                  </Text>
-                  <Text style={ styles.subText }>
-                    { item.band.title }
-                  </Text>
+                  <Text style={styles.titleStyle}>{item.title}</Text>
+                  <Text style={styles.subText}>{item.band.title}</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={ () => songunfavorite(item.id) }>
+              <TouchableOpacity onPress={() => songunfavorite(item.id)}>
                 <SvgImage
-                  iconStyle={ { marginRight: 0 } }
-                  iconName={ favSymbolFilledIcon }
-                  height={ 22 }
-                  width={ 22 }
+                  iconStyle={{marginRight: 0}}
+                  iconName={favSymbolFilledIcon}
+                  height={22}
+                  width={22}
                 />
               </TouchableOpacity>
             </View>
             <Divider
-              orientation='horizontal'
-              width={ 0.4 }
-              color={ Colors.dividerColor }
+              orientation="horizontal"
+              width={0.4}
+              color={Colors.dividerColor}
             />
           </View>
-        ) }
+        )}
       />
     </>
   );
   return (
-    <View style={ styles.FavoritesViewStyle }>
-      <Loader
-        visible={ showLoading }
-      />
-      <Text style={ styles.songsText }>
-        { strings('userProfile.favorites') }
-      </Text>
-      { !(Object.keys(favSongList).length === 0)
-      && (
-      <View>
-        { renderFavoritesData(favSongList) }
-      </View>
-      ) }
+    <View style={styles.FavoritesViewStyle}>
+      <Loader visible={showLoading} />
+      <Text style={styles.songsText}>{strings('userProfile.favorites')}</Text>
+      {!(Object.keys(favSongList).length === 0) && (
+        <View>{renderFavoritesData(favSongList)}</View>
+      )}
     </View>
   );
 };

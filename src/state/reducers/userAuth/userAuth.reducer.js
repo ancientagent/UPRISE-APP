@@ -1,4 +1,4 @@
-import { App } from '../../types';
+import {App} from '../../types';
 
 const initialState = {
   accessToken: '',

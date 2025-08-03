@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  getDayEventType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {getDayEventType} from '../../../types/listener/listener';
 
-export const getDayEventActions = createRequestResponseActionSet(getDayEventType);
+export const getDayEventActions =
+  createRequestResponseActionSet(getDayEventType);

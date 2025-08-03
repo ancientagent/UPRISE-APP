@@ -1,12 +1,10 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import upDateProfileRequest from '../../../services/upDateProfile/upDateProfile.service';
-import { upDateProfileSagaType } from '../../types/sagas';
-import { upDateProfileRequestActions } from '../../actions/request/upDateProfile/upDateProfile.actions';
-import { accessToken } from '../../selectors/UserProfile';
+import {upDateProfileSagaType} from '../../types/sagas';
+import {upDateProfileRequestActions} from '../../actions/request/upDateProfile/upDateProfile.actions';
+import {accessToken} from '../../selectors/UserProfile';
 import showAlert from '../AlertUtility';
-import { getUserDetailsSagaAction } from '../../actions/sagas';
+import {getUserDetailsSagaAction} from '../../actions/sagas';
 
 export default function* upDateProfileWatcherSaga() {
   yield takeLatest(upDateProfileSagaType, upDateProfileWorkerSaga);
@@ -30,4 +28,3 @@ export function* upDateProfileWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

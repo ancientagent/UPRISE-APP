@@ -1,4 +1,4 @@
-import { createRequestResponseReducer } from '../../generic';
-import { getSongAnalyticsType } from '../../../types/listener/listener';
+import {createRequestResponseReducer} from '../../generic';
+import {getSongAnalyticsType} from '../../../types/listener/listener';
 
-export default createRequestResponseReducer(getSongAnalyticsType); 
+export default createRequestResponseReducer(getSongAnalyticsType);

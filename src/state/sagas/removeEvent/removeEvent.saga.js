@@ -1,10 +1,8 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import removeEventRequest from '../../../services/removeEvent/removeEvent.service';
-import { removeEventSagaType } from '../../types/sagas';
-import { removeEventActions } from '../../actions/request/removeEvent/removeEvent.actions';
-import { accessToken } from '../../selectors/UserProfile';
+import {removeEventSagaType} from '../../types/sagas';
+import {removeEventActions} from '../../actions/request/removeEvent/removeEvent.actions';
+import {accessToken} from '../../selectors/UserProfile';
 import showAlert from '../AlertUtility';
 
 export default function* removeEventWatcherSaga() {
@@ -28,4 +26,3 @@ export function* removeEventWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import albumDetailsRequest from '../../../services/albumDetails/albumDetails.service';
-import { albumDetailsSagaType } from '../../types/sagas';
-import { albumDetailsActions } from '../../actions/request/albumDetails/albumDetails.actions';
+import {albumDetailsSagaType} from '../../types/sagas';
+import {albumDetailsActions} from '../../actions/request/albumDetails/albumDetails.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* albumDetailsWatcherSaga() {
   yield takeLatest(albumDetailsSagaType, albumDetailsWorkerSaga);
@@ -29,4 +27,3 @@ export function* albumDetailsWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

@@ -1,12 +1,14 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import songUnfavoriteRequest from '../../../services/songUnfavorite/songUnfavorite.service';
-import { songUnfavoriteSagaType } from '../../types/sagas';
-import { songUnfavoriteActions } from '../../actions/request/songUnfavorite/songUnfavorite.actions';
-import { accessToken } from '../../selectors/UserProfile';
+import {songUnfavoriteSagaType} from '../../types/sagas';
+import {songUnfavoriteActions} from '../../actions/request/songUnfavorite/songUnfavorite.actions';
+import {accessToken} from '../../selectors/UserProfile';
 import showAlert from '../AlertUtility';
-import { getRadioSongSagaAction, favoriteSongListSagaAction, treandingSongsSagaAction } from '../../actions/sagas';
+import {
+  getRadioSongSagaAction,
+  favoriteSongListSagaAction,
+  treandingSongsSagaAction,
+} from '../../actions/sagas';
 
 export default function* songUnfavoriteWatcherSaga() {
   yield takeLatest(songUnfavoriteSagaType, songUnfavoriteWorkerSaga);
@@ -25,11 +27,10 @@ export function* songUnfavoriteWorkerSaga(action) {
       yield put(songUnfavoriteActions.succeed(response));
       yield put(getRadioSongSagaAction());
       yield put(favoriteSongListSagaAction());
-      yield put(treandingSongsSagaAction({ count: 'all' }));
+      yield put(treandingSongsSagaAction({count: 'all'}));
     }
   } catch (e) {
     yield put(songUnfavoriteActions.fail(e));
     yield call(showAlert, e.error);
   }
 }
-

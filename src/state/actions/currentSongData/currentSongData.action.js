@@ -1,3 +1,6 @@
-import { App } from '../../types';
+import {App} from '../../types';
 
-export const currentSongDataAction = payload => ({ type: App.currentSongData, payload });
+export const currentSongDataAction = payload => ({
+  type: App.currentSongData,
+  payload,
+});

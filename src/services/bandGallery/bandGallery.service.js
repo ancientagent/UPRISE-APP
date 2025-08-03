@@ -1,17 +1,14 @@
 import Config from 'react-native-config';
-import { request } from '../request/request.service';
-import {
-  GET,
-} from '../constants/Constants';
-import { getRequestURL } from '../../utilities/utilities';
+import {request} from '../request/request.service';
+import {GET} from '../constants/Constants';
+import {getRequestURL} from '../../utilities/utilities';
 
 export default function bandGalleryRequest(payload) {
   const finalUrl = Config.BAND_GALLERY.replace('{BANDID}', payload.bandId);
   const requestOptions = {
     method: GET,
     url: getRequestURL(finalUrl),
-    headers: { Authorization: `Bearer ${payload.accessToken}` },
+    headers: {Authorization: `Bearer ${payload.accessToken}`},
   };
-  return request(requestOptions)
-    .then(response => response);
+  return request(requestOptions).then(response => response);
 }

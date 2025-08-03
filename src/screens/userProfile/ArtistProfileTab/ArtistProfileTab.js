@@ -1,34 +1,48 @@
 /* eslint-disable global-require */
 /* eslint-disable no-undef */
 /* eslint-disable no-lone-blocks */
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
-  View, Text, TouchableOpacity, TextInput, Image, Alert,
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  Image,
+  Alert,
 } from 'react-native';
 import * as yup from 'yup';
-import { ScrollView } from 'react-native-virtualized-view';
-import { useSelector, useDispatch } from 'react-redux';
-import { Icon, Divider, Avatar } from 'react-native-elements';
-import { Formik } from 'formik';
+import {ScrollView} from 'react-native-virtualized-view';
+import {useSelector, useDispatch} from 'react-redux';
+import {Icon, Divider, Avatar} from 'react-native-elements';
+import {Formik} from 'formik';
 import MarqueeText from 'react-native-marquee';
 import _ from 'lodash';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './ArtistProfileTab.styles';
 import BlackEdit from '../../../../assets/images/BlackEdit.svg';
 import SvgImage from '../../../components/SvgImage/SvgImage';
 import Colors from '../../../theme/colors';
-import { getUserDetails, getArtistProfile } from '../../../state/selectors/UserProfile';
-import { currentScreenAction } from '../../../state/actions/currentScreen/currentScreen.action';
-import { artistProfileSagaAction, updateArtistProfileSagaAction } from '../../../state/actions/sagas';
-import { strings } from '../../../utilities/localization/localization';
+import {
+  getUserDetails,
+  getArtistProfile,
+} from '../../../state/selectors/UserProfile';
+import {currentScreenAction} from '../../../state/actions/currentScreen/currentScreen.action';
+import {
+  artistProfileSagaAction,
+  updateArtistProfileSagaAction,
+} from '../../../state/actions/sagas';
+import {strings} from '../../../utilities/localization/localization';
 import Loader from '../../../components/Loader/Loader';
 
 const ArtistProfileTab = props => {
-  const { navigation, EditMode, setEditMode } = props;
-  const showLoading = useSelector(state => state.artistProfile.isWaiting || state.updateArtistProfile.isWaiting);
+  const {navigation, EditMode, setEditMode} = props;
+  const showLoading = useSelector(
+    state =>
+      state.artistProfile.isWaiting || state.updateArtistProfile.isWaiting,
+  );
   const [artistLogo, setArtistLogo] = useState(null);
   const [artistLogoId, setArtistLogoId] = useState(null);
-  
+
   const userDetails = useSelector(getUserDetails);
   const artistProfile = useSelector(getArtistProfile);
   const screenDetails = useSelector(state => state.currentScreen);
@@ -52,7 +66,10 @@ const ArtistProfileTab = props => {
     title: yup
       .string()
       .trim()
-      .required(strings('userProfile.bandNameRequired') || 'Artist/Band name is required'),
+      .required(
+        strings('userProfile.bandNameRequired') ||
+          'Artist/Band name is required',
+      ),
     description: yup
       .string()
       .max(255, 'Description must be 255 characters or less')
@@ -60,7 +77,7 @@ const ArtistProfileTab = props => {
   });
 
   const handleArtistProfileSubmit = values => {
-    dispatch(currentScreenAction({ ...screenDetails, userProfileEdit: false }));
+    dispatch(currentScreenAction({...screenDetails, userProfileEdit: false}));
     const formData = {
       title: values.title.trim(),
       description: values.description || null,
@@ -89,81 +106,80 @@ const ArtistProfileTab = props => {
     <>
       <Avatar
         containerStyle={styles.ArtistLogo}
-        size='large'
+        size="large"
         rounded
-        source={artistLogo ? { uri: artistLogo } : require('../../../../assets/images/band_defult_img.png')}
+        source={
+          artistLogo
+            ? {uri: artistLogo}
+            : require('../../../../assets/images/band_defult_img.png')
+        }
       />
     </>
   );
 
   const renderArtistInfo = () => {
-    if (!artistProfile) return null;
+    if (!artistProfile) {
+      return null;
+    }
 
     return (
       <View>
         <View style={styles.ArtistProfileView}>
           <View>
-            <View>
-              {renderArtistLogo()}
-            </View>
+            <View>{renderArtistLogo()}</View>
           </View>
           <View style={styles.artistNameView}>
-            <MarqueeText
-              speed={0.2}
-              marqueeOnStart
-              loop
-              delay={1000}
-            >
-              <Text style={styles.artistNameText}>
-                {artistProfile.title}
-                {' '}
-              </Text>
+            <MarqueeText speed={0.2} marqueeOnStart loop delay={1000}>
+              <Text style={styles.artistNameText}>{artistProfile.title} </Text>
             </MarqueeText>
-            <MarqueeText
-              speed={0.2}
-              marqueeOnStart
-              loop
-              delay={1000}
-            >
+            <MarqueeText speed={0.2} marqueeOnStart loop delay={1000}>
               <Text style={styles.descriptionText}>
                 {artistProfile.description}
               </Text>
             </MarqueeText>
           </View>
         </View>
-        <View style={{ marginTop: 20 }}>
+        <View style={{marginTop: 20}}>
           <View style={styles.statusView}>
             <Icon
-              type='ionicon'
-              name='checkmark-circle-outline'
+              type="ionicon"
+              name="checkmark-circle-outline"
               size={16}
-              style={{ marginRight: 14 }}
-              color={artistProfile.status === 'ACTIVE' ? Colors.success : Colors.error}
+              style={{marginRight: 14}}
+              color={
+                artistProfile.status === 'ACTIVE'
+                  ? Colors.success
+                  : Colors.error
+              }
             />
-            <Text style={{ color: Colors.White }}>
+            <Text style={{color: Colors.White}}>
               Status: {artistProfile.status}
             </Text>
           </View>
           <View style={styles.promosView}>
             <Icon
-              type='ionicon'
-              name='megaphone-outline'
+              type="ionicon"
+              name="megaphone-outline"
               size={16}
-              style={{ marginRight: 14 }}
-              color={artistProfile.promosEnabled ? Colors.success : Colors.profileIconColor}
+              style={{marginRight: 14}}
+              color={
+                artistProfile.promosEnabled
+                  ? Colors.success
+                  : Colors.profileIconColor
+              }
             />
-            <Text style={{ color: Colors.White }}>
+            <Text style={{color: Colors.White}}>
               Promos: {artistProfile.promosEnabled ? 'Enabled' : 'Disabled'}
             </Text>
           </View>
         </View>
         <Divider
-          orientation='horizontal'
+          orientation="horizontal"
           width={0.4}
           color={Colors.dividerColor}
-          style={{ marginTop: 14 }}
+          style={{marginTop: 14}}
         />
-        <View style={{ marginHorizontal: 24 }}>
+        <View style={{marginHorizontal: 24}}>
           <Text style={styles.socialPlatform}>
             {strings('socialPlatform.socialPlatform')}
           </Text>
@@ -176,7 +192,7 @@ const ArtistProfileTab = props => {
                 {artistProfile.facebook}
               </Text>
               <Divider
-                orientation='horizontal'
+                orientation="horizontal"
                 width={1}
                 color={Colors.dividerColor}
               />
@@ -191,7 +207,7 @@ const ArtistProfileTab = props => {
                 {artistProfile.instagram}
               </Text>
               <Divider
-                orientation='horizontal'
+                orientation="horizontal"
                 width={1}
                 color={Colors.dividerColor}
               />
@@ -199,14 +215,12 @@ const ArtistProfileTab = props => {
           )}
           {artistProfile.youtube && (
             <>
-              <Text style={styles.socialPlatformTitle}>
-                YouTube
-              </Text>
+              <Text style={styles.socialPlatformTitle}>YouTube</Text>
               <Text style={styles.socialPlatformUserId}>
                 {artistProfile.youtube}
               </Text>
               <Divider
-                orientation='horizontal'
+                orientation="horizontal"
                 width={1}
                 color={Colors.dividerColor}
               />
@@ -221,7 +235,7 @@ const ArtistProfileTab = props => {
                 {artistProfile.twitter}
               </Text>
               <Divider
-                orientation='horizontal'
+                orientation="horizontal"
                 width={1}
                 color={Colors.dividerColor}
               />
@@ -244,20 +258,16 @@ const ArtistProfileTab = props => {
         promosEnabled: artistProfile?.promosEnabled || false,
       }}
       validationSchema={ArtistProfileValidators}
-      onSubmit={values => handleArtistProfileSubmit(values)}
-    >
-      {({
-        handleChange, values, handleSubmit, errors, isValid,
-      }) => (
+      onSubmit={values => handleArtistProfileSubmit(values)}>
+      {({handleChange, values, handleSubmit, errors, isValid}) => (
         <View>
           <View style={styles.ArtistProfileView}>
             <View>
               {renderArtistLogo()}
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('ChangeAvatar', { onGoBack: refreshLogo });
-                }}
-              >
+                  navigation.navigate('ChangeAvatar', {onGoBack: refreshLogo});
+                }}>
                 <SvgImage
                   iconStyle={styles.editIconStyle}
                   iconName={BlackEdit}
@@ -268,7 +278,10 @@ const ArtistProfileTab = props => {
             </View>
             <View style={styles.artistNameView}>
               <TextInput
-                placeholder={strings('userProfile.bandNamePlaceholder') || 'Enter your artist or band name'}
+                placeholder={
+                  strings('userProfile.bandNamePlaceholder') ||
+                  'Enter your artist or band name'
+                }
                 style={styles.artistNameText}
                 placeholderTextColor={Colors.placeholderTextColor}
                 onChangeText={handleChange('title')}
@@ -276,9 +289,7 @@ const ArtistProfileTab = props => {
                 maxLength={50}
               />
               {errors.title ? (
-                <Text style={styles.errorTextStyle}>
-                  {errors.title}
-                </Text>
+                <Text style={styles.errorTextStyle}>{errors.title}</Text>
               ) : null}
               <TextInput
                 placeholderTextColor={Colors.placeholderTextColor}
@@ -292,12 +303,12 @@ const ArtistProfileTab = props => {
             </View>
           </View>
           <Divider
-            orientation='horizontal'
+            orientation="horizontal"
             width={0.4}
             color={Colors.dividerColor}
-            style={{ marginTop: 14 }}
+            style={{marginTop: 14}}
           />
-          <View style={{ marginHorizontal: 24 }}>
+          <View style={{marginHorizontal: 24}}>
             <Text style={styles.socialPlatform}>
               {strings('socialPlatform.socialPlatform')}
             </Text>
@@ -315,7 +326,7 @@ const ArtistProfileTab = props => {
                 placeholderTextColor={Colors.placeholderTextColor}
               />
               <Divider
-                orientation='horizontal'
+                orientation="horizontal"
                 width={1}
                 color={Colors.dividerColor}
               />
@@ -334,15 +345,13 @@ const ArtistProfileTab = props => {
                 placeholderTextColor={Colors.placeholderTextColor}
               />
               <Divider
-                orientation='horizontal'
+                orientation="horizontal"
                 width={1}
                 color={Colors.dividerColor}
               />
             </>
             <>
-              <Text style={styles.socialPlatformTitle}>
-                YouTube
-              </Text>
+              <Text style={styles.socialPlatformTitle}>YouTube</Text>
               <TextInput
                 style={styles.socialPlatformUserId}
                 onChangeText={handleChange('youtube')}
@@ -353,7 +362,7 @@ const ArtistProfileTab = props => {
                 placeholderTextColor={Colors.placeholderTextColor}
               />
               <Divider
-                orientation='horizontal'
+                orientation="horizontal"
                 width={1}
                 color={Colors.dividerColor}
               />
@@ -372,15 +381,21 @@ const ArtistProfileTab = props => {
                 placeholderTextColor={Colors.placeholderTextColor}
               />
               <Divider
-                orientation='horizontal'
+                orientation="horizontal"
                 width={1}
                 color={Colors.dividerColor}
               />
             </>
             <TouchableOpacity onPress={handleSubmit} disabled={!isValid}>
               <Text
-                style={[styles.saveText, { color: !isValid ? Colors.sideHeadingText : Colors.radiumColour }]}
-              >
+                style={[
+                  styles.saveText,
+                  {
+                    color: !isValid
+                      ? Colors.sideHeadingText
+                      : Colors.radiumColour,
+                  },
+                ]}>
                 {strings('userProfile.save') || 'Save'}
               </Text>
             </TouchableOpacity>
@@ -407,12 +422,11 @@ const ArtistProfileTab = props => {
       <KeyboardAwareScrollView
         enableOnAndroid
         keyboardOpeningTime={0}
-        keyboardShouldPersistTaps='handled'
-      >
+        keyboardShouldPersistTaps="handled">
         {!EditMode ? renderArtistInfo() : renderEditForm()}
       </KeyboardAwareScrollView>
     </ScrollView>
   );
 };
 
-export default ArtistProfileTab; 
+export default ArtistProfileTab;

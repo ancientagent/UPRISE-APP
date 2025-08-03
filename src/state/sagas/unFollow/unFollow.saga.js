@@ -1,13 +1,13 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import unFollowRequest from '../../../services/unFollow/unFollow.service';
-import { unFollowSagaType } from '../../types/sagas';
-import { unFollowRequestActions } from '../../actions/request/unFollow/unFollow.actions';
-import { accessToken } from '../../selectors/UserProfile';
+import {unFollowSagaType} from '../../types/sagas';
+import {unFollowRequestActions} from '../../actions/request/unFollow/unFollow.actions';
+import {accessToken} from '../../selectors/UserProfile';
 import showAlert from '../AlertUtility';
 import {
-  followingSagaAction, getUserDetailsSagaAction, followersListSagaAction,
+  followingSagaAction,
+  getUserDetailsSagaAction,
+  followersListSagaAction,
 } from '../../actions/sagas';
 
 export default function* unFollowWatcherSaga() {
@@ -34,4 +34,3 @@ export function* unFollowWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

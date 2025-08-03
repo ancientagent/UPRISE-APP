@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import Colors from '../../theme/colors';
 
 export default StyleSheet.create({
@@ -20,7 +20,9 @@ export default StyleSheet.create({
     marginBottom: 50,
   },
   signupContainer: {
-    width: '85%', marginTop: 80, alignItems: 'center',
+    width: '85%',
+    marginTop: 80,
+    alignItems: 'center',
   },
   checkText: {
     color: Colors.White,
@@ -94,7 +96,7 @@ export default StyleSheet.create({
     fontFamily: 'Oswald Regular',
     fontWeight: '400',
   },
-  SignupUserNameField: { marginTop: 40, width: '85%' },
+  SignupUserNameField: {marginTop: 40, width: '85%'},
   titleStyle: {
     fontSize: 12,
     fontFamily: 'Oswald Regular',

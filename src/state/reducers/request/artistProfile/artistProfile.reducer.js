@@ -1,8 +1,15 @@
-import { artistProfileSagaType, updateArtistProfileSagaType } from '../../../types/sagas';
-import { createRequestResponseActionTypeSet } from '../../../types/generic/requestResponse.types';
+import {
+  artistProfileSagaType,
+  updateArtistProfileSagaType,
+} from '../../../types/sagas';
+import {createRequestResponseActionTypeSet} from '../../../types/generic/requestResponse.types';
 
-const artistProfileActionTypes = createRequestResponseActionTypeSet(artistProfileSagaType);
-const updateArtistProfileActionTypes = createRequestResponseActionTypeSet(updateArtistProfileSagaType);
+const artistProfileActionTypes = createRequestResponseActionTypeSet(
+  artistProfileSagaType,
+);
+const updateArtistProfileActionTypes = createRequestResponseActionTypeSet(
+  updateArtistProfileSagaType,
+);
 
 const initialState = {
   isWaiting: false,
@@ -64,4 +71,4 @@ const updateArtistProfileReducer = (state = initialState, action) => {
   }
 };
 
-export { artistProfileReducer, updateArtistProfileReducer }; 
+export {artistProfileReducer, updateArtistProfileReducer};

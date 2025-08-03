@@ -1,13 +1,14 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import _ from 'lodash';
 import mostRatedSongsRequest from '../../../services/mostRatedSongs/mostRatedSongs.service';
-import { mostRatedSongsSagaType } from '../../types/sagas';
-import { mostRatedSongsActions } from '../../actions/request/mostRatedSongs/mostRatedSongs.actions';
+import {mostRatedSongsSagaType} from '../../types/sagas';
+import {mostRatedSongsActions} from '../../actions/request/mostRatedSongs/mostRatedSongs.actions';
 import showAlert from '../AlertUtility';
 import {
-  accessToken, getUserDetails, getUserLocation, loginData,
+  accessToken,
+  getUserDetails,
+  getUserLocation,
+  loginData,
 } from '../../selectors/UserProfile';
 
 export default function* mostRatedSongsWatcherSaga() {
@@ -26,7 +27,10 @@ export function* mostRatedSongsWorkerSaga(action) {
     const payload = {
       accessToken: userToken,
       count: action.payload.count,
-      state: _.get(selectedLocation, location, '') || _.get(LoginData, prefrence, '') || userLocation.state,
+      state:
+        _.get(selectedLocation, location, '') ||
+        _.get(LoginData, prefrence, '') ||
+        userLocation.state,
     };
     const response = yield call(mostRatedSongsRequest, payload);
     if (response !== null) {
@@ -37,4 +41,3 @@ export function* mostRatedSongsWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import Colors from '../../../theme/colors';
 
 export default StyleSheet.create({
@@ -13,7 +13,7 @@ export default StyleSheet.create({
     marginTop: 15,
     marginHorizontal: 10,
   },
-  gridView: { marginBottom: 10 },
+  gridView: {marginBottom: 10},
   gridImage: {
     height: 164,
     width: '100%',

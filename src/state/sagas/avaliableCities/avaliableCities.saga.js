@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import avaliableCitiesRequest from '../../../services/avaliableCities/avaliableCities.service';
-import { avaliableCitiesSagaType } from '../../types/sagas';
-import { avaliableCitiesActions } from '../../actions/request/avaliableCities/avaliableCities.actions';
+import {avaliableCitiesSagaType} from '../../types/sagas';
+import {avaliableCitiesActions} from '../../actions/request/avaliableCities/avaliableCities.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* avaliableCitiesWatcherSaga() {
   yield takeLatest(avaliableCitiesSagaType, avaliableCitiesWorkerSaga);

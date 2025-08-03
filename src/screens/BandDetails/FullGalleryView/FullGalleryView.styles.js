@@ -1,4 +1,4 @@
-import { StyleSheet, Platform } from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import Colors from '../../../theme/colors';
 
 export default StyleSheet.create({
@@ -9,10 +9,12 @@ export default StyleSheet.create({
   fullGalleryContainer: {
     height: '85%',
   },
-  modelStyle: { backgroundColor: Colors.Black, height: '100%' },
-  iconStyle: { marginTop: 50, alignSelf: 'flex-end' },
+  modelStyle: {backgroundColor: Colors.Black, height: '100%'},
+  iconStyle: {marginTop: 50, alignSelf: 'flex-end'},
   imageView: {
-    height: 500, width: '100%', marginTop: 100,
+    height: 500,
+    width: '100%',
+    marginTop: 100,
   },
   miniPlayerStyle: {
     height: 150,

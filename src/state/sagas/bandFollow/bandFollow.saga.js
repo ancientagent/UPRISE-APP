@@ -1,13 +1,12 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import bandFollowRequest from '../../../services/bandFollow/bandFollow.service';
-import { bandFollowSagaType } from '../../types/sagas';
-import { bandFollowRequestActions } from '../../actions/request/bandFollow/bandFollow.actions';
-import { accessToken } from '../../selectors/UserProfile';
+import {bandFollowSagaType} from '../../types/sagas';
+import {bandFollowRequestActions} from '../../actions/request/bandFollow/bandFollow.actions';
+import {accessToken} from '../../selectors/UserProfile';
 import showAlert from '../AlertUtility';
 import {
-  getUserDetailsSagaAction, getRadioSongSagaAction
+  getUserDetailsSagaAction,
+  getRadioSongSagaAction,
 } from '../../actions/sagas';
 
 export default function* bandFollowWatcherSaga() {
@@ -33,4 +32,3 @@ export function* bandFollowWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

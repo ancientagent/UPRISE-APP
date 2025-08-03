@@ -1,8 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  getPopularArtistGenresStatisticsType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {getPopularArtistGenresStatisticsType} from '../../../types/listener/listener';
 
-export const getPopularArtistGenresStatisticsRequestActions = createRequestResponseActionSet(
-  getPopularArtistGenresStatisticsType,
-);
+export const getPopularArtistGenresStatisticsRequestActions =
+  createRequestResponseActionSet(getPopularArtistGenresStatisticsType);

@@ -1,6 +1,6 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  mostPopularGenresType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {mostPopularGenresType} from '../../../types/listener/listener';
 
-export const mostPopularGenresActions = createRequestResponseActionSet(mostPopularGenresType);
+export const mostPopularGenresActions = createRequestResponseActionSet(
+  mostPopularGenresType,
+);

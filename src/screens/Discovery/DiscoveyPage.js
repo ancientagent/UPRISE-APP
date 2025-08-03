@@ -1,21 +1,29 @@
 /* eslint-disable global-require */
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
-  View, Text, Image, TouchableOpacity, FlatList, ImageBackground, Alert,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  ImageBackground,
+  Alert,
 } from 'react-native';
 import _ from 'lodash';
 import TrackPlayer from 'react-native-track-player';
-import { useDispatch, useSelector } from 'react-redux';
-import AsyncStorage
-from '@react-native-community/async-storage';
-import { ScrollView } from 'react-native-virtualized-view';
+import {useDispatch, useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
+import {ScrollView} from 'react-native-virtualized-view';
 import Carousel from 'react-native-snap-carousel';
 import SliderEntry from '../../components/SliderEntry/SliderEntry';
 import radioStations from '../../../assets/images/radio_stations.svg';
-import { getStationBgColor } from '../../utilities/utilities';
+import {getStationBgColor} from '../../utilities/utilities';
 import styles from './DiscoveyPage.styles';
 import {
-  getDiscoveryPopularBandsList, getTreandingSongsList, getMostPopularAlbumsList, getMostPopularGenresList,
+  getDiscoveryPopularBandsList,
+  getTreandingSongsList,
+  getMostPopularAlbumsList,
+  getMostPopularGenresList,
   getRadioStations,
 } from '../../state/selectors/UserProfile';
 import {
@@ -27,13 +35,16 @@ import {
 import albumVector from '../../../assets/images/albumVector.svg';
 import bandVector from '../../../assets/images/bandVector.svg';
 import SvgImage from '../../components/SvgImage/SvgImage';
-import { sliderWidth, itemWidth } from '../../components/SliderEntry/SliderEntry.style';
+import {
+  sliderWidth,
+  itemWidth,
+} from '../../components/SliderEntry/SliderEntry.style';
 // import musicVector from '../../../assets/images/musicVector.svg';
-import { strings } from '../../utilities/localization/localization';
-import { currentSongDataAction } from '../../state/actions/currentSongData/currentSongData.action';
+import {strings} from '../../utilities/localization/localization';
+import {currentSongDataAction} from '../../state/actions/currentSongData/currentSongData.action';
 
 const DiscoveyPage = props => {
-  const { navigation } = props;
+  const {navigation} = props;
   const dispatch = useDispatch();
   useEffect(() => {
     const totalCount = {
@@ -55,142 +66,163 @@ const DiscoveyPage = props => {
       const artist = _.get(data, 'band.title', '');
       const artwork = data.thumbnail;
       return {
-        ...data, url, artwork, artist,
+        ...data,
+        url,
+        artwork,
+        artist,
       };
     });
     return songDetails;
   };
   const renderAlbumsFlatList = renderData => (
-    <View style={ { marginLeft: 20 } }>
+    <View style={{marginLeft: 20}}>
       <FlatList
         horizontal
-        data={ renderData }
-        renderItem={ ({ item }) => (
+        data={renderData}
+        renderItem={({item}) => (
           <TouchableOpacity
-            activeOpacity={ 0.8 }
-            onPress={ () => {
+            activeOpacity={0.8}
+            onPress={() => {
               if (item?.id && item?.band?.id) {
-                navigation.navigate('AlbumSongs', { albumId: item.id, bandId: item.band.id });
+                navigation.navigate('AlbumSongs', {
+                  albumId: item.id,
+                  bandId: item.band.id,
+                });
               }
-            } }
-          >
-            <View style={ styles.albumsImageView }>
+            }}>
+            <View style={styles.albumsImageView}>
               <Image
-                style={ styles.albumsImage }
-                source={ item?.thumbnail ? { uri: item.thumbnail } : require('../../../assets/images/album_default_img.png') }
+                style={styles.albumsImage}
+                source={
+                  item?.thumbnail
+                    ? {uri: item.thumbnail}
+                    : require('../../../assets/images/album_default_img.png')
+                }
               />
-              <Text style={ styles.albumsTextStyle }>
-                { item?.title || 'Unknown Album' }
+              <Text style={styles.albumsTextStyle}>
+                {item?.title || 'Unknown Album'}
               </Text>
-              <View style={ styles.AlbumNameView }>
+              <View style={styles.AlbumNameView}>
                 <SvgImage
-                  iconName={ bandVector }
-                  iconStyle={ { marginRight: 7 } }
-                  width={ 12 }
-                  height={ 12 }
+                  iconName={bandVector}
+                  iconStyle={{marginRight: 7}}
+                  width={12}
+                  height={12}
                 />
-                <Text style={ styles.AlbumTitle }>{ item?.band?.title || 'Unknown Band' }</Text>
+                <Text style={styles.AlbumTitle}>
+                  {item?.band?.title || 'Unknown Band'}
+                </Text>
               </View>
             </View>
           </TouchableOpacity>
-        ) }
+        )}
       />
     </View>
   );
   const renderGenresFlatList = renderData => (
-    <View style={ { marginLeft: 20 } }>
+    <View style={{marginLeft: 20}}>
       <FlatList
         horizontal
-        data={ renderData }
-        renderItem={ ({ item }) => (
+        data={renderData}
+        renderItem={({item}) => (
           <TouchableOpacity
-            activeOpacity={ 0.8 }
-            onPress={ () => {
+            activeOpacity={0.8}
+            onPress={() => {
               if (item?.id && item?.name) {
-                navigation.navigate('RadioStations', { genreId: item.id, genreName: item.name, isDiscovery: true });
+                navigation.navigate('RadioStations', {
+                  genreId: item.id,
+                  genreName: item.name,
+                  isDiscovery: true,
+                });
               }
-            } }
-          >
-            <View style={ styles.genreImageView }>
+            }}>
+            <View style={styles.genreImageView}>
               <ImageBackground
-                style={ styles.genreImage }
-                source={ item?.thumbnail ? { uri: item.thumbnail } : require('../../../assets/images/music_default_img.png') }
-              >
-                <View style={ styles.genreOverlay }>
-                  <Text style={ styles.genreTextStyle }>
-                    { item?.name || 'Unknown Genre' }
+                style={styles.genreImage}
+                source={
+                  item?.thumbnail
+                    ? {uri: item.thumbnail}
+                    : require('../../../assets/images/music_default_img.png')
+                }>
+                <View style={styles.genreOverlay}>
+                  <Text style={styles.genreTextStyle}>
+                    {item?.name || 'Unknown Genre'}
                   </Text>
-                  { /* <View style={ styles.genreNameView }>
+                  {/* <View style={ styles.genreNameView }>
                     <SvgImage iconStyle={ { right: 4 } } iconName={ musicVector } height={ 10 } width={ 6 } />
                     <Text style={ styles.genreTitle }>
                       { item.songCount }
                       { ' ' }
                       Tracks
                     </Text>
-                  </View> */ }
+                  </View> */}
                 </View>
               </ImageBackground>
             </View>
           </TouchableOpacity>
-        ) }
+        )}
       />
     </View>
   );
   const renderBandsFlatList = renderData => (
     <Carousel
       // ref={ c => _slider1Ref = c }
-      data={ renderData }
-      renderItem={ ({ item, index }, parallaxProps) => (
+      data={renderData}
+      renderItem={({item, index}, parallaxProps) => (
         <SliderEntry
-          data={ item }
-          even={ (index + 1) % 2 === 0 }
+          data={item}
+          even={(index + 1) % 2 === 0}
           parallax
-          uri={ item?.logo }
-          title={ item?.title }
-          onDone={ () => item?.id && navigation.navigate('BandDetails', { bandId: item.id }) }
-          parallaxProps={ parallaxProps }
-          defultImage={ require('../../../assets/images/band_defult_img.png') }
+          uri={item?.logo}
+          title={item?.title}
+          onDone={() =>
+            item?.id && navigation.navigate('BandDetails', {bandId: item.id})
+          }
+          parallaxProps={parallaxProps}
+          defultImage={require('../../../assets/images/band_defult_img.png')}
         />
-      ) }
-      sliderWidth={ sliderWidth }
-      inactiveSlideShift={ 20 }
-      itemWidth={ itemWidth }
+      )}
+      sliderWidth={sliderWidth}
+      inactiveSlideShift={20}
+      itemWidth={itemWidth}
       hasParallaxImages
-      containerCustomStyle={ { marginTop: 15, overflow: 'visible' } }
+      containerCustomStyle={{marginTop: 15, overflow: 'visible'}}
     />
   );
   const renderRadioStations = () => {
     const colorsList = getStationBgColor;
     return (
-      <View style={ styles.radioStaionView }>
-        <Text style={ styles.radioStaion }>
-          { strings('DiscoveyPage.popularRadioStation') }
+      <View style={styles.radioStaionView}>
+        <Text style={styles.radioStaion}>
+          {strings('DiscoveyPage.popularRadioStation')}
         </Text>
         <Carousel
           // ref={ c => _slider1Ref = c }
-          data={ stateName }
-          renderItem={ ({ item, index }, parallaxProps) => (
+          data={stateName}
+          renderItem={({item, index}, parallaxProps) => (
             <SliderEntry
-              data={ item }
-              even={ (index + 1) % 2 === 0 }
+              data={item}
+              even={(index + 1) % 2 === 0}
               parallax
               showRadioStation
-              title={ item }
-              bgColor={ colorsList[index] }
-              onDone={ () => navigation.navigate('RadioStations', {
-                stateName: item,
-                bgColor: colorsList[index],
-              }) }
-              parallaxProps={ parallaxProps }
+              title={item}
+              bgColor={colorsList[index]}
+              onDone={() =>
+                navigation.navigate('RadioStations', {
+                  stateName: item,
+                  bgColor: colorsList[index],
+                })
+              }
+              parallaxProps={parallaxProps}
             />
-          ) }
-          sliderWidth={ sliderWidth }
-          inactiveSlideShift={ 20 }
-          itemWidth={ itemWidth }
+          )}
+          sliderWidth={sliderWidth}
+          inactiveSlideShift={20}
+          itemWidth={itemWidth}
           hasParallaxImages
-          containerCustomStyle={ { marginTop: 15, overflow: 'visible' } }
+          containerCustomStyle={{marginTop: 15, overflow: 'visible'}}
         />
-        { /* <TouchableOpacity
+        {/* <TouchableOpacity
           style={ {
             flexDirection: 'row',
           } }
@@ -214,7 +246,7 @@ const DiscoveyPage = props => {
           <Text style={ styles.svgTxt }>
             { item }
           </Text>
-        </TouchableOpacity> */ }
+        </TouchableOpacity> */}
       </View>
     );
   };
@@ -222,24 +254,24 @@ const DiscoveyPage = props => {
   const renderTrendyFlatList = renderData => (
     <Carousel
       // ref={ c => _slider1Ref = c }
-      data={ renderData }
-      renderItem={ ({ item, index }, parallaxProps) => (
+      data={renderData}
+      renderItem={({item, index}, parallaxProps) => (
         <SliderEntry
-          data={ item }
-          even={ (index + 1) % 2 === 0 }
+          data={item}
+          even={(index + 1) % 2 === 0}
           parallax
-          uri={ item?.thumbnail }
-          title={ item?.title }
-          onDone={ () => item?.id && navOndemandPage(item) }
-          parallaxProps={ parallaxProps }
-          defultImage={ require('../../../assets/images/band_defult_img.png') }
+          uri={item?.thumbnail}
+          title={item?.title}
+          onDone={() => item?.id && navOndemandPage(item)}
+          parallaxProps={parallaxProps}
+          defultImage={require('../../../assets/images/band_defult_img.png')}
         />
-      ) }
-      sliderWidth={ sliderWidth }
-      inactiveSlideShift={ 20 }
-      itemWidth={ itemWidth }
+      )}
+      sliderWidth={sliderWidth}
+      inactiveSlideShift={20}
+      itemWidth={itemWidth}
       hasParallaxImages
-      containerCustomStyle={ { marginTop: 15, overflow: 'visible' } }
+      containerCustomStyle={{marginTop: 15, overflow: 'visible'}}
     />
     // <View style={ { marginLeft: 20 } }>
     //   <FlatList
@@ -311,17 +343,19 @@ const DiscoveyPage = props => {
       console.log('navOndemandPage: Missing required item properties');
       return;
     }
-    
+
     await AsyncStorage.setItem('onDemandPlayer', 'active');
-    const songDetails = [{
-      id: item.id,
-      artist: item.band?.title || 'Unknown Artist',
-      artwork: item.thumbnail,
-      url: item.song,
-      title: item.title || 'Unknown Title',
-      duration: item.duration,
-      isSongFavorite: item.isSongFavorite,
-    }];
+    const songDetails = [
+      {
+        id: item.id,
+        artist: item.band?.title || 'Unknown Artist',
+        artwork: item.thumbnail,
+        url: item.song,
+        title: item.title || 'Unknown Title',
+        duration: item.duration,
+        isSongFavorite: item.isSongFavorite,
+      },
+    ];
     const data = {
       songList: songDetails,
       intialSongId: 0,
@@ -331,22 +365,20 @@ const DiscoveyPage = props => {
     };
     dispatch(currentSongDataAction(data));
     await TrackPlayer.reset();
-    navigation.navigate('BandDetails',
-      {
-        bandId: item.band.id,
-      });
+    navigation.navigate('BandDetails', {
+      bandId: item.band.id,
+    });
   };
   return (
     <ScrollView>
       <View>
-        { popularBandsList.length > 0
-        && (
-        <View style={ { marginTop: 12 } }>
-          <View style={ styles.AlbumsView }>
-            <Text style={ styles.AlbumsText }>
-              { strings('DiscoveyPage.popularBands') }
-            </Text>
-            { /* { popularBandsList.length > 10
+        {popularBandsList.length > 0 && (
+          <View style={{marginTop: 12}}>
+            <View style={styles.AlbumsView}>
+              <Text style={styles.AlbumsText}>
+                {strings('DiscoveyPage.popularBands')}
+              </Text>
+              {/* { popularBandsList.length > 10
               && (
               <Text
                 style={ styles.seeallText }
@@ -357,12 +389,12 @@ const DiscoveyPage = props => {
               >
                 { strings('General.seeAll') }
               </Text>
-              ) } */ }
+              ) } */}
+            </View>
+            {renderBandsFlatList(popularBandsList)}
           </View>
-          { renderBandsFlatList(popularBandsList) }
-        </View>
-        ) }
-        { /* { popularAlbums.length > 0
+        )}
+        {/* { popularAlbums.length > 0
         && (
         <View style={ { marginTop: 12 } }>
           <View style={ styles.AlbumsView }>
@@ -381,32 +413,29 @@ const DiscoveyPage = props => {
           </View>
           { renderAlbumsFlatList(_.slice(popularAlbums, 0, 10)) }
         </View>
-        ) } */ }
-        { renderRadioStations() }
-        { treandingSongs.length > 0
-        && (
-        <View>
-          <View style={ styles.AlbumsView }>
-            <Text style={ styles.AlbumsText }>
-              { strings('DiscoveyPage.popularSongs') }
-            </Text>
-            { treandingSongs.length > 10
-              && (
-              <Text
-                style={ styles.seeallText }
-                onPress={ () => {
-                  dispatch(treandingSongsSagaAction({ count: 'all' }));
-                  navigation.navigate('AllTrendingSongs');
-                } }
-              >
-                { strings('General.seeAll') }
+        ) } */}
+        {renderRadioStations()}
+        {treandingSongs.length > 0 && (
+          <View>
+            <View style={styles.AlbumsView}>
+              <Text style={styles.AlbumsText}>
+                {strings('DiscoveyPage.popularSongs')}
               </Text>
-              ) }
+              {treandingSongs.length > 10 && (
+                <Text
+                  style={styles.seeallText}
+                  onPress={() => {
+                    dispatch(treandingSongsSagaAction({count: 'all'}));
+                    navigation.navigate('AllTrendingSongs');
+                  }}>
+                  {strings('General.seeAll')}
+                </Text>
+              )}
+            </View>
+            {renderTrendyFlatList(_.slice(treandingSongs, 0, 10))}
           </View>
-          { renderTrendyFlatList(_.slice(treandingSongs, 0, 10)) }
-        </View>
-        ) }
-        { /* { genresList.length > 0
+        )}
+        {/* { genresList.length > 0
         && (
         <View style={ { marginTop: 12 } }>
           <View style={ styles.AlbumsView }>
@@ -425,7 +454,7 @@ const DiscoveyPage = props => {
           </View>
           { renderGenresFlatList(_.slice(genresList, 0, 10)) }
         </View>
-        ) } */ }
+        ) } */}
       </View>
     </ScrollView>
   );

@@ -1,4 +1,4 @@
-import { StyleSheet, Platform } from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import Colors from '../../theme/colors';
 
 export default StyleSheet.create({
@@ -40,4 +40,3 @@ export default StyleSheet.create({
     borderColor: Colors.errorBorderColor,
   },
 });
-

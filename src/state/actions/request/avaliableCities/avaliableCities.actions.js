@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  avaliableCitiesType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {avaliableCitiesType} from '../../../types/listener/listener';
 
-export const avaliableCitiesActions = createRequestResponseActionSet(avaliableCitiesType);
+export const avaliableCitiesActions =
+  createRequestResponseActionSet(avaliableCitiesType);

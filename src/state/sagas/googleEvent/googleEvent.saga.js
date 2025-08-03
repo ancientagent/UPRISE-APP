@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import googleEventRequest from '../../../services/googleEvent/googleEvent.service';
-import { googleEventSagaType } from '../../types/sagas';
-import { googleEventActions } from '../../actions/request/googleEvent/googleEvent.actions';
+import {googleEventSagaType} from '../../types/sagas';
+import {googleEventActions} from '../../actions/request/googleEvent/googleEvent.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* googleEventWatcherSaga() {
   yield takeLatest(googleEventSagaType, googleEventWorkerSaga);
@@ -28,4 +26,3 @@ export function* googleEventWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

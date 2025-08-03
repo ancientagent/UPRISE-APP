@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import Colors from '../../theme/colors';
 
 export default StyleSheet.create({
@@ -19,9 +19,11 @@ export default StyleSheet.create({
     alignSelf: 'center',
     marginTop: 20,
   },
-  ImageStyle: { height: 100, width: 100, marginBottom: 30 },
+  ImageStyle: {height: 100, width: 100, marginBottom: 30},
   container: {
-    justifyContent: 'center', alignItems: 'center', marginTop: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30,
   },
   forgotPasswordTxt: {
     fontSize: 28,

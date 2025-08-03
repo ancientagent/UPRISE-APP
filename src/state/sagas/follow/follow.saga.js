@@ -1,14 +1,10 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import followRequest from '../../../services/follow/follow.service';
-import { followSagaType } from '../../types/sagas';
-import { followRequestActions } from '../../actions/request/follow/follow.actions';
-import { accessToken } from '../../selectors/UserProfile';
+import {followSagaType} from '../../types/sagas';
+import {followRequestActions} from '../../actions/request/follow/follow.actions';
+import {accessToken} from '../../selectors/UserProfile';
 import showAlert from '../AlertUtility';
-import {
-  getUserDetailsSagaAction,
-} from '../../actions/sagas';
+import {getUserDetailsSagaAction} from '../../actions/sagas';
 
 export default function* followWatcherSaga() {
   yield takeLatest(followSagaType, followWorkerSaga);
@@ -32,4 +28,3 @@ export function* followWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

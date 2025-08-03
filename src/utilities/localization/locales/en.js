@@ -98,7 +98,8 @@ export default {
     dontUseText: "Don't Use Location",
     revokedByUser: 'Location permission revoked by user.',
     deniedByUser: 'Location permission denied by user.',
-    turnOnLocation: 'Turn on Location Services to allow Uprise to determine your location.',
+    turnOnLocation:
+      'Turn on Location Services to allow Uprise to determine your location.',
     permissionDenied: 'Location permission denied',
     unableToOpen: 'Unable to open settings',
     detect: 'Detect my location',
@@ -109,14 +110,16 @@ export default {
     hintText: 'Hint: City, State, Zip',
     welcomeTo: 'Welcome to',
     upriseRadiyo: 'Uprise',
-    indicationText: "You're one step away, please enter username to enjoy uprise.",
+    indicationText:
+      "You're one step away, please enter username to enjoy uprise.",
     save: 'Save',
     selectGenre: 'Please select a genre.',
   },
   SignupUserName: {
     welcomeTo: 'Welcome to',
     upriseRadiyo: 'Uprise',
-    indicationText: "You're one step away, please enter username to enjoy uprise.",
+    indicationText:
+      "You're one step away, please enter username to enjoy uprise.",
     save: 'Save',
   },
   OnDemandMusic: {
@@ -149,7 +152,8 @@ export default {
     stepOneTitile: 'Discover new music',
     stepTwoTitile: 'Explore the music',
     stepOneText: 'Explore the taste of local \nmusic through Uprise.',
-    stepTwoText: 'Every piece of music has its own \nencourage. Listen to the best \nlocal and international music.',
+    stepTwoText:
+      'Every piece of music has its own \nencourage. Listen to the best \nlocal and international music.',
     skip: 'Skip',
     letsGetStarted: "Let's Get Started",
   },
@@ -234,7 +238,8 @@ export default {
     characters: 'characters',
     userNameRequired: 'Enter user name',
     createPasswordRightText: 'Password must be at least',
-    passwordValid: 'Sorry, password must have atleast 8 characters consists of atleast one lowercase letter, one uppercase letter, one number and a special character',
+    passwordValid:
+      'Sorry, password must have atleast 8 characters consists of atleast one lowercase letter, one uppercase letter, one number and a special character',
     createPasswordLeftText: 'characters',
     validEmail: 'Please enter valid E-mail',
     emailRequired: 'Enter an E-mail',
@@ -251,7 +256,8 @@ export default {
   },
   Alert: {
     noInternetTitle: 'No Internet',
-    noNetworkMessage: 'Please check your Internet connection. Make sure Wifi or Mobile data is turned on, then try again.',
+    noNetworkMessage:
+      'Please check your Internet connection. Make sure Wifi or Mobile data is turned on, then try again.',
     ok: 'OK',
     title: 'Uprise',
   },

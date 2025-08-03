@@ -1,14 +1,15 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import getRadioStationsSongsRequest from '../../../services/getRadioStationsSongs/getRadioStationsSongs.service';
-import { getRadioStationsSongsSagaType } from '../../types/sagas';
-import { getRadioStationsSongsActions } from '../../actions/request/getRadioStationsSongs/getRadioStationsSongs.actions';
+import {getRadioStationsSongsSagaType} from '../../types/sagas';
+import {getRadioStationsSongsActions} from '../../actions/request/getRadioStationsSongs/getRadioStationsSongs.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* getRadioStationsSongsWatcherSaga() {
-  yield takeLatest(getRadioStationsSongsSagaType, getRadioStationsSongsWorkerSaga);
+  yield takeLatest(
+    getRadioStationsSongsSagaType,
+    getRadioStationsSongsWorkerSaga,
+  );
 }
 
 export function* getRadioStationsSongsWorkerSaga(action) {
@@ -28,4 +29,3 @@ export function* getRadioStationsSongsWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

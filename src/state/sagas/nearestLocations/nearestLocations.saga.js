@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import nearestLocationsRequest from '../../../services/nearestLocations/nearestLocations.service';
-import { nearestLocationsSagaType } from '../../types/sagas';
-import { nearestLocationsActions } from '../../actions/request/nearestLocations/nearestLocations.actions';
+import {nearestLocationsSagaType} from '../../types/sagas';
+import {nearestLocationsActions} from '../../actions/request/nearestLocations/nearestLocations.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* nearestLocationsWatcherSaga() {
   yield takeLatest(nearestLocationsSagaType, nearestLocationsWorkerSaga);
@@ -27,4 +25,3 @@ export function* nearestLocationsWorkerSaga() {
     yield call(showAlert, e.error);
   }
 }
-

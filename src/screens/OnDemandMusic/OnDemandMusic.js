@@ -1,8 +1,15 @@
 /* eslint-disable no-shadow */
 /* eslint-disable global-require */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  View, Text, Image, TouchableOpacity, ActivityIndicator, Platform, Alert, BackHandler,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+  Platform,
+  Alert,
+  BackHandler,
 } from 'react-native';
 import TrackPlayer, {
   RepeatMode,
@@ -13,7 +20,7 @@ import TrackPlayer, {
   useTrackPlayerEvents,
 } from 'react-native-track-player';
 import MarqueeText from 'react-native-marquee';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import favSymbolFilledIcon from '../../../assets/images/favSymbolFilledIcon.svg';
 import Colors from '../../theme/colors';
@@ -28,15 +35,16 @@ import forwardBtn from '../../../assets/images/forwardBtn.svg';
 import styles from './onDemandMusic.styles';
 import playBtn from '../../../assets/images/playBtn.svg';
 import {
-  songfavoriteSagaAction, songUnfavoriteSagaAction,
+  songfavoriteSagaAction,
+  songUnfavoriteSagaAction,
 } from '../../state/actions/sagas';
 import UseProgress from '../../components/UseProgress/UseProgress';
 
-const OnDemandMusic = ({ route, navigation }) => {
+const OnDemandMusic = ({route, navigation}) => {
   const playbackState = usePlaybackState();
   const dispatch = useDispatch();
   const playlistData = route.params.songList;
-  const { intialSongId } = route.params;
+  const {intialSongId} = route.params;
   const [trackArtwork, setTrackArtwork] = useState();
   const [trackTitle, setTrackTitle] = useState();
   const [trackArtist, setTrackArtist] = useState();
@@ -52,11 +60,11 @@ const OnDemandMusic = ({ route, navigation }) => {
 
   useTrackPlayerEvents([Event.PlaybackTrackChanged], async event => {
     if (
-      event.type === Event.PlaybackTrackChanged
-      && event.nextTrack !== undefined
+      event.type === Event.PlaybackTrackChanged &&
+      event.nextTrack !== undefined
     ) {
       const track = await TrackPlayer.getTrack(event.nextTrack);
-      const { title, artist, artwork } = track || {};
+      const {title, artist, artwork} = track || {};
       setTrackTitle(title);
       setTrackArtist(artist);
       setTrackArtwork(artwork);
@@ -68,7 +76,7 @@ const OnDemandMusic = ({ route, navigation }) => {
     } else if (event.nextTrack === 0) {
       setPreviousBtnState(false);
       setForwardBtnState(true);
-    } else if ((playlistData.length - 1) === event.nextTrack) {
+    } else if (playlistData.length - 1 === event.nextTrack) {
       setForwardBtnState(false);
       await TrackPlayer.pause();
     } else {
@@ -78,20 +86,18 @@ const OnDemandMusic = ({ route, navigation }) => {
   });
   useEffect(() => {
     const backAction = () => {
-      Alert.alert(
-        'Uprise',
-        "Now you're switching to fairplayer",
-        [
-          {
-            text: 'Cancel',
-            style: 'cancel',
+      Alert.alert('Uprise', "Now you're switching to fairplayer", [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Continue',
+          onPress: () => {
+            navigation.goBack();
           },
-          {
-            text: 'Continue',
-            onPress: () => { navigation.goBack(); },
-          },
-        ],
-      );
+        },
+      ]);
       return true;
     };
     const backHandler = BackHandler.addEventListener(
@@ -110,8 +116,8 @@ const OnDemandMusic = ({ route, navigation }) => {
 
   const willUnMountCall = async () => {
     AsyncStorage.setItem('page', 'other');
-    const { songInfo } = route.params;
-    const { position } = route.params;
+    const {songInfo} = route.params;
+    const {position} = route.params;
     const state = route.params.songState;
     await TrackPlayer.reset();
     await TrackPlayer.add(songInfo);
@@ -168,21 +174,17 @@ const OnDemandMusic = ({ route, navigation }) => {
   const returnPlayBtn = () => {
     switch (playbackState) {
       case State.Playing || playbackState === 3:
-        return <SvgImage iconName={ Pause } height={ 32 } width={ 32 } />;
+        return <SvgImage iconName={Pause} height={32} width={32} />;
       case State.Paused:
-        return <SvgImage iconName={ playBtn } height={ 32 } width={ 32 } />;
+        return <SvgImage iconName={playBtn} height={32} width={32} />;
       default:
-        return (
-          Platform.OS === 'ios'
-            ? (
-              <Image
-                style={ styles.songLoader }
-                source={ require('../../../assets/images/song_loader.gif') }
-              />
-            )
-            : (
-              <ActivityIndicator size={ 30 } color={ Colors.URbtnColor } />
-            )
+        return Platform.OS === 'ios' ? (
+          <Image
+            style={styles.songLoader}
+            source={require('../../../assets/images/song_loader.gif')}
+          />
+        ) : (
+          <ActivityIndicator size={30} color={Colors.URbtnColor} />
         );
     }
   };
@@ -207,84 +209,72 @@ const OnDemandMusic = ({ route, navigation }) => {
   return (
     <URContainer>
       <View>
-        <View style={ styles.Container }>
+        <View style={styles.Container}>
           <Image
-            style={ styles.playerImage }
-            source={ trackArtwork ? { uri: `${trackArtwork}` } : defaultPlayerImg }
+            style={styles.playerImage}
+            source={trackArtwork ? {uri: `${trackArtwork}`} : defaultPlayerImg}
           />
-          <View style={ styles.textContainer }>
-            <View style={ { maxWidth: '70%' } }>
-              <MarqueeText
-                speed={ 0.2 }
-                marqueeOnStart
-                loop
-                delay={ 1000 }
-              >
-                <Text style={ styles.songTitle }>
-                  { trackTitle }
-                </Text>
+          <View style={styles.textContainer}>
+            <View style={{maxWidth: '70%'}}>
+              <MarqueeText speed={0.2} marqueeOnStart loop delay={1000}>
+                <Text style={styles.songTitle}>{trackTitle}</Text>
               </MarqueeText>
-              <MarqueeText
-                speed={ 0.2 }
-                marqueeOnStart
-                loop
-                delay={ 1000 }
-              >
-                <Text style={ styles.songArtistText }>
-                  { trackArtist }
-                </Text>
+              <MarqueeText speed={0.2} marqueeOnStart loop delay={1000}>
+                <Text style={styles.songArtistText}>{trackArtist}</Text>
               </MarqueeText>
             </View>
-            { favSong
-              ? (
-                <TouchableOpacity onPress={ songunfavorite }>
-                  <SvgImage
-                    iconName={ favSymbolFilledIcon }
-                    height={ 23 }
-                    width={ 21 }
-                  />
-                </TouchableOpacity>
-              )
-              : (
-                <TouchableOpacity onPress={ songfavorite }>
-                  <SvgImage iconName={ favSymbolIcon } height={ 23 } width={ 21 } />
-                </TouchableOpacity>
-              ) }
+            {favSong ? (
+              <TouchableOpacity onPress={songunfavorite}>
+                <SvgImage
+                  iconName={favSymbolFilledIcon}
+                  height={23}
+                  width={21}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={songfavorite}>
+                <SvgImage iconName={favSymbolIcon} height={23} width={21} />
+              </TouchableOpacity>
+            )}
           </View>
-          <View style={ { marginTop: 35 } }>
+          <View style={{marginTop: 35}}>
             <UseProgress
-              sliderStyle={ { height: 20 } }
-              trackStyle={ { borderRadius: 0 } }
-              thumbStyle={ styles.thumbStyle }
-              timeTextView={ styles.songTimeStyle }
-              timeText={ styles.timeText }
+              sliderStyle={{height: 20}}
+              trackStyle={{borderRadius: 0}}
+              thumbStyle={styles.thumbStyle}
+              timeTextView={styles.songTimeStyle}
+              timeText={styles.timeText}
               onDemand
               // onSlidingComplete={ async value => {
               //   await TrackPlayer.seekTo(value);
               // } }
             />
-            <View style={ styles.actionBtnContainer }>
-              { previousBtnState
-                ? (
-                  <TouchableOpacity onPress={ () => TrackPlayer.skipToPrevious() }>
-                    <SvgImage iconName={ forwardBtn } height={ 32 } width={ 27 } />
-                  </TouchableOpacity>
-                )
-                : (
-                  <SvgImage iconName={ onDemandDisableBack } height={ 32 } width={ 27 } />
-                ) }
-              <TouchableOpacity onPress={ () => togglePlayback(playbackState) }>
-                { returnPlayBtn() }
+            <View style={styles.actionBtnContainer}>
+              {previousBtnState ? (
+                <TouchableOpacity onPress={() => TrackPlayer.skipToPrevious()}>
+                  <SvgImage iconName={forwardBtn} height={32} width={27} />
+                </TouchableOpacity>
+              ) : (
+                <SvgImage
+                  iconName={onDemandDisableBack}
+                  height={32}
+                  width={27}
+                />
+              )}
+              <TouchableOpacity onPress={() => togglePlayback(playbackState)}>
+                {returnPlayBtn()}
               </TouchableOpacity>
-              { forwardBtnState
-                ? (
-                  <TouchableOpacity onPress={ () => TrackPlayer.skipToNext() }>
-                    <SvgImage iconName={ songSkipBtn } height={ 32 } width={ 27 } />
-                  </TouchableOpacity>
-                )
-                : (
-                  <SvgImage iconName={ onDemandDisableForward } height={ 32 } width={ 27 } />
-                ) }
+              {forwardBtnState ? (
+                <TouchableOpacity onPress={() => TrackPlayer.skipToNext()}>
+                  <SvgImage iconName={songSkipBtn} height={32} width={27} />
+                </TouchableOpacity>
+              ) : (
+                <SvgImage
+                  iconName={onDemandDisableForward}
+                  height={32}
+                  width={27}
+                />
+              )}
             </View>
           </View>
         </View>

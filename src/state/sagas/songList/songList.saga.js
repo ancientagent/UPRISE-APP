@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import songListRequest from '../../../services/songList/songList.service';
-import { songListSagaType } from '../../types/sagas';
-import { songListActions } from '../../actions/request/songList/songList.actions';
+import {songListSagaType} from '../../types/sagas';
+import {songListActions} from '../../actions/request/songList/songList.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* songListWatcherSaga() {
   yield takeLatest(songListSagaType, songListWorkerSaga);
@@ -29,4 +27,3 @@ export function* songListWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

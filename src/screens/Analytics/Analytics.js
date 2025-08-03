@@ -1,14 +1,18 @@
 /* eslint-disable no-nested-ternary */
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
-  View, Text, ActivityIndicator, FlatList, StyleSheet,
+  View,
+  Text,
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { ScrollView } from 'react-native-virtualized-view';
-import { getSongAnalytics } from '../../state/selectors/UserProfile';
-import { getSongAnalyticsSagaAction } from '../../state/actions/sagas';
+import {useDispatch, useSelector} from 'react-redux';
+import {ScrollView} from 'react-native-virtualized-view';
+import {getSongAnalytics} from '../../state/selectors/UserProfile';
+import {getSongAnalyticsSagaAction} from '../../state/actions/sagas';
 import Colors from '../../theme/colors';
-import { strings } from '../../utilities/localization/localization';
+import {strings} from '../../utilities/localization/localization';
 
 const Analytics = () => {
   const dispatch = useDispatch();
@@ -30,9 +34,11 @@ const Analytics = () => {
     </View>
   );
 
-  const renderTableRow = ({ item }) => (
+  const renderTableRow = ({item}) => (
     <View style={styles.tableRow}>
-      <Text style={styles.cellText} numberOfLines={2}>{item.title || 'N/A'}</Text>
+      <Text style={styles.cellText} numberOfLines={2}>
+        {item.title || 'N/A'}
+      </Text>
       <Text style={styles.cellText}>{item.songCount || 0}</Text>
       <Text style={styles.cellText}>{item.likes || 0}</Text>
       <Text style={styles.cellText}>{item.upvotes || 0}</Text>
@@ -43,7 +49,9 @@ const Analytics = () => {
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
       <Text style={styles.emptyText}>No song analytics data available</Text>
-      <Text style={styles.emptySubText}>Upload songs to see performance metrics</Text>
+      <Text style={styles.emptySubText}>
+        Upload songs to see performance metrics
+      </Text>
     </View>
   );
 
@@ -72,9 +80,7 @@ const Analytics = () => {
 
   if (error) {
     return (
-      <ScrollView style={styles.container}>
-        {renderErrorState()}
-      </ScrollView>
+      <ScrollView style={styles.container}>{renderErrorState()}</ScrollView>
     );
   }
 
@@ -82,7 +88,9 @@ const Analytics = () => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Song Analytics Dashboard</Text>
-        <Text style={styles.subtitle}>Track your music performance metrics</Text>
+        <Text style={styles.subtitle}>
+          Track your music performance metrics
+        </Text>
       </View>
 
       {songAnalytics && songAnalytics.length > 0 ? (
@@ -91,7 +99,9 @@ const Analytics = () => {
           <FlatList
             data={songAnalytics}
             renderItem={renderTableRow}
-            keyExtractor={(item, index) => item.id?.toString() || index.toString()}
+            keyExtractor={(item, index) =>
+              item.id?.toString() || index.toString()
+            }
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
           />
@@ -141,7 +151,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     elevation: 3,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
@@ -201,4 +211,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Analytics; 
+export default Analytics;

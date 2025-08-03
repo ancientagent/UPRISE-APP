@@ -1,8 +1,8 @@
-import { StyleSheet, Dimensions, Platform } from 'react-native';
+import {StyleSheet, Dimensions, Platform} from 'react-native';
 import Colors from '../../theme/colors';
 
 const IS_IOS = Platform.OS === 'ios';
-const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
+const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 
 function wp(percentage) {
   const value = (percentage * viewportWidth) / 100;
@@ -63,7 +63,7 @@ export default StyleSheet.create({
     bottom: 18,
     shadowColor: Colors.Black,
     shadowOpacity: 0.25,
-    shadowOffset: { width: 0, height: 10 },
+    shadowOffset: {width: 0, height: 10},
     shadowRadius: 10,
     borderRadius: entryBorderRadius,
   },

@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import getSongAnalyticsRequest from '../../../services/analytics/analytics.service';
-import { getSongAnalyticsSagaType } from '../../types/sagas';
-import { getSongAnalyticsActions } from '../../actions/request/getSongAnalytics/getSongAnalytics.actions';
+import {getSongAnalyticsSagaType} from '../../types/sagas';
+import {getSongAnalyticsActions} from '../../actions/request/getSongAnalytics/getSongAnalytics.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* getSongAnalyticsWatcherSaga() {
   yield takeLatest(getSongAnalyticsSagaType, getSongAnalyticsWorkerSaga);
@@ -26,4 +24,4 @@ export function* getSongAnalyticsWorkerSaga() {
     yield put(getSongAnalyticsActions.fail(e));
     yield call(showAlert, e.error);
   }
-} 
+}

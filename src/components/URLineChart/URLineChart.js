@@ -1,12 +1,10 @@
 import React from 'react';
-import {
-  View, Text, Dimensions, StyleSheet,
-} from 'react-native';
-import { LineChart } from 'react-native-chart-kit';
+import {View, Text, Dimensions, StyleSheet} from 'react-native';
+import {LineChart} from 'react-native-chart-kit';
 import Colors from '../../theme/colors';
 
 const URLineChart = props => {
-  const { title, lineChartData, lineStrokeColor } = props;
+  const {title, lineChartData, lineStrokeColor} = props;
   const screenWidth = Dimensions.get('window').width;
   const chartConfig = {
     backgroundColor: 'transparent',
@@ -14,7 +12,8 @@ const URLineChart = props => {
     backgroundGradientTo: Colors.statisticsBgColor,
     decimalPlaces: 0,
     color: () => lineStrokeColor,
-    labelColor: /* istanbul ignore next */(opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+    labelColor: /* istanbul ignore next */ (opacity = 1) =>
+      `rgba(255, 255, 255, ${opacity})`,
     propsForLabels: styles.propsForLabels,
     propsForBackgroundLines: {
       r: '6',
@@ -25,22 +24,25 @@ const URLineChart = props => {
     barPercentage: 5,
   };
   return (
-    <View style={ { backgroundColor: Colors.statisticsBgColor, marginBottom: 20 } }>
-      <Text style={ styles.titleText }>
-        { title }
-      </Text>
-      <View style={ { marginBottom: 20 } }>
+    <View style={{backgroundColor: Colors.statisticsBgColor, marginBottom: 20}}>
+      <Text style={styles.titleText}>{title}</Text>
+      <View style={{marginBottom: 20}}>
         <LineChart
-          data={ lineChartData }
-          width={ screenWidth - 20 }
-          height={ 220 }
-          chartConfig={ chartConfig }
-          style={ styles.lineChartStyle }
-          segments={ 5 }
+          data={lineChartData}
+          width={screenWidth - 20}
+          height={220}
+          chartConfig={chartConfig}
+          style={styles.lineChartStyle}
+          segments={5}
         />
-        <View style={ { flexDirection: 'row', justifyContent: 'space-evenly', width: '100%' } }>
-          <Text style={ styles.indicationText }>X- Time period</Text>
-          <Text style={ styles.indicationText }>Y- Count</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            width: '100%',
+          }}>
+          <Text style={styles.indicationText}>X- Time period</Text>
+          <Text style={styles.indicationText}>Y- Count</Text>
         </View>
       </View>
     </View>

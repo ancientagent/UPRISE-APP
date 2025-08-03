@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import treandingSongsRequest from '../../../services/treandingSongs/treandingSongs.service';
-import { treandingSongsSagaType } from '../../types/sagas';
-import { treandingSongsActions } from '../../actions/request/treandingSongs/treandingSongs.actions';
+import {treandingSongsSagaType} from '../../types/sagas';
+import {treandingSongsActions} from '../../actions/request/treandingSongs/treandingSongs.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* treandingSongsWatcherSaga() {
   yield takeLatest(treandingSongsSagaType, treandingSongsWorkerSaga);
@@ -28,4 +26,3 @@ export function* treandingSongsWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

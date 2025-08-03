@@ -1,10 +1,8 @@
 /* eslint-disable no-shadow */
 import React from 'react';
-import { Icon } from 'react-native-elements';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {
-  Alert,
-} from 'react-native';
+import {Icon} from 'react-native-elements';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {Alert} from 'react-native';
 import Colors from '../theme/colors';
 import Discovery from '../screens/Discovery/Discovery';
 import OtherProfile from '../screens/otherProfile/otherProfile';
@@ -35,37 +33,40 @@ const DiscoveryStack = createNativeStackNavigator();
 function DiscoveryStackScreen() {
   return (
     <DiscoveryStack.Navigator
-      initialRouteName='Discovery'
-      screenOptions={ ({ navigation }) => ({
+      initialRouteName="Discovery"
+      screenOptions={({navigation}) => ({
         animationTypeForReplace: 'pop',
         animation: 'none',
-        headerStyle: { borderBottomWidth: 0 },
+        headerStyle: {borderBottomWidth: 0},
         animationEnabled: false,
         animationDuration: 0,
         gestureEnabled: false,
         headerLeft: () => (
           <>
             <Icon
-              type='ionicon'
-              name='chevron-back-outline'
-              size={ 24 }
-              color={ Colors.White }
-              onPress={ () => navigation.goBack() }
+              type="ionicon"
+              name="chevron-back-outline"
+              size={24}
+              color={Colors.White}
+              onPress={() => navigation.goBack()}
             />
           </>
         ),
-      }) }
-    >
-      <DiscoveryStack.Screen name='Discovery' component={ Discovery } options={ () => ({ headerShown: false }) } />
+      })}>
       <DiscoveryStack.Screen
-        name='RadioStations'
-        component={ RadioStations }
-        options={ () => ({ headerShown: false }) }
+        name="Discovery"
+        component={Discovery}
+        options={() => ({headerShown: false})}
       />
       <DiscoveryStack.Screen
-        name='AllPopularGenres'
-        component={ AllPopularGenres }
-        options={ () => ({
+        name="RadioStations"
+        component={RadioStations}
+        options={() => ({headerShown: false})}
+      />
+      <DiscoveryStack.Screen
+        name="AllPopularGenres"
+        component={AllPopularGenres}
+        options={() => ({
           headerTitle: 'Popular Genres',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -86,12 +87,12 @@ function DiscoveryStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='AllTrendingSongs'
-        component={ AllTrendingSongs }
-        options={ () => ({
+        name="AllTrendingSongs"
+        component={AllTrendingSongs}
+        options={() => ({
           headerTitle: 'Popular Songs',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -112,12 +113,12 @@ function DiscoveryStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='AllPopularBands'
-        component={ AllPopularBands }
-        options={ () => ({
+        name="AllPopularBands"
+        component={AllPopularBands}
+        options={() => ({
           headerTitle: 'Popular Artists',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -138,13 +139,17 @@ function DiscoveryStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
-      <DiscoveryStack.Screen name='AlbumSongs' component={ AlbumSongs } options={ () => ({ headerShown: false }) } />
       <DiscoveryStack.Screen
-        name='FollowersPage'
-        component={ FollowersPage }
-        options={ () => ({
+        name="AlbumSongs"
+        component={AlbumSongs}
+        options={() => ({headerShown: false})}
+      />
+      <DiscoveryStack.Screen
+        name="FollowersPage"
+        component={FollowersPage}
+        options={() => ({
           headerTitle: 'Followers',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -165,12 +170,12 @@ function DiscoveryStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='Following'
-        component={ Following }
-        options={ () => ({
+        name="Following"
+        component={Following}
+        options={() => ({
           headerTitle: 'Following',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -191,12 +196,12 @@ function DiscoveryStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='ChangePassword'
-        component={ ChangePassword }
-        options={ () => ({
+        name="ChangePassword"
+        component={ChangePassword}
+        options={() => ({
           headerTitle: 'Change Password',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -217,12 +222,12 @@ function DiscoveryStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='FullGalleryView'
-        component={ FullGalleryView }
-        options={ () => ({
+        name="FullGalleryView"
+        component={FullGalleryView}
+        options={() => ({
           headerTitle: 'Gallery',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -243,12 +248,12 @@ function DiscoveryStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='FullEventView'
-        component={ FullEventView }
-        options={ () => ({
+        name="FullEventView"
+        component={FullEventView}
+        options={() => ({
           headerTitle: 'Events',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -269,12 +274,12 @@ function DiscoveryStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='AllBandList'
-        component={ AllBandList }
-        options={ () => ({
+        name="AllBandList"
+        component={AllBandList}
+        options={() => ({
           headerTitle: 'Band List',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -295,12 +300,12 @@ function DiscoveryStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='AllAlbums'
-        component={ AllAlbums }
-        options={ ({ navigation, route }) => ({
+        name="AllAlbums"
+        component={AllAlbums}
+        options={({navigation, route}) => ({
           headerTitle: route.params.isDiscovery ? 'Popular Albums' : 'Albums',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -321,12 +326,12 @@ function DiscoveryStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='AllBandSongs'
-        component={ AllBandSongs }
-        options={ ({ navigation, route }) => ({
+        name="AllBandSongs"
+        component={AllBandSongs}
+        options={({navigation, route}) => ({
           headerTitle: 'Songs',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -347,14 +352,22 @@ function DiscoveryStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
-      <DiscoveryStack.Screen name='Events' component={ Events } options={ () => ({ headerShown: false }) } />
-      <DiscoveryStack.Screen name='UserProfile' component={ UserProfile } options={ () => ({ headerShown: false }) } />
       <DiscoveryStack.Screen
-        name='OtherProfile'
-        component={ OtherProfile }
-        options={ ({ route }) => ({
+        name="Events"
+        component={Events}
+        options={() => ({headerShown: false})}
+      />
+      <DiscoveryStack.Screen
+        name="UserProfile"
+        component={UserProfile}
+        options={() => ({headerShown: false})}
+      />
+      <DiscoveryStack.Screen
+        name="OtherProfile"
+        component={OtherProfile}
+        options={({route}) => ({
           headerTitle: route.params.userName ? route.params.userName : null,
           headerLeftContainerStyle: {
             marginHorizontal: 24,
@@ -372,12 +385,12 @@ function DiscoveryStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='RadioPreferences'
-        component={ RadioPreferences }
-        options={ () => ({
+        name="RadioPreferences"
+        component={RadioPreferences}
+        options={() => ({
           headerTitle: 'Radio Preferences',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -395,12 +408,12 @@ function DiscoveryStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='BandDetails'
-        component={ BandDetails }
-        options={ () => ({
+        name="BandDetails"
+        component={BandDetails}
+        options={() => ({
           headerTitle: 'Artist Details',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -418,12 +431,12 @@ function DiscoveryStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='RadioScreen'
-        component={ RadioScreen }
-        options={ () => ({
+        name="RadioScreen"
+        component={RadioScreen}
+        options={() => ({
           headerTitle: 'Uprise',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -441,12 +454,12 @@ function DiscoveryStackScreen() {
             fontWeight: '400',
             fontSize: 20,
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='OnDemandMusic'
-        component={ OnDemandMusic }
-        options={ ({ navigation }) => ({
+        name="OnDemandMusic"
+        component={OnDemandMusic}
+        options={({navigation}) => ({
           headerTitle: 'Playing Now',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -457,26 +470,24 @@ function DiscoveryStackScreen() {
           headerLeft: () => (
             <>
               <Icon
-                type='ionicon'
-                name='chevron-back-outline'
-                size={ 24 }
-                color={ Colors.White }
-                onPress={ async () => {
-                  Alert.alert(
-                    'Uprise',
-                    "Now you're switching to fairplayer",
-                    [
-                      {
-                        text: 'Cancel',
-                        style: 'cancel',
+                type="ionicon"
+                name="chevron-back-outline"
+                size={24}
+                color={Colors.White}
+                onPress={async () => {
+                  Alert.alert('Uprise', "Now you're switching to fairplayer", [
+                    {
+                      text: 'Cancel',
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Continue',
+                      onPress: () => {
+                        navigation.goBack();
                       },
-                      {
-                        text: 'Continue',
-                        onPress: () => { navigation.goBack(); },
-                      },
-                    ],
-                  );
-                } }
+                    },
+                  ]);
+                }}
               />
             </>
           ),
@@ -493,12 +504,12 @@ function DiscoveryStackScreen() {
             fontWeight: '400',
             fontSize: 20,
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='ChangeAvatar'
-        component={ ChangeAvatar }
-        options={ () => ({
+        name="ChangeAvatar"
+        component={ChangeAvatar}
+        options={() => ({
           headerTitle: 'Choose your avatar',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -516,12 +527,12 @@ function DiscoveryStackScreen() {
             fontFamily: 'Oswald Bold',
             fontWeight: '800',
           },
-        }) }
+        })}
       />
       <DiscoveryStack.Screen
-        name='ChangeInstrument'
-        component={ ChangeInstrument }
-        options={ () => ({
+        name="ChangeInstrument"
+        component={ChangeInstrument}
+        options={() => ({
           headerTitle: 'Instrument',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -539,7 +550,7 @@ function DiscoveryStackScreen() {
             fontFamily: 'Oswald Bold',
             fontWeight: '800',
           },
-        }) }
+        })}
       />
     </DiscoveryStack.Navigator>
   );

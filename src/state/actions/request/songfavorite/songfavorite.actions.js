@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  songfavoriteType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {songfavoriteType} from '../../../types/listener/listener';
 
-export const songfavoriteRequestActions = createRequestResponseActionSet(songfavoriteType);
+export const songfavoriteRequestActions =
+  createRequestResponseActionSet(songfavoriteType);

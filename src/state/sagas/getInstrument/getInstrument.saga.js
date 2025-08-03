@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import getInstrumentsRequest from '../../../services/getInstrument/getInstrument.service';
-import { getInstrumentSagaType } from '../../types/sagas';
-import { getInstrumentRequestActions } from '../../actions/request/getInstrument/getInstrument.actions';
+import {getInstrumentSagaType} from '../../types/sagas';
+import {getInstrumentRequestActions} from '../../actions/request/getInstrument/getInstrument.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* getInstrumentWatcherSaga() {
   yield takeLatest(getInstrumentSagaType, getInstrumentWorkerSaga);
@@ -27,4 +25,3 @@ export function* getInstrumentWorkerSaga() {
     yield call(showAlert, e.error);
   }
 }
-

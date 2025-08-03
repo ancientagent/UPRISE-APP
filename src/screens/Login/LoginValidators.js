@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { strings } from '../../utilities/localization/localization';
+import {strings} from '../../utilities/localization/localization';
 
 const loginValidationSchema = yup.object().shape({
   emailorUserName: yup
@@ -7,7 +7,13 @@ const loginValidationSchema = yup.object().shape({
     .required(strings('loginValidation.emailorUserName')),
   password: yup
     .string()
-    .min(8, ({ min }) => `${(strings('SignupValidators.createPasswordRightText'))} ${min} ${strings('SignupValidators.createPasswordLeftText')}`)
+    .min(
+      8,
+      ({min}) =>
+        `${strings(
+          'SignupValidators.createPasswordRightText',
+        )} ${min} ${strings('SignupValidators.createPasswordLeftText')}`,
+    )
     .required(strings('loginValidation.passwordRequired')),
 });
 export default loginValidationSchema;

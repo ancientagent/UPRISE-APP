@@ -1,4 +1,4 @@
-import { StyleSheet, Platform } from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import Colors from '../../theme/colors';
 
 export default StyleSheet.create({
@@ -59,7 +59,7 @@ export default StyleSheet.create({
     marginRight: 15,
     marginBottom: 12,
   },
-  toggleView: { marginTop: 10, maxHeight: '55%' },
+  toggleView: {marginTop: 10, maxHeight: '55%'},
   selectGenrText: {
     marginTop: 15,
     marginLeft: 25,
@@ -229,4 +229,3 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
-

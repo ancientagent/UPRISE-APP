@@ -1,3 +1,6 @@
-import { App } from '../../types';
+import {App} from '../../types';
 
-export const currentScreenAction = payload => ({ type: App.currentScreen, payload });
+export const currentScreenAction = payload => ({
+  type: App.currentScreen,
+  payload,
+});

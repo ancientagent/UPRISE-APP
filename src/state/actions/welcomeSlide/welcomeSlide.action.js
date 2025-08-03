@@ -1,3 +1,6 @@
-import { App } from '../../types';
+import {App} from '../../types';
 
-export const welcomeSlideAction = payload => ({ type: App.welcomeSlide, payload });
+export const welcomeSlideAction = payload => ({
+  type: App.welcomeSlide,
+  payload,
+});

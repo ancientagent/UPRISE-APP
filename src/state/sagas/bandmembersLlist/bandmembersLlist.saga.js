@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import bandmembersLlistRequest from '../../../services/bandmembersLlist/bandmembersLlist.service';
-import { bandmembersLlistSagaType } from '../../types/sagas';
-import { bandmembersLlistActions } from '../../actions/request/bandmembersLlist/bandmembersLlist.actions';
+import {bandmembersLlistSagaType} from '../../types/sagas';
+import {bandmembersLlistActions} from '../../actions/request/bandmembersLlist/bandmembersLlist.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* bandmembersLlistWatcherSaga() {
   yield takeLatest(bandmembersLlistSagaType, bandmembersLlistWorkerSaga);
@@ -28,4 +26,3 @@ export function* bandmembersLlistWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

@@ -1,6 +1,6 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  ForgotPasswordReqSagaType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {ForgotPasswordReqSagaType} from '../../../types/listener/listener';
 
-export const forgotPasswordRequestActions = createRequestResponseActionSet(ForgotPasswordReqSagaType);
+export const forgotPasswordRequestActions = createRequestResponseActionSet(
+  ForgotPasswordReqSagaType,
+);

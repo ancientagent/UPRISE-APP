@@ -1,10 +1,8 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import songDownVoteRequest from '../../../services/songDownVote/songDownVote.service';
-import { songDownVoteSagaType } from '../../types/sagas';
-import { songDownVoteActions } from '../../actions/request/songDownVote/songDownVote.actions';
-import { accessToken } from '../../selectors/UserProfile';
+import {songDownVoteSagaType} from '../../types/sagas';
+import {songDownVoteActions} from '../../actions/request/songDownVote/songDownVote.actions';
+import {accessToken} from '../../selectors/UserProfile';
 import showAlert from '../AlertUtility';
 
 export default function* songDownVoteWatcherSaga() {
@@ -28,4 +26,3 @@ export function* songDownVoteWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

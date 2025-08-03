@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  getSongAnalyticsType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {getSongAnalyticsType} from '../../../types/listener/listener';
 
-export const getSongAnalyticsActions = createRequestResponseActionSet(getSongAnalyticsType); 
+export const getSongAnalyticsActions =
+  createRequestResponseActionSet(getSongAnalyticsType);

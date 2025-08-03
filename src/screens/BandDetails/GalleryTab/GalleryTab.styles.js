@@ -1,8 +1,8 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import Colors from '../../../theme/colors';
 
 export default StyleSheet.create({
-  galleryTabView: { marginTop: 15 },
+  galleryTabView: {marginTop: 15},
   gridView: {
     alignItems: 'center',
     marginBottom: 10,
@@ -15,11 +15,10 @@ export default StyleSheet.create({
     backgroundColor: Colors.Black,
     height: '100%',
   },
-  iconStyle:
-      {
-        marginTop: 50,
-        alignSelf: 'flex-end',
-      },
+  iconStyle: {
+    marginTop: 50,
+    alignSelf: 'flex-end',
+  },
   galleryTxt: {
     alignSelf: 'center',
     fontSize: 12,

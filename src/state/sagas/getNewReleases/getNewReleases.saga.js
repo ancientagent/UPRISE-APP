@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import getNewReleasesRequest from '../../../services/getNewReleases/getNewReleases.service';
-import { getNewReleasesSagaType } from '../../types/sagas';
-import { getNewReleasesActions } from '../../actions/request/getNewReleases/getNewReleases.actions';
+import {getNewReleasesSagaType} from '../../types/sagas';
+import {getNewReleasesActions} from '../../actions/request/getNewReleases/getNewReleases.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* getNewReleasesWatcherSaga() {
   yield takeLatest(getNewReleasesSagaType, getNewReleasesWorkerSaga);
@@ -27,4 +25,3 @@ export function* getNewReleasesWorkerSaga() {
     yield call(showAlert, e.error);
   }
 }
-

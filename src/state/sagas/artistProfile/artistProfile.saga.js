@@ -1,8 +1,16 @@
-import { call, put, takeLatest, select } from 'redux-saga/effects';
-import getArtistProfileRequest, { updateArtistProfileRequest } from '../../../services/artistProfile/artistProfile.service';
-import { artistProfileSagaType, updateArtistProfileSagaType } from '../../types/sagas';
-import { artistProfileActions, updateArtistProfileActions } from '../../actions/request/artistProfile/artistProfile.actions';
-import { accessToken } from '../../selectors/UserProfile';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
+import getArtistProfileRequest, {
+  updateArtistProfileRequest,
+} from '../../../services/artistProfile/artistProfile.service';
+import {
+  artistProfileSagaType,
+  updateArtistProfileSagaType,
+} from '../../types/sagas';
+import {
+  artistProfileActions,
+  updateArtistProfileActions,
+} from '../../actions/request/artistProfile/artistProfile.actions';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* artistProfileWatcherSaga() {
   yield takeLatest(artistProfileSagaType, artistProfileWorkerSaga);
@@ -39,4 +47,4 @@ export function* updateArtistProfileWorkerSaga(action) {
   } catch (e) {
     yield put(updateArtistProfileActions.fail(e));
   }
-} 
+}

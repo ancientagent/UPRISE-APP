@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import bandSongListRequest from '../../../services/getBandSongList/getBandSongList.service';
-import { getBandSongListSagaType } from '../../types/sagas';
-import { getBandSongListRequestActions } from '../../actions/request/getBandSongList/getBandSongList.actions';
+import {getBandSongListSagaType} from '../../types/sagas';
+import {getBandSongListRequestActions} from '../../actions/request/getBandSongList/getBandSongList.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* bandSongListWatcherSaga() {
   yield takeLatest(getBandSongListSagaType, bandSongListWorkerSaga);

@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import favoriteSongListRequest from '../../../services/favoriteSongList/favoriteSongList.service';
-import { favoriteSongListSagaType } from '../../types/sagas';
-import { favoriteSongListActions } from '../../actions/request/favoriteSongList/favoriteSongList.actions';
+import {favoriteSongListSagaType} from '../../types/sagas';
+import {favoriteSongListActions} from '../../actions/request/favoriteSongList/favoriteSongList.actions';
 import showAlert from '../AlertUtility';
-import { accessToken, getUserDetails } from '../../selectors/UserProfile';
+import {accessToken, getUserDetails} from '../../selectors/UserProfile';
 
 export default function* favoriteSongListWatcherSaga() {
   yield takeLatest(favoriteSongListSagaType, favoriteSongListWorkerSaga);

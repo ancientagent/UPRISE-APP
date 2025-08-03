@@ -1,6 +1,6 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { enableScreens } from 'react-native-screens';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {enableScreens} from 'react-native-screens';
 
 // Import Screens directly
 import Login from '../screens/Login/Login';
@@ -35,13 +35,16 @@ const AppNavigator = () => {
       <RootStack.Screen name="SignupUserName" component={SignupUserName} />
       <RootStack.Screen name="MailConfirmation" component={MailConfirmation} />
       <RootStack.Screen name="HomeSceneCreation" component={UserLocation} />
-      <RootStack.Screen name="CommunityOnboarding" component={CommunityOnboarding} />
+      <RootStack.Screen
+        name="CommunityOnboarding"
+        component={CommunityOnboarding}
+      />
       <RootStack.Screen
         name="ForgotPassword"
         component={ForgotPassword}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
-      <RootStack.Screen name='ChangePassword' component={ChangePassword} />
+      <RootStack.Screen name="ChangePassword" component={ChangePassword} />
       <RootStack.Screen name="Analytics" component={Analytics} />
       <RootStack.Screen name="TestPlaces" component={TestPlaces} />
 

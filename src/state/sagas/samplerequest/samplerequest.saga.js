@@ -1,8 +1,6 @@
-import {
-  call, put, takeLatest,
-} from 'redux-saga/effects';
-import { sampleReqSagaType } from '../../types/sagas';
-import { sampleRequestActions } from '../../actions/request/samplerequest/samplerequest.actions';
+import {call, put, takeLatest} from 'redux-saga/effects';
+import {sampleReqSagaType} from '../../types/sagas';
+import {sampleRequestActions} from '../../actions/request/samplerequest/samplerequest.actions';
 import getSampleRequest from '../../../services/samplerequest/samplerequest.service';
 
 export default function* sampleWatcherSaga() {
@@ -18,4 +16,3 @@ export function* sampleWorkerSaga() {
     yield put(sampleRequestActions.fail(error));
   }
 }
-

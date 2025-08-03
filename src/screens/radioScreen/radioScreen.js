@@ -1,9 +1,15 @@
 /* eslint-disable radix */
 /* eslint-disable no-shadow */
 /* eslint-disable global-require */
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
-  View, Text, Image, TouchableOpacity, ActivityIndicator, Platform, ScrollView,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+  Platform,
+  ScrollView,
 } from 'react-native';
 import TrackPlayer, {
   Capability,
@@ -13,10 +19,9 @@ import TrackPlayer, {
   useTrackPlayerEvents,
 } from 'react-native-track-player';
 import MarqueeText from 'react-native-marquee';
-import { useDispatch, useSelector } from 'react-redux';
-import { Icon } from 'react-native-elements';
-import AsyncStorage
-from '@react-native-community/async-storage';
+import {useDispatch, useSelector} from 'react-redux';
+import {Icon} from 'react-native-elements';
+import AsyncStorage from '@react-native-community/async-storage';
 import Pause from '../../../assets/images/pause.svg';
 import Colors from '../../theme/colors';
 import URContainer from '../../components/URContainer/URContainer';
@@ -26,9 +31,13 @@ import songSkipBtn from '../../../assets/images/songSkipBtn.svg';
 import radioBlastOutline from '../../../assets/images/radio_Blast_outline.svg';
 import radioBlast from '../../../assets/images/radioBlast.svg';
 import styles from './radioScreen.styles';
-import { getRadioSong, getUserDetails } from '../../state/selectors/UserProfile';
+import {getRadioSong, getUserDetails} from '../../state/selectors/UserProfile';
 import {
-  getRadioSongSagaAction, songBlastSagaAction, postSongIdSagaAction, songfavoriteSagaAction, songUnfavoriteSagaAction,
+  getRadioSongSagaAction,
+  songBlastSagaAction,
+  postSongIdSagaAction,
+  songfavoriteSagaAction,
+  songUnfavoriteSagaAction,
   stationSwitchingSagaAction,
 } from '../../state/actions/sagas';
 import favSymbolIcon from '../../../assets/images/favSymbolIcon.svg';
@@ -42,7 +51,9 @@ const RadioScreen = () => {
   const songData = useSelector(getRadioSong);
   const userDetails = useSelector(getUserDetails);
   const dispatch = useDispatch();
-  const [initialState, setInitialState] = useState(userDetails.radioPrefrence && userDetails.radioPrefrence.stationType);
+  const [initialState, setInitialState] = useState(
+    userDetails.radioPrefrence && userDetails.radioPrefrence.stationType,
+  );
   const [trackArtwork, setTrackArtwork] = useState();
   const [trackTitle, setTrackTitle] = useState();
   const [trackArtist, setTrackArtist] = useState();
@@ -68,10 +79,18 @@ const RadioScreen = () => {
     // Set current tier based on user's station preference
     const stationType = userDetails.radioPrefrence?.stationType;
     switch (stationType) {
-      case '1': setCurrentTier('CITYWIDE'); break;
-      case '2': setCurrentTier('STATEWIDE'); break;
-      case '3': setCurrentTier('NATIONAL'); break;
-      default: setCurrentTier('CITYWIDE'); break;
+      case '1':
+        setCurrentTier('CITYWIDE');
+        break;
+      case '2':
+        setCurrentTier('STATEWIDE');
+        break;
+      case '3':
+        setCurrentTier('NATIONAL');
+        break;
+      default:
+        setCurrentTier('CITYWIDE');
+        break;
     }
   }, [userDetails.radioPrefrence]);
 
@@ -97,20 +116,14 @@ const RadioScreen = () => {
     await TrackPlayer.reset();
     await TrackPlayer.updateOptions({
       stopWithApp: true,
-      capabilities: [
-        Capability.Play,
-        Capability.Pause,
-      ],
+      capabilities: [Capability.Play, Capability.Pause],
       compactCapabilities: [
         Capability.Play,
         Capability.Pause,
         // Capability.SkipToNext,
         // Capability.SkipToPrevious,
       ],
-      notificationCapabilities: [
-        Capability.Play,
-        Capability.Pause,
-      ],
+      notificationCapabilities: [Capability.Play, Capability.Pause],
     });
     await TrackPlayer.add(songInfo);
     await TrackPlayer.play();
@@ -129,17 +142,18 @@ const RadioScreen = () => {
   };
 
   useTrackPlayerEvents([Event.PlaybackQueueEnded], async event => {
-    const page = await AsyncStorage.getItem('page') || 'other';
+    const page = (await AsyncStorage.getItem('page')) || 'other';
     console.log(`TrackPlayerEvent = ${JSON.stringify(event)}}`, page);
     if (page !== 'demand' && songData.songId) {
-      await (() => new Promise(resolve => {
-        const payload = {
-          songId: songData.songId,
-          listenSource: 'radio',
-          callback: resolve,
-        };
-        dispatch(postSongIdSagaAction(payload));
-      }))();
+      await (() =>
+        new Promise(resolve => {
+          const payload = {
+            songId: songData.songId,
+            listenSource: 'radio',
+            callback: resolve,
+          };
+          dispatch(postSongIdSagaAction(payload));
+        }))();
       dispatch(getRadioSongSagaAction());
       await TrackPlayer.reset();
       await TrackPlayer.updateMetadataForTrack(0, songInfo);
@@ -162,7 +176,7 @@ const RadioScreen = () => {
     };
     dispatch(songfavoriteSagaAction(payload));
   };
-  
+
   const songunfavorite = () => {
     setFav(false);
     const payload = {
@@ -170,16 +184,17 @@ const RadioScreen = () => {
     };
     dispatch(songUnfavoriteSagaAction(payload));
   };
-  
+
   const skipNext = async () => {
-    await (() => new Promise(resolve => {
-      const payload = {
-        songId: songData.songId,
-        listenSource: 'radio',
-        callback: resolve,
-      };
-      dispatch(postSongIdSagaAction(payload));
-    }))();
+    await (() =>
+      new Promise(resolve => {
+        const payload = {
+          songId: songData.songId,
+          listenSource: 'radio',
+          callback: resolve,
+        };
+        dispatch(postSongIdSagaAction(payload));
+      }))();
     dispatch(getRadioSongSagaAction());
     await TrackPlayer.reset();
     await TrackPlayer.updateMetadataForTrack(0, songInfo);
@@ -190,19 +205,24 @@ const RadioScreen = () => {
    * Handle tier switching
    * @param {string} newTier - New tier to switch to
    */
-  const handleTierSwitch = async (newTier) => {
-    if (newTier === currentTier) return;
-    
+  const handleTierSwitch = async newTier => {
+    if (newTier === currentTier) {
+      return;
+    }
+
     setTierLoading(true);
     try {
       const stationType = {
-        'CITYWIDE': '1',
-        'STATEWIDE': '2',
-        'NATIONAL': '3'
+        CITYWIDE: '1',
+        STATEWIDE: '2',
+        NATIONAL: '3',
       }[newTier];
 
       const payload = {
-        stationPrefrence: newTier === 'NATIONAL' ? 'USA' : userDetails[newTier === 'CITYWIDE' ? 'city' : 'state'],
+        stationPrefrence:
+          newTier === 'NATIONAL'
+            ? 'USA'
+            : userDetails[newTier === 'CITYWIDE' ? 'city' : 'state'],
         stationType: stationType,
         selectedTabId: 1, // Home tab
       };
@@ -213,7 +233,7 @@ const RadioScreen = () => {
       });
 
       setCurrentTier(newTier);
-      
+
       // Get new song for the tier
       dispatch(getRadioSongSagaAction());
       await TrackPlayer.reset();
@@ -231,7 +251,7 @@ const RadioScreen = () => {
    * @param {string} tier - Tier name
    * @returns {string} Tier description
    */
-  const getTierDescription = (tier) => {
+  const getTierDescription = tier => {
     switch (tier) {
       case 'CITYWIDE':
         return `Latest local uploads from ${userDetails.city}`;
@@ -249,25 +269,25 @@ const RadioScreen = () => {
    */
   const renderTierToggle = () => {
     const tiers = ['CITYWIDE', 'STATEWIDE', 'NATIONAL'];
-    
+
     return (
       <View style={styles.tierToggleContainer}>
         <Text style={styles.tierToggleTitle}>RaDIYo Broadcast</Text>
         <View style={styles.tierButtonsContainer}>
-          {tiers.map((tier) => (
+          {tiers.map(tier => (
             <TouchableOpacity
               key={tier}
               style={[
                 styles.tierButton,
-                currentTier === tier && styles.tierButtonActive
+                currentTier === tier && styles.tierButtonActive,
               ]}
               onPress={() => handleTierSwitch(tier)}
-              disabled={tierLoading}
-            >
-              <Text style={[
-                styles.tierButtonText,
-                currentTier === tier && styles.tierButtonTextActive
-              ]}>
+              disabled={tierLoading}>
+              <Text
+                style={[
+                  styles.tierButtonText,
+                  currentTier === tier && styles.tierButtonTextActive,
+                ]}>
                 {tier}
               </Text>
             </TouchableOpacity>
@@ -282,113 +302,112 @@ const RadioScreen = () => {
 
   const returnPlayBtn = () => {
     if (playbackState === State.Playing) {
-      return <SvgImage iconName={Pause} height={ 32 } width={ 32 } />;
+      return <SvgImage iconName={Pause} height={32} width={32} />;
     }
-    return <SvgImage iconName={playBtn} height={ 32 } width={ 32 } />;
+    return <SvgImage iconName={playBtn} height={32} width={32} />;
   };
 
   const defaultPlayerImg = require('../../../assets/images/music_default_img.png');
 
   return (
     <URContainer>
-      <ScrollView contentContainerStyle={ {
-        alignItems: 'center',
-        height: '100%',
-      } }
-      >
+      <ScrollView
+        contentContainerStyle={{
+          alignItems: 'center',
+          height: '100%',
+        }}>
         {/* Tier Toggle Section */}
         {renderTierToggle()}
 
-        <View style={ styles.Container }>
+        <View style={styles.Container}>
           <Image
-            style={ styles.playerImage }
-            source={ trackArtwork ? { uri: `${trackArtwork}` } : defaultPlayerImg }
+            style={styles.playerImage}
+            source={trackArtwork ? {uri: `${trackArtwork}`} : defaultPlayerImg}
           />
-          <View style={ styles.textContainer }>
-            <View style={ { maxWidth: '70%' } }>
-              <MarqueeText
-                speed={ 0.2 }
-                marqueeOnStart
-                loop
-                delay={ 1000 }
-              >
-                <Text style={ styles.songTitle }>
-                  { trackTitle }
-                </Text>
+          <View style={styles.textContainer}>
+            <View style={{maxWidth: '70%'}}>
+              <MarqueeText speed={0.2} marqueeOnStart loop delay={1000}>
+                <Text style={styles.songTitle}>{trackTitle}</Text>
               </MarqueeText>
-              <MarqueeText
-                speed={ 0.2 }
-                marqueeOnStart
-                loop
-                delay={ 1000 }
-              >
-                <Text style={ styles.songArtistText }>
-                  { trackArtist }
-                </Text>
+              <MarqueeText speed={0.2} marqueeOnStart loop delay={1000}>
+                <Text style={styles.songArtistText}>{trackArtist}</Text>
               </MarqueeText>
             </View>
-            { favSong
-              ? (
-                <TouchableOpacity onPress={ songunfavorite } disabled={ !songData.songId }>
+            {favSong ? (
+              <TouchableOpacity
+                onPress={songunfavorite}
+                disabled={!songData.songId}>
+                <SvgImage
+                  iconStyle={{marginRight: 0}}
+                  iconName={favSymbolFilledIcon}
+                  height={23}
+                  width={21}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={songfavorite}
+                disabled={!songData.songId}>
+                <SvgImage
+                  iconStyle={{marginRight: 0}}
+                  iconName={favSymbolIcon}
+                  height={23}
+                  width={21}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+          <View style={{marginTop: 35}}>
+            <UseProgress
+              sliderStyle={{height: 20}}
+              trackStyle={{borderRadius: 0}}
+              thumbStyle={styles.thumbStyle}
+              disabled
+              timeTextView={styles.songTimeStyle}
+              timeText={styles.timeText}
+              hideSkip={hideSkip}
+              setHideSkip={setHideSkip}
+            />
+            <View style={styles.actionBtnContainer}>
+              {hideSkip ? (
+                <TouchableOpacity
+                  onPress={skipNext}
+                  disabled={!songData.songId}>
+                  <SvgImage iconName={songSkipBtn} height={28} width={32} />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity>
+                  <SvgImage iconName={disableNext} height={28} width={32} />
+                </TouchableOpacity>
+              )}
+              {handleBlast ? (
+                <SvgImage iconName={radioBlast} height={32} width={32} />
+              ) : (
+                <TouchableOpacity
+                  onPress={songBlast}
+                  disabled={!songData.songId}>
                   <SvgImage
-                    iconStyle={ { marginRight: 0 } }
-                    iconName={ favSymbolFilledIcon }
-                    height={ 23 }
-                    width={ 21 }
+                    iconName={radioBlastOutline}
+                    height={32}
+                    width={32}
                   />
                 </TouchableOpacity>
-              )
-              : (
-                <TouchableOpacity onPress={ songfavorite } disabled={ !songData.songId }>
-                  <SvgImage iconStyle={ { marginRight: 0 } } iconName={ favSymbolIcon } height={ 23 } width={ 21 } />
-                </TouchableOpacity>
-              ) }
-          </View>
-          <View style={ { marginTop: 35 } }>
-            <UseProgress
-              sliderStyle={ { height: 20 } }
-              trackStyle={ { borderRadius: 0 } }
-              thumbStyle={ styles.thumbStyle }
-              disabled
-              timeTextView={ styles.songTimeStyle }
-              timeText={ styles.timeText }
-              hideSkip={ hideSkip }
-              setHideSkip={ setHideSkip }
-            />
-            <View style={ styles.actionBtnContainer }>
-              { hideSkip
-                ? (
-                  <TouchableOpacity onPress={ skipNext } disabled={ !songData.songId }>
-                    <SvgImage iconName={ songSkipBtn } height={ 28 } width={ 32 } />
-                  </TouchableOpacity>
-                )
-                : (
-                  <TouchableOpacity>
-                    <SvgImage iconName={ disableNext } height={ 28 } width={ 32 } />
-                  </TouchableOpacity>
-                ) }
-              { handleBlast
-                ? (
-                  <SvgImage iconName={ radioBlast } height={ 32 } width={ 32 } />
-                )
-                : (
-                  <TouchableOpacity onPress={ songBlast } disabled={ !songData.songId }>
-                    <SvgImage iconName={ radioBlastOutline } height={ 32 } width={ 32 } />
-                  </TouchableOpacity>
-                ) }
-              <TouchableOpacity onPress={ () => togglePlayback(playbackState) }>
-                { returnPlayBtn() }
+              )}
+              <TouchableOpacity onPress={() => togglePlayback(playbackState)}>
+                {returnPlayBtn()}
               </TouchableOpacity>
             </View>
-            <View style={ styles.locationView }>
+            <View style={styles.locationView}>
               <Icon
-                type='ionicon'
-                size={ 13 }
-                name='location-outline'
-                color={ Colors.White }
+                type="ionicon"
+                size={13}
+                name="location-outline"
+                color={Colors.White}
               />
-              <Text style={ styles.locationText }>
-                { parseInt(initialState) === 2 ? songData.stateName : songData.cityName }
+              <Text style={styles.locationText}>
+                {parseInt(initialState) === 2
+                  ? songData.stateName
+                  : songData.cityName}
               </Text>
             </View>
           </View>

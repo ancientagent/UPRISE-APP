@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from 'react-native';
 import Config from 'react-native-config';
-import { searchCities } from '../../services/googlePlaces/googlePlaces.service';
+import {searchCities} from '../../services/googlePlaces/googlePlaces.service';
 
 const TestPlaces = () => {
   const [input, setInput] = useState('');
@@ -20,12 +27,12 @@ const TestPlaces = () => {
       console.log('Input:', input);
       console.log('API Key available:', !!Config.GOOGLE_PLACES_API_KEY);
       console.log('MAP_API_KEY available:', !!Config.MAP_API_KEY);
-      
+
       const suggestions = await searchCities(input);
       console.log('API Response:', suggestions);
-      
+
       setResults(suggestions || []);
-      
+
       if (suggestions && suggestions.length > 0) {
         Alert.alert('Success', `Found ${suggestions.length} suggestions!`);
       } else {
@@ -42,14 +49,14 @@ const TestPlaces = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Google Places API Test</Text>
-      
+
       <Text style={styles.info}>
         API Key: {Config.GOOGLE_PLACES_API_KEY ? '✅ Available' : '❌ Missing'}
       </Text>
       <Text style={styles.info}>
         MAP_API_KEY: {Config.MAP_API_KEY ? '✅ Available' : '❌ Missing'}
       </Text>
-      
+
       <TextInput
         style={styles.input}
         placeholder="Enter city name (e.g., Austin)"
@@ -57,17 +64,16 @@ const TestPlaces = () => {
         onChangeText={setInput}
         placeholderTextColor="#888"
       />
-      
-      <TouchableOpacity 
+
+      <TouchableOpacity
         style={[styles.button, loading && styles.buttonDisabled]}
         onPress={testPlacesAPI}
-        disabled={loading}
-      >
+        disabled={loading}>
         <Text style={styles.buttonText}>
           {loading ? 'Testing...' : 'Test API'}
         </Text>
       </TouchableOpacity>
-      
+
       {results.length > 0 && (
         <View style={styles.results}>
           <Text style={styles.resultsTitle}>Results:</Text>
@@ -146,4 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TestPlaces; 
+export default TestPlaces;

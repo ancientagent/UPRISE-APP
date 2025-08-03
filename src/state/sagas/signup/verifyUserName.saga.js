@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest,
-} from 'redux-saga/effects';
+import {call, put, takeLatest} from 'redux-saga/effects';
 import verifyUserNameRequest from '../../../services/signup/verifyUserName.service';
-import { verifyUserNameType } from '../../types/sagas';
-import { verifyUserNameRequestAction } from '../../actions/request/signup/verifyUserName.action';
+import {verifyUserNameType} from '../../types/sagas';
+import {verifyUserNameRequestAction} from '../../actions/request/signup/verifyUserName.action';
 import showAlert from '../AlertUtility';
-import { ssoLoginSagaAction } from '../../actions/sagas';
+import {ssoLoginSagaAction} from '../../actions/sagas';
 
 export default function* verifyUserNameWatcherSaga() {
   yield takeLatest(verifyUserNameType, verifyUserNameWorkerSaga);
@@ -30,4 +28,3 @@ export function* verifyUserNameWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

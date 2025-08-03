@@ -1,10 +1,8 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import postSongIdRequest from '../../../services/postSongId/postSongId.service';
-import { postSongIdSagaType } from '../../types/sagas';
-import { postSongIdRequestActions } from '../../actions/request/postSongId/postSongId.actions';
-import { accessToken } from '../../selectors/UserProfile';
+import {postSongIdSagaType} from '../../types/sagas';
+import {postSongIdRequestActions} from '../../actions/request/postSongId/postSongId.actions';
+import {accessToken} from '../../selectors/UserProfile';
 import showAlert from '../AlertUtility';
 
 export default function* postSongIdWatcherSaga() {
@@ -29,4 +27,3 @@ export function* postSongIdWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

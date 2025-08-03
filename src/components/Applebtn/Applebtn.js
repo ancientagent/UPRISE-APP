@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import React, {useEffect} from 'react';
+import {useDispatch} from 'react-redux';
 import {
-  View, Text, TouchableOpacity,
-} from 'react-native';
-import { appleAuth } from '@invertase/react-native-apple-authentication';
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
+import {View, Text, TouchableOpacity} from 'react-native';
+import {appleAuth} from '@invertase/react-native-apple-authentication';
 import SvgImage from '../SvgImage/SvgImage';
 import appleIcon from '../../../assets/images/appleIcon.svg';
-import { strings } from '../../utilities/localization/localization';
-import { verifyUserSagaAction } from '../../state/actions/sagas';
+import {strings} from '../../utilities/localization/localization';
+import {verifyUserSagaAction} from '../../state/actions/sagas';
 import styles from './Applebtn.styles';
 
 const jwtDecode = require('jwt-decode');
@@ -19,10 +20,7 @@ const Applebtn = () => {
     try {
       const appleAuthRequestResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
-        requestedScopes: [
-          appleAuth.Scope.EMAIL,
-          appleAuth.Scope.FULL_NAME,
-        ],
+        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
       });
 
       const token = appleAuthRequestResponse.identityToken;
@@ -67,16 +65,13 @@ const Applebtn = () => {
   };
   return (
     <TouchableOpacity
-      style={ styles.googleBtnView }
-      activeOpacity={ 0.7 }
-      onPress={ onAppleButtonPress }
-    >
-      <View style={ styles.contentView }>
-        <SvgImage iconStyle={ styles.googleIcon } iconName={ appleIcon } />
-        <Text
-          style={ styles.googleText }
-        >
-          { strings('Login.appleSigninText') }
+      style={styles.googleBtnView}
+      activeOpacity={0.7}
+      onPress={onAppleButtonPress}>
+      <View style={styles.contentView}>
+        <SvgImage iconStyle={styles.googleIcon} iconName={appleIcon} />
+        <Text style={styles.googleText}>
+          {strings('Login.appleSigninText')}
         </Text>
       </View>
     </TouchableOpacity>

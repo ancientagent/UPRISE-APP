@@ -1,60 +1,65 @@
-import React, { useState } from 'react';
-import {
-  View, Text, StyleSheet, TouchableOpacity,
-} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import _ from 'lodash';
-import { Divider } from 'react-native-elements';
+import {Divider} from 'react-native-elements';
 import Colors from '../../../theme/colors';
 import EventTab from '../EventTab/EventTab';
 import GalleryTab from '../GalleryTab/GalleryTab';
 
 const BandDetailsTabs = props => {
-  const { navigation, BandId } = props;
+  const {navigation, BandId} = props;
   const [selectedTab, setSelectedTab] = useState(1);
-  const items = [{
-    id: 1,
-    title: 'Gallery',
-  },
-  {
-    id: 2,
-    title: 'Events',
-  },
+  const items = [
+    {
+      id: 1,
+      title: 'Gallery',
+    },
+    {
+      id: 2,
+      title: 'Events',
+    },
   ];
   const renderToggleButtons = () => {
     const toggleButtons = [];
     _.forEach(items, item => {
       toggleButtons.push(
         <TouchableOpacity
-          onPress={ () => {
+          onPress={() => {
             setSelectedTab(item.id);
-          } }
-        >
-          <Text style={ item.id === selectedTab ? styles.focusedStyle : styles.unfocusedStyle }>
-            { item.title }
+          }}>
+          <Text
+            style={
+              item.id === selectedTab
+                ? styles.focusedStyle
+                : styles.unfocusedStyle
+            }>
+            {item.title}
           </Text>
           <Divider
-            orientation='horizontal'
-            width={ 2 }
-            color={ item.id === selectedTab ? Colors.URbtnColor : Colors.transparentColor }
+            orientation="horizontal"
+            width={2}
+            color={
+              item.id === selectedTab
+                ? Colors.URbtnColor
+                : Colors.transparentColor
+            }
           />
         </TouchableOpacity>,
       );
     });
-    return (toggleButtons);
+    return toggleButtons;
   };
   const renderContaint = () => {
     if (selectedTab === 1) {
-      return <GalleryTab navigation={ navigation } BandId={ BandId } />;
+      return <GalleryTab navigation={navigation} BandId={BandId} />;
     } else {
-      return <EventTab navigation={ navigation } />;
+      return <EventTab navigation={navigation} />;
     }
   };
   return (
-    <View style={ { marginTop: 10 } }>
-      <View style={ styles.toggleBtnView }>
-        { renderToggleButtons() }
-      </View>
-      { renderContaint() }
+    <View style={{marginTop: 10}}>
+      <View style={styles.toggleBtnView}>{renderToggleButtons()}</View>
+      {renderContaint()}
     </View>
   );
 };

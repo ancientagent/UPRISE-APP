@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import getEventsStatisticsRequest from '../../../services/getEventsStatistics/getEventsStatistics.service';
-import { getEventsStatisticsSagaType } from '../../types/sagas';
-import { getEventsStatisticsRequestActions } from '../../actions/request/getEventsStatistics/getEventsStatistics.actions';
+import {getEventsStatisticsSagaType} from '../../types/sagas';
+import {getEventsStatisticsRequestActions} from '../../actions/request/getEventsStatistics/getEventsStatistics.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* getEventsStatisticsWatcherSaga() {
   yield takeLatest(getEventsStatisticsSagaType, getEventsStatisticsWorkerSaga);

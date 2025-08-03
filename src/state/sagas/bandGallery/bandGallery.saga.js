@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import bandGalleryRequest from '../../../services/bandGallery/bandGallery.service';
-import { bandGallerySagaType } from '../../types/sagas';
-import { bandGalleryActions } from '../../actions/request/bandGallery/bandGallery.actions';
+import {bandGallerySagaType} from '../../types/sagas';
+import {bandGalleryActions} from '../../actions/request/bandGallery/bandGallery.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* bandGalleryWatcherSaga() {
   yield takeLatest(bandGallerySagaType, bandGalleryWorkerSaga);
@@ -28,4 +26,3 @@ export function* bandGalleryWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

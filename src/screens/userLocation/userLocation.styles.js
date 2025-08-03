@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import Colors from '../../theme/colors';
 
 const styles = StyleSheet.create({
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     zIndex: 1000,
     elevation: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
@@ -138,4 +138,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default styles; 
+export default styles;

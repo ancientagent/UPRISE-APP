@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  LoginRequestTypes,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {LoginRequestTypes} from '../../../types/listener/listener';
 
-export const loginRequestActions = createRequestResponseActionSet(LoginRequestTypes);
+export const loginRequestActions =
+  createRequestResponseActionSet(LoginRequestTypes);

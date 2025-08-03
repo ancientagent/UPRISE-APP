@@ -1,4 +1,4 @@
-import { App as NetworkStatus } from '../../types';
+import {App as NetworkStatus} from '../../types';
 
 const initialState = {
   showPopup: true,

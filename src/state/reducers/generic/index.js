@@ -1,3 +1,3 @@
-import createRequestResponseReducer, { getInitialState } from './generic.reducer';
+import createRequestResponseReducer, {getInitialState} from './generic.reducer';
 
-export { createRequestResponseReducer, getInitialState };
+export {createRequestResponseReducer, getInitialState};

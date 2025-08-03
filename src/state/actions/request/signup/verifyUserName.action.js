@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  verifyUserNameTypes,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {verifyUserNameTypes} from '../../../types/listener/listener';
 
-export const verifyUserNameRequestAction = createRequestResponseActionSet(verifyUserNameTypes);
+export const verifyUserNameRequestAction =
+  createRequestResponseActionSet(verifyUserNameTypes);

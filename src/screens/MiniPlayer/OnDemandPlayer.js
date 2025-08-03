@@ -1,10 +1,16 @@
 /* eslint-disable no-shadow */
 /* eslint-disable global-require */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  View, Text, Image, TouchableOpacity, Platform, ActivityIndicator, Alert,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Platform,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
-import { Icon } from 'react-native-elements';
+import {Icon} from 'react-native-elements';
 import TrackPlayer, {
   Capability,
   Event,
@@ -12,11 +18,10 @@ import TrackPlayer, {
   usePlaybackState,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import MarqueeText from 'react-native-marquee';
-import AsyncStorage
-from '@react-native-community/async-storage';
-import { resetRoot } from '../../navigators/RootNavigation';
+import AsyncStorage from '@react-native-community/async-storage';
+import {resetRoot} from '../../navigators/RootNavigation';
 import Pause from '../../../assets/images/pause.svg';
 import Colors from '../../theme/colors';
 import SvgImage from '../../components/SvgImage/SvgImage';
@@ -25,14 +30,16 @@ import favSymbolIcon from '../../../assets/images/favSymbolIcon.svg';
 import favSymbolFilledIcon from '../../../assets/images/favSymbolFilledIcon.svg';
 import styles from './MiniPlayer.styles';
 import {
-  songfavoriteSagaAction, songUnfavoriteSagaAction,
+  songfavoriteSagaAction,
+  songUnfavoriteSagaAction,
 } from '../../state/actions/sagas';
 import UseProgress from '../../components/UseProgress/UseProgress';
 import {
-  currentSongData, currentScreen,
+  currentSongData,
+  currentScreen,
 } from '../../state/selectors/UserProfile';
-import { currentSongDataAction } from '../../state/actions/currentSongData/currentSongData.action';
-import { currentScreenAction } from '../../state/actions/currentScreen/currentScreen.action';
+import {currentSongDataAction} from '../../state/actions/currentSongData/currentSongData.action';
+import {currentScreenAction} from '../../state/actions/currentScreen/currentScreen.action';
 
 const OnDemandPlayer = () => {
   const playbackState = usePlaybackState();
@@ -40,7 +47,7 @@ const OnDemandPlayer = () => {
   const songData = useSelector(currentSongData);
   const currentRoute = useSelector(currentScreen);
   const playlistData = songData.songList;
-  const { intialSongId } = songData;
+  const {intialSongId} = songData;
   const [favSong, setFav] = useState(false);
   const [trackArtwork, setTrackArtwork] = useState();
   const [trackTitle, setTrackTitle] = useState();
@@ -69,11 +76,11 @@ const OnDemandPlayer = () => {
   };
   useTrackPlayerEvents([Event.PlaybackTrackChanged], async event => {
     if (
-      event.type === Event.PlaybackTrackChanged
-        && event.nextTrack !== undefined
+      event.type === Event.PlaybackTrackChanged &&
+      event.nextTrack !== undefined
     ) {
       const track = await TrackPlayer.getTrack(event.nextTrack);
-      const { title, artist, artwork } = track || {};
+      const {title, artist, artwork} = track || {};
       setTrackTitle(title);
       setTrackArtist(artist);
       setTrackArtwork(artwork);
@@ -100,18 +107,9 @@ const OnDemandPlayer = () => {
     await TrackPlayer.reset();
     await TrackPlayer.updateOptions({
       stopWithApp: true,
-      capabilities: [
-        Capability.Play,
-        Capability.Pause,
-      ],
-      compactCapabilities: [
-        Capability.Play,
-        Capability.Pause,
-      ],
-      notificationCapabilities: [
-        Capability.Play,
-        Capability.Pause,
-      ],
+      capabilities: [Capability.Play, Capability.Pause],
+      compactCapabilities: [Capability.Play, Capability.Pause],
+      notificationCapabilities: [Capability.Play, Capability.Pause],
     });
     await TrackPlayer.add(songInfo);
     await TrackPlayer.skip(intialSongId);
@@ -132,23 +130,33 @@ const OnDemandPlayer = () => {
   const returnPlayBtn = () => {
     switch (playbackState) {
       case State.Playing || playbackState === 3:
-        return <SvgImage iconStyle={ { marginRight: 20 } } iconName={ Pause } height={ 27 } width={ 27 } />;
-      case State.Paused:
-        return <SvgImage iconStyle={ { marginRight: 20 } } iconName={ playBtn } height={ 27 } width={ 27 } />;
-      default:
         return (
-          Platform.OS === 'ios'
-            ? (
-              <Image
-                style={ styles.songLoader }
-                source={ require('../../../assets/images/song_loader.gif') }
-              />
-            )
-            : (
-              <View style={ { marginRight: 20 } }>
-                <ActivityIndicator size={ 26 } color={ Colors.URbtnColor } />
-              </View>
-            )
+          <SvgImage
+            iconStyle={{marginRight: 20}}
+            iconName={Pause}
+            height={27}
+            width={27}
+          />
+        );
+      case State.Paused:
+        return (
+          <SvgImage
+            iconStyle={{marginRight: 20}}
+            iconName={playBtn}
+            height={27}
+            width={27}
+          />
+        );
+      default:
+        return Platform.OS === 'ios' ? (
+          <Image
+            style={styles.songLoader}
+            source={require('../../../assets/images/song_loader.gif')}
+          />
+        ) : (
+          <View style={{marginRight: 20}}>
+            <ActivityIndicator size={26} color={Colors.URbtnColor} />
+          </View>
         );
     }
   };
@@ -158,8 +166,11 @@ const OnDemandPlayer = () => {
       songId: currentSongId,
     };
     dispatch(songfavoriteSagaAction(payload));
-    const songList = playlistData.map(data => ({ ...data, isSongFavorite: true }));
-    dispatch(currentSongDataAction({ ...songData, songList }));
+    const songList = playlistData.map(data => ({
+      ...data,
+      isSongFavorite: true,
+    }));
+    dispatch(currentSongDataAction({...songData, songList}));
   };
   const songunfavorite = async () => {
     setFav(false);
@@ -167,8 +178,11 @@ const OnDemandPlayer = () => {
       songId: currentSongId,
     };
     dispatch(songUnfavoriteSagaAction(payload));
-    const songList = playlistData.map(data => ({ ...data, isSongFavorite: false }));
-    dispatch(currentSongDataAction({ ...songData, songList }));
+    const songList = playlistData.map(data => ({
+      ...data,
+      isSongFavorite: false,
+    }));
+    dispatch(currentSongDataAction({...songData, songList}));
   };
   const reloadPlayerData = async () => {
     setPlayerState(false);
@@ -180,11 +194,13 @@ const OnDemandPlayer = () => {
         {
           text: 'OK',
           onPress: async () => {
-            dispatch(currentScreenAction({ ...currentRoute, ondemandPlayerClose: true }));
+            dispatch(
+              currentScreenAction({...currentRoute, ondemandPlayerClose: true}),
+            );
             if (currentRoute.screen === 'Home') {
               resetRoot();
             }
-            const { songInfo, position } = songData;
+            const {songInfo, position} = songData;
             await TrackPlayer.reset();
             await TrackPlayer.add(songInfo);
             await TrackPlayer.seekTo(position);
@@ -192,106 +208,90 @@ const OnDemandPlayer = () => {
             await TrackPlayer.removeUpcomingTracks();
           },
         },
-
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
   };
-  return (
-    playerState
-      ? (
-        <>
-          <View style={ {
-            flexDirection: 'row',
-            marginTop: 10,
-          } }
-          >
-            <View>
-              <Image
-                style={ styles.songImage }
-                source={ trackArtwork ? { uri: `${trackArtwork}` } : defaultPlayerImg }
-              />
+  return playerState ? (
+    <>
+      <View
+        style={{
+          flexDirection: 'row',
+          marginTop: 10,
+        }}>
+        <View>
+          <Image
+            style={styles.songImage}
+            source={trackArtwork ? {uri: `${trackArtwork}`} : defaultPlayerImg}
+          />
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            width: '78%',
+          }}>
+          <View style={styles.songDetailsText}>
+            <View style={{marginLeft: 9, width: 115}}>
+              <MarqueeText speed={0.2} marqueeOnStart loop delay={1000}>
+                <Text style={styles.songName}>{trackTitle}</Text>
+              </MarqueeText>
+              <MarqueeText speed={0.2} marqueeOnStart loop delay={1000}>
+                <Text style={styles.artistName}>{trackArtist}</Text>
+              </MarqueeText>
             </View>
-            <View style={ {
-              flexDirection: 'column',
-              width: '78%',
-            } }
-            >
-              <View style={ styles.songDetailsText }>
-                <View style={ { marginLeft: 9, width: 115 } }>
-                  <MarqueeText
-                    speed={ 0.2 }
-                    marqueeOnStart
-                    loop
-                    delay={ 1000 }
-                  >
-                    <Text style={ styles.songName }>
-                      { trackTitle }
-                    </Text>
-                  </MarqueeText>
-                  <MarqueeText
-                    speed={ 0.2 }
-                    marqueeOnStart
-                    loop
-                    delay={ 1000 }
-                  >
-                    <Text style={ styles.artistName }>
-                      { trackArtist }
-                    </Text>
-                  </MarqueeText>
-                </View>
-                <View style={ { flexDirection: 'row' } }>
-                  <TouchableOpacity onPress={ () => togglePlayback(playbackState) }>
-                    { returnPlayBtn() }
-                  </TouchableOpacity>
-                  { favSong
-                    ? (
-                      <TouchableOpacity onPress={ songunfavorite } disabled={ !currentSongId }>
-                        <SvgImage
-                          iconStyle={ { marginRight: 0 } }
-                          iconName={ favSymbolFilledIcon }
-                          height={ 24 }
-                          width={ 24 }
-                        />
-                      </TouchableOpacity>
-                    )
-                    : (
-                      <TouchableOpacity onPress={ songfavorite } disabled={ !currentSongId }>
-                        <SvgImage
-                          iconStyle={ { marginRight: 0 } }
-                          iconName={ favSymbolIcon }
-                          height={ 24 }
-                          width={ 24 }
-                        />
-                      </TouchableOpacity>
-                    ) }
-                </View>
-              </View>
-              <UseProgress
-                sliderStyle={ styles.sliderStyle }
-                sliderView={ styles.sliderView }
-                trackStyle={ styles.trackStyle }
-                thumbStyle={ styles.thumbStyle }
-                onDemand
-                disabled
-                timeTextView={ styles.timeTextView }
-                timeText={ styles.timeText }
-                onSlidingComplete={ async value => {
-                  await TrackPlayer.seekTo(value);
-                } }
-              />
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity onPress={() => togglePlayback(playbackState)}>
+                {returnPlayBtn()}
+              </TouchableOpacity>
+              {favSong ? (
+                <TouchableOpacity
+                  onPress={songunfavorite}
+                  disabled={!currentSongId}>
+                  <SvgImage
+                    iconStyle={{marginRight: 0}}
+                    iconName={favSymbolFilledIcon}
+                    height={24}
+                    width={24}
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={songfavorite}
+                  disabled={!currentSongId}>
+                  <SvgImage
+                    iconStyle={{marginRight: 0}}
+                    iconName={favSymbolIcon}
+                    height={24}
+                    width={24}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
           </View>
-          <Icon
-            type='ionicon'
-            name='close-circle-outline'
-            size={ 24 }
-            color={ Colors.White }
-            onPress={ () => reloadPlayerData() }
+          <UseProgress
+            sliderStyle={styles.sliderStyle}
+            sliderView={styles.sliderView}
+            trackStyle={styles.trackStyle}
+            thumbStyle={styles.thumbStyle}
+            onDemand
+            disabled
+            timeTextView={styles.timeTextView}
+            timeText={styles.timeText}
+            onSlidingComplete={async value => {
+              await TrackPlayer.seekTo(value);
+            }}
           />
-        </>
-      ) : null
-  );
+        </View>
+      </View>
+      <Icon
+        type="ionicon"
+        name="close-circle-outline"
+        size={24}
+        color={Colors.White}
+        onPress={() => reloadPlayerData()}
+      />
+    </>
+  ) : null;
 };
 
 export default OnDemandPlayer;

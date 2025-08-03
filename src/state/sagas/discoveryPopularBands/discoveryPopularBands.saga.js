@@ -1,14 +1,15 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import discoveryPopularBandsRequest from '../../../services/discoveryPopularBands/discoveryPopularBands.service';
-import { discoveryPopularBandsSagaType } from '../../types/sagas';
-import { discoveryPopularBandsActions } from '../../actions/request/discoveryPopularBands/discoveryPopularBands.actions';
+import {discoveryPopularBandsSagaType} from '../../types/sagas';
+import {discoveryPopularBandsActions} from '../../actions/request/discoveryPopularBands/discoveryPopularBands.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* discoveryPopularBandsWatcherSaga() {
-  yield takeLatest(discoveryPopularBandsSagaType, discoveryPopularBandsWorkerSaga);
+  yield takeLatest(
+    discoveryPopularBandsSagaType,
+    discoveryPopularBandsWorkerSaga,
+  );
 }
 
 export function* discoveryPopularBandsWorkerSaga(action) {
@@ -28,4 +29,3 @@ export function* discoveryPopularBandsWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

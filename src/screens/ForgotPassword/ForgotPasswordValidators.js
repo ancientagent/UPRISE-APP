@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { strings } from '../../utilities/localization/localization';
+import {strings} from '../../utilities/localization/localization';
 
 const ForgotPasswordValidators = yup.object().shape({
   email: yup

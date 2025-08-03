@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  updateInstrumentType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {updateInstrumentType} from '../../../types/listener/listener';
 
-export const updateInstrumentRequestActions = createRequestResponseActionSet(updateInstrumentType);
+export const updateInstrumentRequestActions =
+  createRequestResponseActionSet(updateInstrumentType);

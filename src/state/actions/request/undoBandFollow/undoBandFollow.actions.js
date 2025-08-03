@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  undoBandFollowType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {undoBandFollowType} from '../../../types/listener/listener';
 
-export const undoBandFollowRequestActions = createRequestResponseActionSet(undoBandFollowType);
+export const undoBandFollowRequestActions =
+  createRequestResponseActionSet(undoBandFollowType);

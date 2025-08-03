@@ -20,31 +20,31 @@ const TitleWithMultiSelect = props => {
     <>
       <MultiSelect
         hideTags
-        fontSize={ fontSize }
-        items={ items }
+        fontSize={fontSize}
+        items={items}
         fixedHeight
-        single={ single }
-        noItemsText={ noItemsText }
-        uniqueKey={ uniqueKey }
-        altFontFamily='Oswald Medium'
-        itemFontSize={ 14 }
-        textColor='white'
-        itemFontFamily='Oswald Medium'
-        selectedItemTextColor='white'
-        selectedItemIconColor='white'
-        styleMainWrapper={ styles.styleMainWrapper }
-        styleInputGroup={ styles.InputGroup }
-        styleItemsContainer={ styles.styleItemsContainer }
-        styleTextDropdownSelected={ styles.styleTextDropdownSelected }
-        styleTextDropdown={ styles.styleTextDropdown }
-        searchInputStyle={ styles.searchInputStyle }
-        onSelectedItemsChange={ onSelectedItemsChange }
-        selectedItems={ selectedItems }
-        selectText={ selectText }
-        searchInputPlaceholderText={ searchInputPlaceholderText }
-        itemTextColor={ itemTextColor }
-        displayKey={ displayKey }
-        styleDropdownMenuSubsection={ styles.styleDropdownMenuSubsection }
+        single={single}
+        noItemsText={noItemsText}
+        uniqueKey={uniqueKey}
+        altFontFamily="Oswald Medium"
+        itemFontSize={14}
+        textColor="white"
+        itemFontFamily="Oswald Medium"
+        selectedItemTextColor="white"
+        selectedItemIconColor="white"
+        styleMainWrapper={styles.styleMainWrapper}
+        styleInputGroup={styles.InputGroup}
+        styleItemsContainer={styles.styleItemsContainer}
+        styleTextDropdownSelected={styles.styleTextDropdownSelected}
+        styleTextDropdown={styles.styleTextDropdown}
+        searchInputStyle={styles.searchInputStyle}
+        onSelectedItemsChange={onSelectedItemsChange}
+        selectedItems={selectedItems}
+        selectText={selectText}
+        searchInputPlaceholderText={searchInputPlaceholderText}
+        itemTextColor={itemTextColor}
+        displayKey={displayKey}
+        styleDropdownMenuSubsection={styles.styleDropdownMenuSubsection}
       />
     </>
   );

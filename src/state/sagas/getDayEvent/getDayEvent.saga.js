@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import getDayEventRequest from '../../../services/getDayEvent/getDayEvent.service';
-import { getDayEventSagaType } from '../../types/sagas';
-import { getDayEventActions } from '../../actions/request/getDayEvent/getDayEvent.actions';
+import {getDayEventSagaType} from '../../types/sagas';
+import {getDayEventActions} from '../../actions/request/getDayEvent/getDayEvent.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* getDayEventWatcherSaga() {
   yield takeLatest(getDayEventSagaType, getDayEventWorkerSaga);
@@ -28,4 +26,3 @@ export function* getDayEventWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

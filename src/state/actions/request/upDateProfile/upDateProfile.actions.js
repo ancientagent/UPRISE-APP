@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  upDateProfileType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {upDateProfileType} from '../../../types/listener/listener';
 
-export const upDateProfileRequestActions = createRequestResponseActionSet(upDateProfileType);
+export const upDateProfileRequestActions =
+  createRequestResponseActionSet(upDateProfileType);

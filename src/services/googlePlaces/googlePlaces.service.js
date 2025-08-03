@@ -1,16 +1,23 @@
 /**
  * Google Places API Service
  * Handles location autocomplete functionality for the Uprise mobile app
- * 
+ *
  * Tested and working with API key: AIzaSyDmEqT-zOSEIP_YlvyZQUAVd7SRlQvmH2g
- * 
+ *
  * @author Development Team
  * @date December 2024
  */
 
+import Config from 'react-native-config';
+
 // Environment variables (add to .env file)
-const GOOGLE_PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY || process.env.MAP_API_KEY || 'AIzaSyDmEqT-zOSEIP_YlvyZQUAVd7SRlQvmH2g';
-const GOOGLE_PLACES_AUTOCOMPLETE_URL = process.env.GOOGLE_PLACES_AUTOCOMPLETE_URL || 'https://places.googleapis.com/v1/places:autocomplete';
+const GOOGLE_PLACES_API_KEY =
+  Config.GOOGLE_PLACES_API_KEY ||
+  Config.MAP_API_KEY ||
+  'AIzaSyDmEqT-zOSEIP_YlvyZQUAVd7SRlQvmH2g';
+const GOOGLE_PLACES_AUTOCOMPLETE_URL =
+  Config.GOOGLE_PLACES_AUTOCOMPLETE_URL ||
+  'https://places.googleapis.com/v1/places:autocomplete';
 
 /**
  * Search for locations using Google Places Autocomplete API
@@ -19,30 +26,37 @@ const GOOGLE_PLACES_AUTOCOMPLETE_URL = process.env.GOOGLE_PLACES_AUTOCOMPLETE_UR
  * @param {string} regionCode - Region code (default: 'US')
  * @returns {Promise<Array>} Array of location suggestions
  */
-export const searchLocations = async (input, languageCode = 'en-US', regionCode = 'US') => {
+export const searchLocations = async (
+  input,
+  languageCode = 'en-US',
+  regionCode = 'US',
+) => {
   try {
     if (!input || input.trim().length === 0) {
       return [];
     }
 
-    const response = await fetch(`${GOOGLE_PLACES_AUTOCOMPLETE_URL}?key=${GOOGLE_PLACES_API_KEY}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${GOOGLE_PLACES_AUTOCOMPLETE_URL}?key=${GOOGLE_PLACES_API_KEY}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          input: input.trim(),
+          languageCode: languageCode,
+          regionCode: regionCode,
+        }),
       },
-      body: JSON.stringify({
-        input: input.trim(),
-        languageCode: languageCode,
-        regionCode: regionCode
-      })
-    });
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
-    
+
     // Return suggestions array or empty array if no suggestions
     return data.suggestions || [];
   } catch (error) {
@@ -56,20 +70,20 @@ export const searchLocations = async (input, languageCode = 'en-US', regionCode 
  * @param {Object} suggestion - The suggestion object from the API
  * @returns {Object} Formatted location data
  */
-export const formatLocationData = (suggestion) => {
+export const formatLocationData = suggestion => {
   if (!suggestion || !suggestion.placePrediction) {
     return null;
   }
 
   const prediction = suggestion.placePrediction;
-  
+
   return {
     placeId: prediction.placeId,
     displayText: prediction.text?.text || '',
     mainText: prediction.structuredFormat?.mainText?.text || '',
     secondaryText: prediction.structuredFormat?.secondaryText?.text || '',
     types: prediction.types || [],
-    place: prediction.place || ''
+    place: prediction.place || '',
   };
 };
 
@@ -78,12 +92,12 @@ export const formatLocationData = (suggestion) => {
  * @param {Array} suggestions - Array of suggestions from the API
  * @returns {Array} Filtered suggestions
  */
-export const filterCitySuggestions = (suggestions) => {
+export const filterCitySuggestions = suggestions => {
   return suggestions.filter(suggestion => {
     const types = suggestion.placePrediction?.types || [];
     // Include localities, geocodes, and political entities
-    return types.some(type => 
-      ['locality', 'geocode', 'political'].includes(type)
+    return types.some(type =>
+      ['locality', 'geocode', 'political'].includes(type),
     );
   });
 };
@@ -93,7 +107,7 @@ export const filterCitySuggestions = (suggestions) => {
  * @param {string} input - The search input
  * @returns {Promise<Array>} Array of city suggestions
  */
-export const searchCities = async (input) => {
+export const searchCities = async input => {
   try {
     const suggestions = await searchLocations(input);
     const citySuggestions = filterCitySuggestions(suggestions);
@@ -109,10 +123,10 @@ export const searchCities = async (input) => {
  * @param {string} placeId - The Google Place ID
  * @returns {Promise<Object>} Location details
  */
-export const getLocationDetails = async (placeId) => {
+export const getLocationDetails = async placeId => {
   try {
     const response = await fetch(
-      `https://places.googleapis.com/v1/places/${placeId}?key=${GOOGLE_PLACES_API_KEY}`
+      `https://places.googleapis.com/v1/places/${placeId}?key=${GOOGLE_PLACES_API_KEY}`,
     );
 
     if (!response.ok) {
@@ -133,5 +147,5 @@ export default {
   searchCities,
   formatLocationData,
   filterCitySuggestions,
-  getLocationDetails
-}; 
+  getLocationDetails,
+};

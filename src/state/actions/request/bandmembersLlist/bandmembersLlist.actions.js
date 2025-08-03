@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  bandmembersLlistType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {bandmembersLlistType} from '../../../types/listener/listener';
 
-export const bandmembersLlistActions = createRequestResponseActionSet(bandmembersLlistType);
+export const bandmembersLlistActions =
+  createRequestResponseActionSet(bandmembersLlistType);

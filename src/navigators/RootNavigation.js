@@ -1,4 +1,4 @@
-import { createNavigationContainerRef } from '@react-navigation/native';
+import {createNavigationContainerRef} from '@react-navigation/native';
 
 export const navigationRef = createNavigationContainerRef();
 
@@ -19,7 +19,6 @@ export function resetRoot(routeName = 'Dashboard') {
   return navigationRef.resetRoot({
     index: 0,
     key: null,
-    routes: [{ name: routeName }],
+    routes: [{name: routeName}],
   });
 }
-

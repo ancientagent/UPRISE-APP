@@ -1,11 +1,9 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import mostPopularGenresRequest from '../../../services/mostPopularGenres/mostPopularGenres.service';
-import { mostPopularGenresSagaType } from '../../types/sagas';
-import { mostPopularGenresActions } from '../../actions/request/mostPopularGenres/mostPopularGenres.actions';
+import {mostPopularGenresSagaType} from '../../types/sagas';
+import {mostPopularGenresActions} from '../../actions/request/mostPopularGenres/mostPopularGenres.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* mostPopularGenresWatcherSaga() {
   yield takeLatest(mostPopularGenresSagaType, mostPopularGenresWorkerSaga);
@@ -28,4 +26,3 @@ export function* mostPopularGenresWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

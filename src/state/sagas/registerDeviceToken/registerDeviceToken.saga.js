@@ -1,10 +1,8 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import registerDeviceTokenRequest from '../../../services/registerDeviceToken/registerDeviceToken.service';
-import { registerDeviceTokenSagaType } from '../../types/sagas';
-import { registerDeviceTokenRequestActions } from '../../actions/request/registerDeviceToken/registerDeviceToken.actions';
-import { accessToken } from '../../selectors/UserProfile';
+import {registerDeviceTokenSagaType} from '../../types/sagas';
+import {registerDeviceTokenRequestActions} from '../../actions/request/registerDeviceToken/registerDeviceToken.actions';
+import {accessToken} from '../../selectors/UserProfile';
 import showAlert from '../AlertUtility';
 
 export default function* registerDeviceTokenWatcherSaga() {
@@ -28,4 +26,3 @@ export function* registerDeviceTokenWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

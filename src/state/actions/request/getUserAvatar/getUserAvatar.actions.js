@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  getUserAvatarType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {getUserAvatarType} from '../../../types/listener/listener';
 
-export const getUserAvatarActions = createRequestResponseActionSet(getUserAvatarType);
+export const getUserAvatarActions =
+  createRequestResponseActionSet(getUserAvatarType);

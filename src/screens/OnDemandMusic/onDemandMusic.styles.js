@@ -1,15 +1,16 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import Colors from '../../theme/colors';
 
 export default StyleSheet.create({
   songLoader: {
-    height: 32, width: 32,
+    height: 32,
+    width: 32,
   },
   Container: {
     marginTop: 60,
     marginHorizontal: 40,
   },
-  thumbStyle: { maxHeight: 16, maxWidth: 16 },
+  thumbStyle: {maxHeight: 16, maxWidth: 16},
   playerImage: {
     height: 266,
     width: '100%',

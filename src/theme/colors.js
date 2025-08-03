@@ -61,7 +61,6 @@ const Colors = {
   text: '#FFFFFF',
   textSecondary: 'rgba(255, 255, 255, 0.6)',
   border: 'rgba(240, 240, 240, 0.2)',
-  error: '#FF0000',
 };
 
 export default Colors;

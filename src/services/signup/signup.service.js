@@ -1,9 +1,7 @@
 import Config from 'react-native-config';
-import { request } from '../request/request.service';
-import {
-  POST,
-} from '../constants/Constants';
-import { getRequestURL } from '../../utilities/utilities';
+import {request} from '../request/request.service';
+import {POST} from '../constants/Constants';
+import {getRequestURL} from '../../utilities/utilities';
 
 export default async function signUpRequest(formData) {
   const requestOptions = {
@@ -11,6 +9,5 @@ export default async function signUpRequest(formData) {
     data: formData,
     url: getRequestURL(Config.SIGNUP_URL),
   };
-  return request(requestOptions)
-    .then(response => response);
+  return request(requestOptions).then(response => response);
 }

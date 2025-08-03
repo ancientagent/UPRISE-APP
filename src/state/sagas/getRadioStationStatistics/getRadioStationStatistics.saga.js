@@ -1,14 +1,15 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import getRadioStationStatisticsRequest from '../../../services/getRadioStationStatistics/getRadioStationStatistics.service';
-import { getRadioStationStatisticsSagaType } from '../../types/sagas';
-import { getRadioStationStatisticsRequestActions } from '../../actions/request/getRadioStationStatistics/getRadioStationStatistics.actions';
+import {getRadioStationStatisticsSagaType} from '../../types/sagas';
+import {getRadioStationStatisticsRequestActions} from '../../actions/request/getRadioStationStatistics/getRadioStationStatistics.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* getRadioStationStatisticsWatcherSaga() {
-  yield takeLatest(getRadioStationStatisticsSagaType, getRadioStationStatisticsWorkerSaga);
+  yield takeLatest(
+    getRadioStationStatisticsSagaType,
+    getRadioStationStatisticsWorkerSaga,
+  );
 }
 
 export function* getRadioStationStatisticsWorkerSaga() {

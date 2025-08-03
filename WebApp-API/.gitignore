@@ -1,0 +1,8 @@
+node_modules/
+.env
+!.env.example
+!.env.backup
+!.env.dev
+postgres-data/*
+.vscode
+logs/*

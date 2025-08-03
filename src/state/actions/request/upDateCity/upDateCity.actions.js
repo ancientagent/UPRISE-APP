@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  upDateCityType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {upDateCityType} from '../../../types/listener/listener';
 
-export const upDateCityRequestActions = createRequestResponseActionSet(upDateCityType);
+export const upDateCityRequestActions =
+  createRequestResponseActionSet(upDateCityType);

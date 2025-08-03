@@ -1,14 +1,15 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import getGenresPrefrenceStatisticsRequest from '../../../services/getGenresPrefrenceStatistics/getGenresPrefrenceStatistics.service';
-import { getGenresPrefrenceStatisticsSagaType } from '../../types/sagas';
-import { getGenresPrefrenceStatisticsRequestActions } from '../../actions/request/getGenresPrefrenceStatistics/getGenresPrefrenceStatistics.actions';
+import {getGenresPrefrenceStatisticsSagaType} from '../../types/sagas';
+import {getGenresPrefrenceStatisticsRequestActions} from '../../actions/request/getGenresPrefrenceStatistics/getGenresPrefrenceStatistics.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* getGenresPrefrenceStatisticsWatcherSaga() {
-  yield takeLatest(getGenresPrefrenceStatisticsSagaType, getGenresPrefrenceStatisticsWorkerSaga);
+  yield takeLatest(
+    getGenresPrefrenceStatisticsSagaType,
+    getGenresPrefrenceStatisticsWorkerSaga,
+  );
 }
 
 export function* getGenresPrefrenceStatisticsWorkerSaga() {

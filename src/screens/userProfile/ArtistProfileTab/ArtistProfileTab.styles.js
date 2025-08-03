@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import Colors from '../../../theme/colors';
 
 export default StyleSheet.create({
@@ -86,4 +86,4 @@ export default StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
-}); 
+});

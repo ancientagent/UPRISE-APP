@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,18 +11,25 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { CommonActions } from '@react-navigation/native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Button } from 'react-native-elements';
+import {useSelector, useDispatch} from 'react-redux';
+import {CommonActions} from '@react-navigation/native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Button} from 'react-native-elements';
 import Config from 'react-native-config';
 
-import { getUserGenresSagaAction, userLocationSagaAction } from '../../state/actions/sagas';
-import { getUserDetails, getUserGenresList, accessToken } from '../../state/selectors/UserProfile';
+import {
+  getUserGenresSagaAction,
+  userLocationSagaAction,
+} from '../../state/actions/sagas';
+import {
+  getUserDetails,
+  getUserGenresList,
+  accessToken,
+} from '../../state/selectors/UserProfile';
 import URContainer from '../../components/URContainer/URContainer';
 import Loader from '../../components/Loader/Loader';
 import Colors from '../../theme/colors';
-import { strings } from '../../utilities/localization/localization';
+import {strings} from '../../utilities/localization/localization';
 
 const UserLocation = () => {
   const dispatch = useDispatch();
@@ -35,7 +42,7 @@ const UserLocation = () => {
   const [isGenreInputFocused, setIsGenreInputFocused] = useState(false);
   const [locationText, setLocationText] = useState('');
   const [useSimpleLocation, setUseSimpleLocation] = useState(false);
-  
+
   // Custom Places Autocomplete state
   const [placePredictions, setPlacePredictions] = useState([]);
   const [isLoadingPlaces, setIsLoadingPlaces] = useState(false);
@@ -50,11 +57,43 @@ const UserLocation = () => {
 
   // --- Effects ---
   useEffect(() => {
-    console.log('--- USER LOCATION: Config.MAP_API_KEY ---', Config.MAP_API_KEY ? 'AVAILABLE' : 'MISSING');
-    console.log('--- USER LOCATION: Full MAP_API_KEY value ---', Config.MAP_API_KEY);
+    console.log(
+      '--- USER LOCATION: Config.MAP_API_KEY ---',
+      Config.MAP_API_KEY ? 'AVAILABLE' : 'MISSING',
+    );
+    console.log(
+      '--- USER LOCATION: Full MAP_API_KEY value ---',
+      Config.MAP_API_KEY,
+    );
+    console.log(
+      '--- USER LOCATION: Config.GET_ALL_GENRES_URL ---',
+      Config.GET_ALL_GENRES_URL ? 'AVAILABLE' : 'MISSING',
+    );
+    console.log(
+      '--- USER LOCATION: Full GET_ALL_GENRES_URL value ---',
+      Config.GET_ALL_GENRES_URL,
+    );
+
+    if (!Config.GET_ALL_GENRES_URL) {
+      console.error(
+        '--- USER LOCATION: CRITICAL ERROR - GET_ALL_GENRES_URL environment variable is missing ---',
+      );
+      Alert.alert(
+        'Configuration Error',
+        'Genre loading is not properly configured. Please contact support.',
+        [{text: 'OK'}],
+      );
+      return;
+    }
+
     if (userAccessToken) {
       console.log('--- USER LOCATION: Dispatching getUserGenresSagaAction ---');
-      dispatch(getUserGenresSagaAction({ accessToken: userAccessToken }));
+      dispatch(getUserGenresSagaAction({accessToken: userAccessToken}));
+    } else {
+      console.error('--- USER LOCATION: ERROR - No access token available ---');
+      Alert.alert('Authentication Error', 'Please log in again to continue.', [
+        {text: 'OK'},
+      ]);
     }
   }, [dispatch, userAccessToken]);
 
@@ -72,42 +111,59 @@ const UserLocation = () => {
   // Debug effect for PlacesInput configuration
   useEffect(() => {
     console.log('--- USER LOCATION: Component Debug Info ---');
-    console.log('  - MAP_API_KEY:', Config.MAP_API_KEY ? `${Config.MAP_API_KEY.substring(0, 20)}...` : 'MISSING');
-    console.log('  - MAP_API_KEY length:', Config.MAP_API_KEY ? Config.MAP_API_KEY.length : 0);
+    console.log(
+      '  - MAP_API_KEY:',
+      Config.MAP_API_KEY
+        ? `${Config.MAP_API_KEY.substring(0, 20)}...`
+        : 'MISSING',
+    );
+    console.log(
+      '  - MAP_API_KEY length:',
+      Config.MAP_API_KEY ? Config.MAP_API_KEY.length : 0,
+    );
     console.log('  - locationText state:', locationText);
     console.log('  - selectedLocation state:', selectedLocation);
     console.log('--- PlacesInput Props that will be passed ---');
-    console.log('  - googleApiKey:', Config.MAP_API_KEY ? 'PRESENT' : 'MISSING');
-    console.log('  - queryCountries: [\'us\']');
+    console.log(
+      '  - googleApiKey:',
+      Config.MAP_API_KEY ? 'PRESENT' : 'MISSING',
+    );
+    console.log("  - queryCountries: ['us']");
     console.log('  - queryTypes: (cities)');
     console.log('  - language: en-US');
-  }, []);
+  }, [locationText, selectedLocation]);
 
   // --- Event Handlers ---
-  
+
   // Fixed Genre Autocomplete Logic - Simple case-insensitive search
-  const handleGenreChange = (text) => {
+  const handleGenreChange = text => {
     console.log('--- USER LOCATION: Genre input changed ---', text);
     console.log('--- USER LOCATION: Current genreList ---', genreList);
-    console.log('--- USER LOCATION: genreList length ---', genreList ? genreList.length : 0);
-    
+    console.log(
+      '--- USER LOCATION: genreList length ---',
+      genreList ? genreList.length : 0,
+    );
+
     setGenreQuery(text); // Update the text in the input box
 
     if (text && genreList) {
-      const filtered = genreList.filter(genre => 
-        genre.name.toLowerCase().includes(text.toLowerCase())
+      const filtered = genreList.filter(genre =>
+        genre.name.toLowerCase().includes(text.toLowerCase()),
       );
       console.log('--- USER LOCATION: Filtered genres ---', filtered);
       console.log('--- USER LOCATION: Filtered count ---', filtered.length);
       setFilteredGenres(filtered);
-      
+
       // Check if current text exactly matches any genre (for button activation)
-      const matchingGenre = filtered.find(genre => 
-        genre.name.toLowerCase() === text.toLowerCase()
+      const matchingGenre = filtered.find(
+        genre => genre.name.toLowerCase() === text.toLowerCase(),
       );
-      
+
       if (matchingGenre && !selectedGenre) {
-        console.log('--- USER LOCATION: Genre text matches suggestion, setting selectedGenre ---', matchingGenre);
+        console.log(
+          '--- USER LOCATION: Genre text matches suggestion, setting selectedGenre ---',
+          matchingGenre,
+        );
         setSelectedGenre(matchingGenre);
       }
     } else {
@@ -117,7 +173,7 @@ const UserLocation = () => {
     }
   };
 
-  const handleGenreSelect = (genre) => {
+  const handleGenreSelect = genre => {
     setGenreQuery(genre.name);
     setSelectedGenre(genre);
     setFilteredGenres([]);
@@ -125,22 +181,30 @@ const UserLocation = () => {
   };
 
   // Fixed Location Selection Handler
-  const handleLocationSelect = (place) => {
+  const handleLocationSelect = place => {
     console.log('--- USER LOCATION: Location Selected ---', place);
     setSelectedLocation(place);
     setLocationText(place.formatted_address || place.description || '');
   };
 
-  const handleLocationError = (error) => {
+  const handleLocationError = error => {
     console.log('--- USER LOCATION: PlacesInput Error ---', error);
-    console.log('--- USER LOCATION: Error Details ---', JSON.stringify(error, null, 2));
-    Alert.alert("Location Error", `There was an issue with location services: ${JSON.stringify(error)}. Please try typing manually.`);
+    console.log(
+      '--- USER LOCATION: Error Details ---',
+      JSON.stringify(error, null, 2),
+    );
+    Alert.alert(
+      'Location Error',
+      `There was an issue with location services: ${JSON.stringify(
+        error,
+      )}. Please try typing manually.`,
+    );
   };
 
-  const handleLocationTextChange = (text) => {
+  const handleLocationTextChange = text => {
     console.log('--- USER LOCATION: Text changed ---', text);
     setLocationText(text);
-    
+
     // Clear selected location when user starts typing
     if (text.trim() === '') {
       setSelectedLocation(null);
@@ -148,31 +212,44 @@ const UserLocation = () => {
       setPlacePredictions([]);
       return;
     }
-    
+
     // Debug: Log if suggestions should appear
     if (text.length > 2) {
-      console.log('--- USER LOCATION: Text length > 2, Places API should be queried ---');
-      console.log('--- USER LOCATION: API Key being used ---', Config.MAP_API_KEY ? Config.MAP_API_KEY.substring(0, 20) + '...' : 'MISSING');
+      console.log(
+        '--- USER LOCATION: Text length > 2, Places API should be queried ---',
+      );
+      console.log(
+        '--- USER LOCATION: API Key being used ---',
+        Config.MAP_API_KEY
+          ? `${Config.MAP_API_KEY.substring(0, 20)}...`
+          : 'MISSING',
+      );
       fetchPlacePredictions(text);
     } else {
       setPlacePredictions([]);
       setShowPlaceSuggestions(false);
     }
-    
+
     // Check if current text matches any existing suggestion (for button activation)
-    const matchingSuggestion = placePredictions.find(prediction => 
-      prediction.description.toLowerCase().includes(text.toLowerCase()) ||
-      prediction.structured_formatting.main_text.toLowerCase().includes(text.toLowerCase())
+    const matchingSuggestion = placePredictions.find(
+      prediction =>
+        prediction.description.toLowerCase().includes(text.toLowerCase()) ||
+        prediction.structured_formatting.main_text
+          .toLowerCase()
+          .includes(text.toLowerCase()),
     );
-    
+
     if (matchingSuggestion && !selectedLocation) {
-      console.log('--- USER LOCATION: Text matches suggestion, setting selectedLocation ---', matchingSuggestion);
+      console.log(
+        '--- USER LOCATION: Text matches suggestion, setting selectedLocation ---',
+        matchingSuggestion,
+      );
       setSelectedLocation(matchingSuggestion);
     }
   };
 
   // Custom Google Places autocomplete function - Using LEGACY Places API (better for cities)
-  const fetchPlacePredictions = async (input) => {
+  const fetchPlacePredictions = async input => {
     if (!Config.MAP_API_KEY || input.length < 3) {
       setPlacePredictions([]);
       setShowPlaceSuggestions(false);
@@ -184,20 +261,40 @@ const UserLocation = () => {
 
     try {
       // Use LEGACY Places API (better for cities and states)
-      const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&types=(cities)&components=country:us&language=en-US&key=${Config.MAP_API_KEY}`;
-      console.log('--- CUSTOM PLACES: API URL ---', url.replace(Config.MAP_API_KEY, 'API_KEY_HIDDEN'));
-      
+      const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
+        input,
+      )}&types=(cities)&components=country:us&language=en-US&key=${
+        Config.MAP_API_KEY
+      }`;
+      console.log(
+        '--- CUSTOM PLACES: API URL ---',
+        url.replace(Config.MAP_API_KEY, 'API_KEY_HIDDEN'),
+      );
+
       const response = await fetch(url);
       const data = await response.json();
-      
-      console.log('--- CUSTOM PLACES: API Response ---', JSON.stringify(data, null, 2));
-      
-      if (data.status === 'OK' && data.predictions && data.predictions.length > 0) {
-        console.log('--- CUSTOM PLACES: All predictions ---', data.predictions.length);
+
+      console.log(
+        '--- CUSTOM PLACES: API Response ---',
+        JSON.stringify(data, null, 2),
+      );
+
+      if (
+        data.status === 'OK' &&
+        data.predictions &&
+        data.predictions.length > 0
+      ) {
+        console.log(
+          '--- CUSTOM PLACES: All predictions ---',
+          data.predictions.length,
+        );
         setPlacePredictions(data.predictions);
         setShowPlaceSuggestions(data.predictions.length > 0);
       } else {
-        console.log('--- CUSTOM PLACES: No predictions or error ---', data.error_message || data.status);
+        console.log(
+          '--- CUSTOM PLACES: No predictions or error ---',
+          data.error_message || data.status,
+        );
         setPlacePredictions([]);
         setShowPlaceSuggestions(false);
       }
@@ -211,31 +308,37 @@ const UserLocation = () => {
   };
 
   // Handle place selection
-  const handlePlaceSelect = async (prediction) => {
+  const handlePlaceSelect = async prediction => {
     console.log('--- CUSTOM PLACES: Place selected ---', prediction);
     setLocationText(prediction.description);
     setShowPlaceSuggestions(false);
-    
+
     // Get place details for coordinates using LEGACY Places API
     try {
       const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${prediction.place_id}&fields=geometry,address_components,formatted_address&key=${Config.MAP_API_KEY}`;
       console.log('--- CUSTOM PLACES: Fetching place details ---');
-      
+
       const response = await fetch(detailsUrl);
       const data = await response.json();
-      
+
       if (data.status === 'OK' && data.result) {
-        console.log('--- CUSTOM PLACES: Place details ---', JSON.stringify(data.result, null, 2));
+        console.log(
+          '--- CUSTOM PLACES: Place details ---',
+          JSON.stringify(data.result, null, 2),
+        );
         setSelectedLocation(data.result);
       } else {
-        console.log('--- CUSTOM PLACES: No place details found ---', data.error_message || data.status);
+        console.log(
+          '--- CUSTOM PLACES: No place details found ---',
+          data.error_message || data.status,
+        );
         // Fallback: create basic location data from prediction
         const fallbackLocation = {
           formatted_address: prediction.description,
           address_components: [],
           geometry: {
-            location: { lat: null, lng: null }
-          }
+            location: {lat: null, lng: null},
+          },
         };
         setSelectedLocation(fallbackLocation);
       }
@@ -246,8 +349,8 @@ const UserLocation = () => {
         formatted_address: prediction.description,
         address_components: [],
         geometry: {
-          location: { lat: null, lng: null }
-        }
+          location: {lat: null, lng: null},
+        },
       };
       setSelectedLocation(fallbackLocation);
     }
@@ -256,25 +359,44 @@ const UserLocation = () => {
   // Fixed Continue Button Logic
   const onContinue = () => {
     if (!selectedGenre) {
-      Alert.alert("Selection Incomplete", "Please select a genre.");
+      Alert.alert('Selection Incomplete', 'Please select a genre.');
       return;
     }
 
     // Check if we have a location (either from Places API or manual input)
     if (!selectedLocation && !locationText.trim()) {
-      Alert.alert("Location Required", "Please enter your location.");
+      Alert.alert('Location Required', 'Please enter your location.');
       return;
     }
 
     let payload;
-    
+
     if (selectedLocation) {
       // Use Places API data if available
       payload = {
-        country: selectedLocation.address_components?.find(c => c.types.includes('country'))?.long_name || '',
-        state: selectedLocation.address_components?.find(c => c.types.includes('administrative_area_level_1'))?.long_name || '',
-        city: selectedLocation.address_components?.find(c => c.types.includes('locality'))?.long_name || selectedLocation.address_components?.find(c => c.types.includes('administrative_area_level_2'))?.long_name || '',
-        zipcode: parseInt(selectedLocation.address_components?.find(c => c.types.includes('postal_code'))?.long_name) || null,
+        country:
+          selectedLocation.address_components?.find(c =>
+            c.types.includes('country'),
+          )?.long_name || '',
+        state:
+          selectedLocation.address_components?.find(c =>
+            c.types.includes('administrative_area_level_1'),
+          )?.long_name || '',
+        city:
+          selectedLocation.address_components?.find(c =>
+            c.types.includes('locality'),
+          )?.long_name ||
+          selectedLocation.address_components?.find(c =>
+            c.types.includes('administrative_area_level_2'),
+          )?.long_name ||
+          '',
+        zipcode:
+          parseInt(
+            selectedLocation.address_components?.find(c =>
+              c.types.includes('postal_code'),
+            )?.long_name,
+            10,
+          ) || null,
         latitude: selectedLocation.geometry?.location?.lat || null,
         longitude: selectedLocation.geometry?.location?.lng || null,
         genreIds: [selectedGenre.id],
@@ -282,7 +404,10 @@ const UserLocation = () => {
       };
     } else {
       // Use manual input as fallback
-      console.log('--- USER LOCATION: Using manual location input ---', locationText);
+      console.log(
+        '--- USER LOCATION: Using manual location input ---',
+        locationText,
+      );
       payload = {
         country: 'USA', // Default for manual input
         state: locationText.toLowerCase().includes('tx') ? 'Texas' : '', // Simple state detection
@@ -294,22 +419,39 @@ const UserLocation = () => {
         userId: userDetails.id,
       };
     }
-    
-    console.log('--- USER LOCATION: Dispatching userLocationSagaAction with payload ---', payload);
+
+    console.log(
+      '--- USER LOCATION: Dispatching userLocationSagaAction with payload ---',
+      payload,
+    );
     dispatch(userLocationSagaAction(payload));
   };
 
   // --- Render Logic ---
   if (isGenresLoading) {
-    return <Loader visible={true} />;
+    return <Loader visible />;
   }
 
   if (genresError) {
     return (
       <URContainer>
         <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>Could not load required data.</Text>
-          <Text style={styles.errorDetail}>Error: {JSON.stringify(genresError)}</Text>
+          <Text style={styles.errorText}>Could not load genres.</Text>
+          <Text style={styles.errorDetail}>
+            Please check your connection and try again.
+          </Text>
+          <TouchableOpacity
+            style={styles.retryButton}
+            onPress={() => {
+              console.log('--- USER LOCATION: Retry button pressed ---');
+              if (userAccessToken) {
+                dispatch(
+                  getUserGenresSagaAction({accessToken: userAccessToken}),
+                );
+              }
+            }}>
+            <Text style={styles.retryButtonText}>Retry</Text>
+          </TouchableOpacity>
         </View>
       </URContainer>
     );
@@ -320,11 +462,14 @@ const UserLocation = () => {
       <KeyboardAwareScrollView
         contentContainerStyle={styles.scrollContainer}
         enableOnAndroid
-        extraScrollHeight={Platform.OS === 'ios' ? 20 : 0}
-      >
+        extraScrollHeight={Platform.OS === 'ios' ? 20 : 0}>
         <View style={styles.contentView}>
-          <Text style={styles.titleText}>Let's Create Your Home Scene</Text>
-          <Text style={styles.subtitleText}>This helps us tune your UPRISE experience.</Text>
+          <Text style={styles.titleText}>
+            Let&apos;s Create Your Home Scene
+          </Text>
+          <Text style={styles.subtitleText}>
+            This helps us tune your UPRISE experience.
+          </Text>
 
           {/* Location Input */}
           <View style={styles.inputWrapper}>
@@ -341,18 +486,24 @@ const UserLocation = () => {
               <View style={styles.placesList}>
                 <FlatList
                   data={placePredictions}
-                  keyExtractor={(item) => item.place_id}
-                  renderItem={({ item }) => (
+                  keyExtractor={item => item.place_id}
+                  renderItem={({item}) => (
                     <TouchableOpacity
                       style={styles.placeItem}
                       onPress={() => {
-                        console.log('--- CUSTOM PLACES: TouchableOpacity pressed ---', item);
+                        console.log(
+                          '--- CUSTOM PLACES: TouchableOpacity pressed ---',
+                          item,
+                        );
                         handlePlaceSelect(item);
                       }}
-                      activeOpacity={0.7}
-                    >
-                      <Text style={styles.placeMainText}>{item.structured_formatting.main_text}</Text>
-                      <Text style={styles.placeSecondaryText}>{item.structured_formatting.secondary_text}</Text>
+                      activeOpacity={0.7}>
+                      <Text style={styles.placeMainText}>
+                        {item.structured_formatting.main_text}
+                      </Text>
+                      <Text style={styles.placeSecondaryText}>
+                        {item.structured_formatting.secondary_text}
+                      </Text>
                     </TouchableOpacity>
                   )}
                   nestedScrollEnabled
@@ -384,16 +535,18 @@ const UserLocation = () => {
             />
             {isGenreInputFocused && filteredGenres.length > 0 && (
               <View style={styles.suggestionsList}>
-                {filteredGenres.map((item) => (
+                {filteredGenres.map(item => (
                   <TouchableOpacity
                     key={item.id.toString()}
                     style={styles.suggestionItem}
                     onPress={() => {
-                      console.log('--- USER LOCATION: Genre TouchableOpacity pressed ---', item);
+                      console.log(
+                        '--- USER LOCATION: Genre TouchableOpacity pressed ---',
+                        item,
+                      );
                       handleGenreSelect(item);
                     }}
-                    activeOpacity={0.7}
-                  >
+                    activeOpacity={0.7}>
                     <Text style={styles.suggestionText}>{item.name}</Text>
                   </TouchableOpacity>
                 ))}
@@ -401,12 +554,12 @@ const UserLocation = () => {
             )}
           </View>
 
-
-
           <Button
             title="Find My Scene"
             onPress={onContinue}
-            disabled={!selectedGenre || (!selectedLocation && !locationText.trim())}
+            disabled={
+              !selectedGenre || (!selectedLocation && !locationText.trim())
+            }
             containerStyle={styles.buttonContainer}
             buttonStyle={styles.button}
             disabledStyle={styles.disabledButton}
@@ -414,13 +567,24 @@ const UserLocation = () => {
           />
           {/* Debug Info */}
           <Text style={{color: 'white', fontSize: 12, marginTop: 10}}>
-            Debug: Genre={!!selectedGenre}, Location={!!selectedLocation}, Text={!!locationText.trim()}
+            Debug: Genre=
+            {!!selectedGenre}, Location=
+            {!!selectedLocation}, Text=
+            {!!locationText.trim()}
           </Text>
           <Text style={{color: 'white', fontSize: 10, marginTop: 5}}>
-            Values: Genre={selectedGenre?.name || 'null'}, Location={selectedLocation?.description || 'null'}, Text="{locationText}"
+            Values: Genre=
+            {selectedGenre?.name || 'null'}, Location=
+            {selectedLocation?.description || 'null'}, Text=&quot;
+            {locationText}
+            &quot;
           </Text>
           <Text style={{color: 'white', fontSize: 10, marginTop: 5}}>
-            Button Disabled: {(!selectedGenre || (!selectedLocation && !locationText.trim())).toString()}
+            Button Disabled:{' '}
+            {(
+              !selectedGenre ||
+              (!selectedLocation && !locationText.trim())
+            ).toString()}
           </Text>
         </View>
       </KeyboardAwareScrollView>
@@ -503,7 +667,7 @@ const styles = StyleSheet.create({
     zIndex: 1000,
     elevation: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.3,
     shadowRadius: 5,
     maxHeight: 200,
@@ -521,7 +685,7 @@ const styles = StyleSheet.create({
     zIndex: 900,
     elevation: 8,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.3,
     shadowRadius: 5,
     borderWidth: 1,
@@ -565,6 +729,18 @@ const styles = StyleSheet.create({
   errorDetail: {
     color: 'grey',
     marginTop: 10,
+  },
+  retryButton: {
+    backgroundColor: Colors.URbtnColor,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+    marginTop: 20,
+  },
+  retryButtonText: {
+    color: Colors.White,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   genreWrapper: {
     marginTop: 25, // Drop the genre section by 25 pixels

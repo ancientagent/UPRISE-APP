@@ -1,13 +1,13 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import undoBandFollowRequest from '../../../services/undoBandFollow/undoBandFollow.service';
-import { undoBandFollowSagaType } from '../../types/sagas';
-import { undoBandFollowRequestActions } from '../../actions/request/undoBandFollow/undoBandFollow.actions';
-import { accessToken, getUserDetails } from '../../selectors/UserProfile';
+import {undoBandFollowSagaType} from '../../types/sagas';
+import {undoBandFollowRequestActions} from '../../actions/request/undoBandFollow/undoBandFollow.actions';
+import {accessToken, getUserDetails} from '../../selectors/UserProfile';
 import showAlert from '../AlertUtility';
 import {
-  followingBandsSagaAction, getUserDetailsSagaAction, getRadioSongSagaAction,
+  followingBandsSagaAction,
+  getUserDetailsSagaAction,
+  getRadioSongSagaAction,
 } from '../../actions/sagas';
 
 export default function* undoBandFollowWatcherSaga() {
@@ -35,4 +35,3 @@ export function* undoBandFollowWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

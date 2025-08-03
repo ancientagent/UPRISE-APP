@@ -1,6 +1,5 @@
-import { createRequestResponseActionSet } from '../../generic';
-import {
-  mostPopularBandsType,
-} from '../../../types/listener/listener';
+import {createRequestResponseActionSet} from '../../generic';
+import {mostPopularBandsType} from '../../../types/listener/listener';
 
-export const mostPopularBandsActions = createRequestResponseActionSet(mostPopularBandsType);
+export const mostPopularBandsActions =
+  createRequestResponseActionSet(mostPopularBandsType);

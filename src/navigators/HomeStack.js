@@ -1,10 +1,8 @@
 /* eslint-disable no-shadow */
 import React from 'react';
-import { Icon } from 'react-native-elements';
-import {
-  Alert,
-} from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {Icon} from 'react-native-elements';
+import {Alert} from 'react-native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Colors from '../theme/colors';
 import Home from '../screens/Home/Home';
 import OtherProfile from '../screens/otherProfile/otherProfile';
@@ -35,34 +33,45 @@ const HomeStack = createNativeStackNavigator();
 function HomeStackScreen() {
   return (
     <HomeStack.Navigator
-      initialRouteName='Home'
-      screenOptions={ ({ navigation }) => ({
+      initialRouteName="Home"
+      screenOptions={({navigation}) => ({
         animationTypeForReplace: 'pop',
         animation: 'none',
-        headerStyle: { borderBottomWidth: 0 },
+        headerStyle: {borderBottomWidth: 0},
         animationEnabled: false,
         animationDuration: 0,
         gestureEnabled: false,
         headerLeft: () => (
           <>
             <Icon
-              type='ionicon'
-              name='chevron-back-outline'
-              size={ 24 }
-              color={ Colors.White }
-              onPress={ () => navigation.goBack() }
+              type="ionicon"
+              name="chevron-back-outline"
+              size={24}
+              color={Colors.White}
+              onPress={() => navigation.goBack()}
             />
           </>
         ),
-      }) }
-    >
-      <HomeStack.Screen name='Home' component={ Home } options={ () => ({ headerShown: false }) } />
-      <HomeStack.Screen name='RadioStations' component={ RadioStations } options={ () => ({ headerShown: false }) } />
-      <HomeStack.Screen name='AlbumSongs' component={ AlbumSongs } options={ () => ({ headerShown: false }) } />
+      })}>
       <HomeStack.Screen
-        name='FollowersPage'
-        component={ FollowersPage }
-        options={ () => ({
+        name="Home"
+        component={Home}
+        options={() => ({headerShown: false})}
+      />
+      <HomeStack.Screen
+        name="RadioStations"
+        component={RadioStations}
+        options={() => ({headerShown: false})}
+      />
+      <HomeStack.Screen
+        name="AlbumSongs"
+        component={AlbumSongs}
+        options={() => ({headerShown: false})}
+      />
+      <HomeStack.Screen
+        name="FollowersPage"
+        component={FollowersPage}
+        options={() => ({
           headerTitle: 'Followers',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -84,12 +93,12 @@ function HomeStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='Following'
-        component={ Following }
-        options={ () => ({
+        name="Following"
+        component={Following}
+        options={() => ({
           headerTitle: 'Following',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -110,12 +119,12 @@ function HomeStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='ChangePassword'
-        component={ ChangePassword }
-        options={ () => ({
+        name="ChangePassword"
+        component={ChangePassword}
+        options={() => ({
           headerTitle: 'Change Password',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -136,12 +145,12 @@ function HomeStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='AllMostPopularBands'
-        component={ AllMostPopularBands }
-        options={ () => ({
+        name="AllMostPopularBands"
+        component={AllMostPopularBands}
+        options={() => ({
           headerTitle: 'Most Popular Artists',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -162,12 +171,12 @@ function HomeStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='AllMostRatedSongs'
-        component={ AllMostRatedSongs }
-        options={ () => ({
+        name="AllMostRatedSongs"
+        component={AllMostRatedSongs}
+        options={() => ({
           headerTitle: 'Most Rated Songs',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -188,12 +197,12 @@ function HomeStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='AllMostPlayedSongs'
-        component={ AllMostPlayedSongs }
-        options={ () => ({
+        name="AllMostPlayedSongs"
+        component={AllMostPlayedSongs}
+        options={() => ({
           headerTitle: 'Most Played Songs',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -214,12 +223,12 @@ function HomeStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='FullGalleryView'
-        component={ FullGalleryView }
-        options={ () => ({
+        name="FullGalleryView"
+        component={FullGalleryView}
+        options={() => ({
           headerTitle: 'Gallery',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -240,12 +249,12 @@ function HomeStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='FullEventView'
-        component={ FullEventView }
-        options={ () => ({
+        name="FullEventView"
+        component={FullEventView}
+        options={() => ({
           headerTitle: 'Events',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -266,12 +275,12 @@ function HomeStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='AllBandList'
-        component={ AllBandList }
-        options={ () => ({
+        name="AllBandList"
+        component={AllBandList}
+        options={() => ({
           headerTitle: 'Band List',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -292,12 +301,12 @@ function HomeStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='AllAlbums'
-        component={ AllAlbums }
-        options={ () => ({
+        name="AllAlbums"
+        component={AllAlbums}
+        options={() => ({
           headerTitle: 'Albums',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -318,12 +327,12 @@ function HomeStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='AllBandSongs'
-        component={ AllBandSongs }
-        options={ () => ({
+        name="AllBandSongs"
+        component={AllBandSongs}
+        options={() => ({
           headerTitle: 'Songs',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -344,14 +353,22 @@ function HomeStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
-      <HomeStack.Screen name='Events' component={ Events } options={ () => ({ headerShown: false }) } />
-      <HomeStack.Screen name='UserProfile' component={ UserProfile } options={ () => ({ headerShown: false }) } />
       <HomeStack.Screen
-        name='OtherProfile'
-        component={ OtherProfile }
-        options={ ({ route }) => ({
+        name="Events"
+        component={Events}
+        options={() => ({headerShown: false})}
+      />
+      <HomeStack.Screen
+        name="UserProfile"
+        component={UserProfile}
+        options={() => ({headerShown: false})}
+      />
+      <HomeStack.Screen
+        name="OtherProfile"
+        component={OtherProfile}
+        options={({route}) => ({
           headerTitle: route.params.userName ? route.params.userName : null,
           headerLeftContainerStyle: {
             marginHorizontal: 24,
@@ -369,12 +386,12 @@ function HomeStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='RadioPreferences'
-        component={ RadioPreferences }
-        options={ () => ({
+        name="RadioPreferences"
+        component={RadioPreferences}
+        options={() => ({
           headerTitle: 'Radio Preferences',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -392,12 +409,12 @@ function HomeStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='BandDetails'
-        component={ BandDetails }
-        options={ () => ({
+        name="BandDetails"
+        component={BandDetails}
+        options={() => ({
           headerTitle: 'Artist Details',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -415,12 +432,12 @@ function HomeStackScreen() {
             fontWeight: '900',
             fontSize: 24,
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='RadioScreen'
-        component={ RadioScreen }
-        options={ () => ({
+        name="RadioScreen"
+        component={RadioScreen}
+        options={() => ({
           headerTitle: 'Uprise',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -438,12 +455,12 @@ function HomeStackScreen() {
             fontWeight: '400',
             fontSize: 20,
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='ChangeAvatar'
-        component={ ChangeAvatar }
-        options={ () => ({
+        name="ChangeAvatar"
+        component={ChangeAvatar}
+        options={() => ({
           headerTitle: 'Choose your avatar',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -461,12 +478,12 @@ function HomeStackScreen() {
             fontFamily: 'Oswald Bold',
             fontWeight: '800',
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='ChangeInstrument'
-        component={ ChangeInstrument }
-        options={ () => ({
+        name="ChangeInstrument"
+        component={ChangeInstrument}
+        options={() => ({
           headerTitle: 'Instrument',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -484,12 +501,12 @@ function HomeStackScreen() {
             fontFamily: 'Oswald Bold',
             fontWeight: '800',
           },
-        }) }
+        })}
       />
       <HomeStack.Screen
-        name='OnDemandMusic'
-        component={ OnDemandMusic }
-        options={ ({ navigation }) => ({
+        name="OnDemandMusic"
+        component={OnDemandMusic}
+        options={({navigation}) => ({
           headerTitle: 'Playing Now',
           headerLeftContainerStyle: {
             marginLeft: 24,
@@ -497,26 +514,24 @@ function HomeStackScreen() {
           headerLeft: () => (
             <>
               <Icon
-                type='ionicon'
-                name='chevron-back-outline'
-                size={ 24 }
-                color={ Colors.White }
-                onPress={ async () => {
-                  Alert.alert(
-                    'Uprise',
-                    "Now you're switching to fairplayer",
-                    [
-                      {
-                        text: 'Cancel',
-                        style: 'cancel',
+                type="ionicon"
+                name="chevron-back-outline"
+                size={24}
+                color={Colors.White}
+                onPress={async () => {
+                  Alert.alert('Uprise', "Now you're switching to fairplayer", [
+                    {
+                      text: 'Cancel',
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Continue',
+                      onPress: () => {
+                        navigation.goBack();
                       },
-                      {
-                        text: 'Continue',
-                        onPress: () => { navigation.goBack(); },
-                      },
-                    ],
-                  );
-                } }
+                    },
+                  ]);
+                }}
               />
             </>
           ),
@@ -536,10 +551,9 @@ function HomeStackScreen() {
             fontWeight: '400',
             fontSize: 20,
           },
-        }) }
+        })}
       />
     </HomeStack.Navigator>
   );
 }
 export default HomeStackScreen;
-

@@ -1,14 +1,12 @@
 /* eslint-disable global-require */
-import React, { useEffect } from 'react';
-import {
-  BackHandler,
-} from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import React, {useEffect} from 'react';
+import {BackHandler} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
 import WelcomeScreenSlides from './WelcomeScreenSlides';
-import { welcomeSlideAction } from '../../state/actions/welcomeSlide/welcomeSlide.action';
+import {welcomeSlideAction} from '../../state/actions/welcomeSlide/welcomeSlide.action';
 
 const WelcomeScreen = props => {
-  const { navigation } = props;
+  const {navigation} = props;
   const showSlide = useSelector(state => state.welcomeSlide.showIntro);
   const dispatch = useDispatch();
 
@@ -25,7 +23,10 @@ const WelcomeScreen = props => {
 
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+      BackHandler.removeEventListener(
+        'hardwareBackPress',
+        handleBackButtonClick,
+      );
     };
   }, [showSlide]);
 

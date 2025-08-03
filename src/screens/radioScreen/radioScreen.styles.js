@@ -1,9 +1,10 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import Colors from '../../theme/colors';
 
 export default StyleSheet.create({
   songLoader: {
-    height: 32, width: 32,
+    height: 32,
+    width: 32,
   },
   Container: {
     marginTop: 12,
@@ -42,7 +43,7 @@ export default StyleSheet.create({
     fontWeight: '400',
     color: Colors.URbtnColor,
   },
-  thumbStyle: { maxHeight: 16, maxWidth: 16 },
+  thumbStyle: {maxHeight: 16, maxWidth: 16},
   actionBtnContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

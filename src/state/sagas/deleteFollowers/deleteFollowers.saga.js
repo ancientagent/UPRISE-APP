@@ -1,14 +1,10 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import deleteFollowersRequest from '../../../services/deleteFollowers/deleteFollowers.service';
-import { deleteFollowersSagaType } from '../../types/sagas';
-import { deleteFollowersActions } from '../../actions/request/deleteFollowers/deleteFollowers.actions';
+import {deleteFollowersSagaType} from '../../types/sagas';
+import {deleteFollowersActions} from '../../actions/request/deleteFollowers/deleteFollowers.actions';
 import showAlert from '../AlertUtility';
-import { accessToken, getUserDetails } from '../../selectors/UserProfile';
-import {
-  followersListSagaAction,
-} from '../../actions/sagas';
+import {accessToken, getUserDetails} from '../../selectors/UserProfile';
+import {followersListSagaAction} from '../../actions/sagas';
 
 export default function* deleteFollowersWatcherSaga() {
   yield takeLatest(deleteFollowersSagaType, deleteFollowersWorkerSaga);
@@ -34,4 +30,3 @@ export function* deleteFollowersWorkerSaga(action) {
     yield call(showAlert, e.error);
   }
 }
-

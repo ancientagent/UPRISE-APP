@@ -1,14 +1,15 @@
-import {
-  call, put, takeLatest, select,
-} from 'redux-saga/effects';
+import {call, put, takeLatest, select} from 'redux-saga/effects';
 import getPopularArtistStatisticsRequest from '../../../services/getPopularArtistStatistics/getPopularArtistStatistics.service';
-import { getPopularArtistStatisticsSagaType } from '../../types/sagas';
-import { getPopularArtistStatisticsRequestActions } from '../../actions/request/getPopularArtistStatistics/getPopularArtistStatistics.actions';
+import {getPopularArtistStatisticsSagaType} from '../../types/sagas';
+import {getPopularArtistStatisticsRequestActions} from '../../actions/request/getPopularArtistStatistics/getPopularArtistStatistics.actions';
 import showAlert from '../AlertUtility';
-import { accessToken } from '../../selectors/UserProfile';
+import {accessToken} from '../../selectors/UserProfile';
 
 export default function* getPopularArtistStatisticsWatcherSaga() {
-  yield takeLatest(getPopularArtistStatisticsSagaType, getPopularArtistStatisticsWorkerSaga);
+  yield takeLatest(
+    getPopularArtistStatisticsSagaType,
+    getPopularArtistStatisticsWorkerSaga,
+  );
 }
 
 export function* getPopularArtistStatisticsWorkerSaga() {

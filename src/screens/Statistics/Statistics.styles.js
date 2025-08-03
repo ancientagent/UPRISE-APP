@@ -1,4 +1,4 @@
-import { StyleSheet, Platform } from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import Colors from '../../theme/colors';
 
 export default StyleSheet.create({
@@ -13,7 +13,7 @@ export default StyleSheet.create({
     borderRadius: 25,
     elevation: 3,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
@@ -211,7 +211,7 @@ export default StyleSheet.create({
     fontWeight: '500',
     color: Colors.profileIconColor,
   },
-  ratedTextView: { marginLeft: 12, alignSelf: 'center' },
+  ratedTextView: {marginLeft: 12, alignSelf: 'center'},
   ratedTextStyle: {
     fontSize: 16,
     width: '65%',

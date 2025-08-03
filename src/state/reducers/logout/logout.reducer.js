@@ -1,4 +1,4 @@
-import { createRequestResponseReducer } from '../generic';
-import { logoutType } from '../../types/listener/listener';
+import {createRequestResponseReducer} from '../generic';
+import {logoutType} from '../../types/listener/listener';
 
-export default createRequestResponseReducer(logoutType); 
+export default createRequestResponseReducer(logoutType);

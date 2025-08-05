@@ -70,3 +70,21 @@ coverage/
 !.env.backup
 !.env.dev
 calendar.js
+
+# Sensitive Files - Added for Security
+.env.txt
+.env.backend.backup
+WebApp-API/.env
+WebApp-API/src/config/google_calender.json
+
+# Log Files
+logs/
+WebApp-API/logs/
+
+# Backup Files
+*.backup
+package.json.backup
+.gitignore.backup
+
+# Embedded Git Repositories
+UPRISE-APP.git/

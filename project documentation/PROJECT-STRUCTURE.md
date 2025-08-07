@@ -3,10 +3,12 @@
 > **🧠 Development Mindset:** Always trace the full user journey and consider edge cases. See `DEVELOPMENT-MINDSET-GUIDE.md` for critical thinking principles.
 
 ## 🏗️ **Project Overview**
-- **React Native App**: Main mobile application ✅ **STABLE - Redux store fixed**
-- **Backend API**: Node.js server in `Webapp_API-Develop/`
+- **React Native App**: Main mobile application ✅ **STABLE - WSL environment configured**
+- **Backend API**: Node.js server in `WebApp-API/` ✅ **WSL-optimized**
 - **Webapp-UI**: React/TypeScript web app in `webapp-ui/` ✅ **ACTIVE DEVELOPMENT**
 - **Legacy Angular App**: Archived in `legacy-angular-app/` 📦 **ARCHIVED**
+
+> **🚨 CRITICAL**: This project **MUST** be developed using Ubuntu via WSL (Windows Subsystem for Linux). Development directly on the Windows file system is **DEPRECATED** and **UNSUPPORTED** due to fundamental incompatibilities with the React Native build toolchain.
 
 ---
 

@@ -1,93 +1,211 @@
-# Mobile App
+# 🚀 UPRISE Mobile App - React Native Project
 
-React Native Mobile app for iOS and Android
+> **🚨 CRITICAL**: This project **MUST** be developed using Ubuntu via WSL (Windows Subsystem for Linux). Development directly on the Windows file system is **DEPRECATED** and **UNSUPPORTED**.
 
-## Getting started
+## 📱 Project Overview
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+UPRISE is a comprehensive React Native mobile application for iOS and Android that provides:
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+- **🎵 Music Discovery**: Local community-based music discovery and streaming
+- **👥 Social Features**: Artist profiles, following, and community engagement
+- **📍 Location-Based Content**: City and state-specific content filtering
+- **📊 Analytics**: Comprehensive user and content analytics
+- **🎪 Events Management**: Local music events and calendar integration
+- **📻 Radio System**: Tier-based radio stations with fair play algorithms
 
-## Add your files
+## 🐧 Development Environment
 
-- [ ] [Create](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+### **Mandatory Requirements**
+- **WSL2**: Ubuntu 20.04+ via Windows Subsystem for Linux
+- **Node.js**: v16.20.2 (installed via NVM)
+- **Java**: OpenJDK 11
+- **Android SDK**: Installed on Windows, accessible from WSL
+- **PostgreSQL**: Server on Windows, configured for WSL connections
+
+### **Quick Start**
+1. **Follow the complete setup guide**: [WSL-DEVELOPMENT-ENVIRONMENT-SETUP.md](WSL-DEVELOPMENT-ENVIRONMENT-SETUP.md)
+2. **Configure environment files**: See [MANUAL-SETUP-GUIDE.md](MANUAL-SETUP-GUIDE.md)
+3. **Launch the application**: Use the "Clean Room" launch sequence
+
+## 🏗️ Project Architecture
+
+### **Frontend (React Native)**
+- **Framework**: React Native 0.66.4
+- **State Management**: Redux with Redux-Saga
+- **Navigation**: React Navigation v5
+- **UI Components**: Custom components with modern design
+- **API Integration**: Comprehensive service layer with 85+ endpoints
+
+### **Backend (Node.js)**
+- **Framework**: Express.js with Sequelize ORM
+- **Database**: PostgreSQL with comprehensive schema
+- **Authentication**: JWT with access/refresh token pattern
+- **File Storage**: Local storage with AWS S3 fallback
+- **Real-time Features**: WebSocket integration for live updates
+
+### **Key Features**
+- ✅ **Artist Unification System**: Unified ArtistProfile model
+- ✅ **Location Filtering**: City and state-based content filtering
+- ✅ **Genre System**: 97 comprehensive genres with sub-genres
+- ✅ **Song Upload**: Complete file upload with metadata extraction
+- ✅ **Fair Play Algorithm**: Intelligent song selection and rotation
+- ✅ **Analytics Dashboard**: Comprehensive user and content analytics
+- ✅ **Event Management**: Local music events with calendar integration
+- ✅ **Radio System**: Tier-based radio stations (Citywide, Statewide, National)
+
+## 🚀 Getting Started
+
+### **Prerequisites**
+1. **WSL2 Setup**: Follow [WSL-DEVELOPMENT-ENVIRONMENT-SETUP.md](WSL-DEVELOPMENT-ENVIRONMENT-SETUP.md)
+2. **Environment Configuration**: Complete all configuration steps
+3. **Database Setup**: Configure PostgreSQL for WSL connections
+
+### **Launch Sequence**
+```bash
+# 1. Clean Room Setup (PowerShell as Administrator)
+taskkill /IM adb.exe /F
+taskkill /IM node.exe /F
+taskkill /IM java.exe /F
+
+# 2. Start ADB Server (PowerShell)
+adb -a nodaemon server start
+
+# 3. Launch Backend (WSL Terminal 1)
+cd ~/projects/UPRISE-APP/WebApp-API
+npm start
+
+# 4. Launch Metro Bundler (WSL Terminal 2)
+cd ~/projects/UPRISE-APP
+npm start
+
+# 5. Launch Android App (WSL Terminal 3)
+cd ~/projects/UPRISE-APP
+npm run android
+```
+
+## 📁 Project Structure
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/imaginnovate_ps/upriseradiyo/mobile_app.git
-git branch -M main
-git push -uf origin main
+UPRISE-APP/
+├── 📱 React Native App (Main)
+│   ├── src/
+│   │   ├── screens/          # UI screens
+│   │   ├── components/       # Reusable components
+│   │   ├── services/         # API services (85+ endpoints)
+│   │   ├── state/           # Redux store and sagas
+│   │   └── utilities/       # Utility functions
+│   ├── android/             # Android-specific code
+│   └── .env                 # Environment variables
+├── 🌐 WebApp-API/           # Backend server
+│   ├── src/
+│   │   ├── routes/          # API endpoints
+│   │   ├── database/        # Models and migrations
+│   │   ├── utils/           # Utilities and algorithms
+│   │   └── config/          # Configuration
+│   └── .env                 # Backend environment
+├── 🖥️ webapp-ui/            # React/TypeScript web app
+└── 📚 project documentation/ # Comprehensive documentation
 ```
 
-## Integrate with your tools
+## 🔧 Key Configuration Files
 
-- [ ] [Set up project integrations](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://gitlab.com/imaginnovate_ps/upriseradiyo/mobile_app/-/settings/integrations)
+### **Environment Files**
+- **`.env`**: Frontend environment variables (85+ endpoints)
+- **`WebApp-API/.env`**: Backend configuration
+- **`webapp-ui/.env`**: Web app configuration
 
-## Collaborate with your team
+### **Build Configuration**
+- **`android/settings.gradle`**: Android build settings
+- **`package.json`**: Node.js dependencies and scripts
+- **`babel.config.js`**: Babel configuration
 
-- [ ] [Invite team members and collaborators](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+## 📚 Documentation
 
-## Test and Deploy
+### **Setup & Configuration**
+- [🐧 WSL Development Environment Setup](WSL-DEVELOPMENT-ENVIRONMENT-SETUP.md) - **CRITICAL**
+- [🔧 Manual Setup Guide](MANUAL-SETUP-GUIDE.md) - Environment configuration
+- [📋 Project Structure](PROJECT-STRUCTURE.md) - Complete architecture overview
 
-Use the built-in continuous integration in GitLab.
+### **Development Guides**
+- [🚀 Quick Fixes](QUICK-FIXES.md) - Common issues and solutions
+- [🧠 Development Mindset](DEVELOPMENT-MINDSET-GUIDE.md) - Debugging principles
+- [📊 System Analysis](WEBAPP-SYSTEM-ANALYSIS.md) - Backend architecture
 
-- [ ] [Get started with GitLab CI/CD](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### **Feature Documentation**
+- [🎵 Song Upload System](PROJECT-MANAGER-REPORT-SONG-UPLOAD-SUCCESS.md)
+- [👥 Artist Unification](ARTIST-UNIFICATION-IMPLEMENTATION.md)
+- [📍 Location Filtering](BACKEND-FORENSIC-ANALYSIS.md)
+- [🎪 Architectural Realignment](ARCHITECTURAL-REALIGNMENT-IMPLEMENTATION.md)
 
-***
+## 🐛 Troubleshooting
 
-# Editing this README
+### **Common Issues**
+1. **Environment Setup**: Follow [WSL-DEVELOPMENT-ENVIRONMENT-SETUP.md](WSL-DEVELOPMENT-ENVIRONMENT-SETUP.md)
+2. **Build Failures**: Check [QUICK-FIXES.md](QUICK-FIXES.md)
+3. **API Errors**: Verify environment variables in `.env` files
+4. **Database Issues**: Check PostgreSQL WSL configuration
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://gitlab.com/-/experiment/new_project_readme_content:24d6a805428ccd172daf3e8cf8e416ee?https://www.makeareadme.com/) for this template.
+### **Support Resources**
+- **Quick Fixes**: [QUICK-FIXES.md](QUICK-FIXES.md) - 39KB of solutions
+- **Troubleshooting Guide**: [TROUBLESHOOTING-REFERENCE.md](TROUBLESHOOTING-REFERENCE.md)
+- **Development Mindset**: [DEVELOPMENT-MINDSET-GUIDE.md](DEVELOPMENT-MINDSET-GUIDE.md)
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## 🎯 Development Status
 
-## Name
-Choose a self-explaining name for your project.
+### **✅ Completed Features**
+- **Core Architecture**: Stable Redux store and API integration
+- **Authentication**: Complete JWT-based auth system
+- **User Management**: Profile, location, and preferences
+- **Content Discovery**: Location and genre-based filtering
+- **Song Management**: Upload, playback, and engagement
+- **Analytics**: Comprehensive user and content analytics
+- **Event System**: Local music events with calendar integration
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### **🚧 Current Development**
+- **Performance Optimization**: Metro bundler and build system
+- **UI/UX Improvements**: Modern component library
+- **Testing**: Comprehensive test coverage
+- **Documentation**: Continuous documentation updates
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## 🤝 Contributing
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+### **Development Workflow**
+1. **Environment Setup**: Follow WSL setup guide
+2. **Feature Development**: Create feature branches
+3. **Testing**: Ensure all tests pass
+4. **Documentation**: Update relevant documentation
+5. **Code Review**: Submit merge requests
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+### **Code Standards**
+- **React Native**: Follow React Native best practices
+- **JavaScript**: Use ES6+ features and proper error handling
+- **Database**: Use Sequelize migrations for schema changes
+- **API Design**: Follow RESTful principles with proper error handling
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## 📊 Project Metrics
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+- **Lines of Code**: 50,000+ (React Native + Backend)
+- **API Endpoints**: 85+ comprehensive endpoints
+- **Environment Variables**: 120+ configuration variables
+- **Database Tables**: 20+ with complex relationships
+- **Documentation**: 25+ comprehensive guides
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+## 🆘 Support & Contact
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### **Documentation Priority**
+1. **WSL Setup**: [WSL-DEVELOPMENT-ENVIRONMENT-SETUP.md](WSL-DEVELOPMENT-ENVIRONMENT-SETUP.md)
+2. **Quick Fixes**: [QUICK-FIXES.md](QUICK-FIXES.md)
+3. **Project Structure**: [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md)
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+### **Development Resources**
+- **Architecture**: [WEBAPP-SYSTEM-ANALYSIS.md](WEBAPP-SYSTEM-ANALYSIS.md)
+- **API Reference**: [COMPREHENSIVE-API-ENDPOINT-AUDIT.md](COMPREHENSIVE-API-ENDPOINT-AUDIT.md)
+- **Environment Variables**: [ENVIRONMENT-VARIABLES-REFERENCE.md](ENVIRONMENT-VARIABLES-REFERENCE.md)
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+---
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+**Last Updated**: January 2025  
+**Environment**: Ubuntu WSL2  
+**Status**: ✅ **STABLE** - All major issues resolved  
+**Next Steps**: Feature development and optimization
 

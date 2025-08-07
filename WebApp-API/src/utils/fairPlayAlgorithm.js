@@ -17,14 +17,14 @@ class FairPlayAlgorithm {
         return 0;
     }
 
-    async getSongMetrics(songId, tier) {
+    async getSongMetrics(db, songId, tier) {
         try {
             const [likesResult, dislikesResult, blastsResult, fullListensResult, skipsResult] = await Promise.all([
-                this.db.SongLikes.findAndCountAll({ where: { songId, tier, status: 'LIKE' } }),
-                this.db.SongLikes.findAndCountAll({ where: { songId, tier, status: 'DISLIKE' } }),
-                this.db.SongBlasts.findAndCountAll({ where: { songId } }),
-                this.db.UserSongListens.findAndCountAll({ where: { songId } }),
-                this.db.SongSkips.findAndCountAll({ where: { songId, tier } })
+                db.SongLikes.findAndCountAll({ where: { songId, tier, status: 'LIKE' } }),
+                db.SongLikes.findAndCountAll({ where: { songId, tier, status: 'DISLIKE' } }),
+                db.SongBlasts.findAndCountAll({ where: { songId } }),
+                db.UserSongListens.findAndCountAll({ where: { songId } }),
+                db.SongSkips.findAndCountAll({ where: { songId, tier } })
             ]);
 
             const likes = this.safeParseCount(likesResult);
@@ -40,9 +40,9 @@ class FairPlayAlgorithm {
         }
     }
 
-    async updateSongPriority(song, tier) {
+    async updateSongPriority(db, song, tier) {
         try {
-            const metrics = await this.getSongMetrics(song.id, tier);
+            const metrics = await this.getSongMetrics(db, song.id, tier);
 
             const timeSinceAired = (new Date() - new Date(song.airedOn || song.createdAt)) / (3600000); // in hours
             const timeDecayFactor = Math.max(0, 1 - (timeSinceAired / 168)); // Linear decay over 1 week

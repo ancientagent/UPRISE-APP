@@ -2,6 +2,8 @@
 
 > **💡 Development Mindset:** Always think "What could go wrong with this approach?" before implementing any solution. See `DEVELOPMENT-MINDSET-GUIDE.md` for comprehensive guidelines.
 
+> **🚨 CRITICAL**: This project **MUST** be developed using Ubuntu via WSL (Windows Subsystem for Linux). Development directly on the Windows file system is **DEPRECATED** and **UNSUPPORTED**.
+
 ## ✅ **ENVIRONMENT FILES - RESOLVED**
 
 **Status**: ✅ **COMPLETELY RESOLVED** - All environment file visibility and protection issues have been fixed.
@@ -934,4 +936,176 @@ const artistProfile = await ArtistProfile.findOne({
 - ✅ Feed returning notifications only (correct)
 - ✅ Songs available via radio endpoints (correct)
 - ❌ Analytics endpoint validation needs investigation
-- ❌ Location data format issues suspected 
+- ❌ Location data format issues suspected
+
+---
+
+## 🐧 **WSL-SPECIFIC TROUBLESHOOTING**
+
+### **WSL Environment Issues**
+
+#### **Issue W1: "adb: command not found" in WSL**
+**Symptoms**: ADB commands fail in WSL terminal
+**Root Cause**: Android SDK not properly configured in WSL
+**Quick Fix**:
+```bash
+# Verify Android SDK path in .bashrc
+echo $ANDROID_SDK_ROOT
+
+# If empty or incorrect, add to ~/.bashrc:
+export ANDROID_SDK_ROOT="/mnt/c/Users/$USER/AppData/Local/Android/Sdk"
+export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+
+# Reload configuration
+source ~/.bashrc
+
+# Test ADB
+adb devices
+```
+
+#### **Issue W2: "JAVA_HOME is not set" in WSL**
+**Symptoms**: Android build fails with Java errors
+**Root Cause**: Java not installed or JAVA_HOME not configured
+**Quick Fix**:
+```bash
+# Install OpenJDK 11
+sudo apt install openjdk-11-jdk -y
+
+# Add to ~/.bashrc:
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+export PATH=$PATH:$JAVA_HOME/bin
+
+# Reload and verify
+source ~/.bashrc
+java -version
+```
+
+#### **Issue W3: "Database connection failed" from WSL**
+**Symptoms**: Backend can't connect to PostgreSQL
+**Root Cause**: PostgreSQL not configured for WSL connections
+**Quick Fix**:
+```bash
+# Find WSL IP address
+ip route | grep default
+
+# Test connection (replace IP with your WSL IP)
+psql -h 172.30.112.1 -U postgres -d postgres
+
+# Update WebApp-API/.env with correct DB_HOST
+DB_HOST=172.30.112.1
+```
+
+#### **Issue W4: "Permission denied" errors in WSL**
+**Symptoms**: File permission errors during build
+**Root Cause**: Windows file permissions not properly set
+**Quick Fix**:
+```bash
+# Fix ownership
+sudo chown -R $USER:$USER ~/projects/UPRISE-APP
+
+# Fix execute permissions
+chmod +x android/gradlew
+
+# Fix node_modules permissions
+sudo chown -R $USER:$USER node_modules/
+```
+
+#### **Issue W5: "Metro bundler not starting" in WSL**
+**Symptoms**: Metro fails to start or shows errors
+**Root Cause**: Node.js version or cache issues
+**Quick Fix**:
+```bash
+# Clear Metro cache
+npx react-native start --reset-cache
+
+# Verify Node.js version
+node --version  # Should be 16.20.2
+
+# If wrong version, switch with NVM
+nvm use 16.20.2
+```
+
+#### **Issue W6: "Android build failing" in WSL**
+**Symptoms**: Gradle build errors or missing files
+**Root Cause**: Missing native_modules.gradle or incorrect configuration
+**Quick Fix**:
+```bash
+# Clean Android build
+cd android
+./gradlew clean
+cd ..
+
+# Create missing gradle file if needed
+mkdir -p node_modules/@react-native-community/cli-platform-android/
+# (See WSL-DEVELOPMENT-ENVIRONMENT-SETUP.md for file content)
+
+# Rebuild
+npm run android
+```
+
+#### **Issue W7: "Port already in use" in WSL**
+**Symptoms**: Services can't start due to port conflicts
+**Root Cause**: Previous processes not properly terminated
+**Quick Fix**:
+```bash
+# Kill processes on specific ports
+sudo lsof -ti:3000 | xargs kill -9
+sudo lsof -ti:8081 | xargs kill -9
+
+# Or use the clean room approach
+# In PowerShell (Administrator):
+taskkill /IM adb.exe /F
+taskkill /IM node.exe /F
+taskkill /IM java.exe /F
+```
+
+#### **Issue W8: "WSL file system performance issues"**
+**Symptoms**: Slow file operations, build times
+**Root Cause**: Windows file system mounted in WSL
+**Quick Fix**:
+```bash
+# Move project to WSL file system
+cp -r /mnt/c/path/to/project ~/projects/UPRISE-APP
+
+# Or optimize Windows mount
+# Add to /etc/wsl.conf:
+[automount]
+options = "metadata,umask=22,fmask=11"
+```
+
+### **WSL Configuration Verification**
+
+#### **Check WSL Environment**
+```bash
+# Verify all environment variables
+echo "JAVA_HOME: $JAVA_HOME"
+echo "ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT"
+echo "NODE_VERSION: $(node --version)"
+echo "JAVA_VERSION: $(java -version 2>&1 | head -1)"
+
+# Verify Android tools
+adb version
+emulator -list-avds
+```
+
+#### **Check Database Connection**
+```bash
+# Test PostgreSQL connection
+psql -h 172.30.112.1 -U postgres -d postgres -c "SELECT version();"
+
+# If connection fails, check Windows PostgreSQL:
+# 1. Verify pg_hba.conf has: host all all 172.16.0.0/12 scram-sha-256
+# 2. Verify postgresql.conf has: listen_addresses = '*'
+# 3. Restart PostgreSQL service in Windows
+```
+
+#### **Check Project Configuration**
+```bash
+# Verify environment files exist
+ls -la .env
+ls -la WebApp-API/.env
+
+# Verify Android configuration
+cat android/settings.gradle
+ls -la node_modules/@react-native-community/cli-platform-android/native_modules.gradle
+``` 

@@ -1,30 +1,32 @@
-// This is a temporary, direct configuration to bypass a failing .env load.
+// Load environment variables
+require('dotenv').config({ path: require('path').resolve(__dirname, '../../../.env') });
+
 module.exports = {
     development: {
-      username: "postgres", // Assuming the user is the default 'postgres'
-      password: "Loca$h2682",
-      database: "uprise_radiyo",
-      host: "127.0.0.1",
+      username: process.env.DB_USERNAME || "postgres",
+      password: process.env.DB_PASSWORD || "Loca$h2682",
+      database: process.env.DB_NAME || "uprise_radiyo",
+      host: process.env.DB_HOST || "127.0.0.1",
       dialect: 'postgres',
       define: {
         freezeTableName: true // Prevent Sequelize from pluralizing table names
       }
     },
     test: {
-      username: "postgres",
-      password: "Loca$h2682",
-      database: "uprise_radiyo_test",
-      host: "127.0.0.1",
+      username: process.env.DB_USERNAME || "postgres",
+      password: process.env.DB_PASSWORD || "Loca$h2682",
+      database: process.env.DB_NAME || "uprise_radiyo",
+      host: process.env.DB_HOST || "127.0.0.1",
       dialect: 'postgres',
       define: {
         freezeTableName: true
       }
     },
     production: {
-      username: "postgres",
-      password: "Loca$h2682",
-      database: "uprise_radiyo_prod",
-      host: "127.0.0.1",
+      username: process.env.DB_USERNAME || "postgres",
+      password: process.env.DB_PASSWORD || "Loca$h2682",
+      database: process.env.DB_NAME || "uprise_radiyo",
+      host: process.env.DB_HOST || "127.0.0.1",
       dialect: 'postgres',
       define: {
         freezeTableName: true

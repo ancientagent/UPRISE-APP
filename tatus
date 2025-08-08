@@ -1,0 +1,5 @@
+[33m3b0fd91[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/feature/repository-cleanup[m[33m, [m[1;31morigin/HEAD[m[33m)[m Complete repository cleanup and updates - Security focused - Fixed Android-ScalableVideoView submodule issues - Removed embedded git repositories - Updated all project files and documentation - Cleaned up environment files and configurations - Added new utility scripts and diagnostic tools - Updated .gitignore to exclude all sensitive files
+[33mb2a47ed[m Add calendar.js to .gitignore
+[33m7a948d1[m Remove old webapp_api-dev folder after migration to webapp-api
+[33m3ba1a24[m chore: Update backend submodule to latest commit
+[33mf7810fa[m Fix: Replace hardcoded IP with environment variables
